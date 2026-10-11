@@ -92,7 +92,7 @@ const b_tiny = (x, y) => text(x, y, 'none', '* respiration sous l\'eau non inclu
 // ============================================================
 // B059a — grue qui plonge dans le grand bleu : bébé émerveillée, bancs de poissons
 B(59, { enter: 'tilt', cam: () => ({ z: 1, hand: .3 }),
-  draw: (t, d) => { const c = camMove(t, d + .9, { y: -260, zoom: 1 }, { y: 30, zoom: 1.1 }, eOutCubic);
+  draw: (t, d) => { const c = camMove(t, d + .9, { y: -120, zoom: 1 }, { y: 30, zoom: 1.1 }, eOutCubic);
     return depth(c, [...underLayers(t, { floor: 1000, seed: 4 }),
       { z: 1.7, svg: Array.from({ length: 14 }, (_, i) => fish({ x: ((2200 - t * 160 - i * 140) % 2400) - 200, y: 260 + (i % 4) * 60 + wave(t, .5, 20, i / 7), s: .32, color: ['#ffb347', '#ff8fb1', '#ffd23f'][i % 3], tf: 4 }, t)).join(''), haze: .2, hazeCol: '#5fc6e6' },
       { z: 1, svg: tor({ x: 780 + t * 70, y: 600, s: 1.35, expr: 'wow', swim: 1.2, rot: -6 }, t) + stars(1000, 420, t, 6, 240) + sparkle(1450, 300, .8 * pop(t, .6)) + sparkle(560, 360, .6 * pop(t, 1.1)) },
@@ -507,7 +507,7 @@ B(90, { enter: 'none', cam: (t, d) => ({ z: 1.02 }),
 B(90, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: t => { const y = Math.floor(seg(t, .1, 2.0) * 50);
     return depth({ x: t * 80, zoom: 1 }, [...underLayers(t * 3, { dark: .25, floor: 1000, seed: 41 }),
-      { z: 1, svg: plasticBag({ x: 700 + t * 160, y: 520, s: 1.3 }, t) + G(tr(1020 + t * 160, 340, pop(t, 0)), path('M0 -70L66 50L-66 50Z', '#ffd23f', 7) + text(0, 38, 'none', '!', OL, 90)) +
+      { z: 1, svg: plasticBag({ x: 700 + t * 160, y: 520, s: 1.3 }, t) + G(tr(420 + t * 160, 420, pop(t, 0)), path('M0 -70L66 50L-66 50Z', '#ffd23f', 7) + text(0, 38, 'none', '!', OL, 90)) +
         [1500, 1700].map((x, i) => G(tr(x + t * 300, 640 + i * 120), fish({ x: 0, y: 0, s: .7, color: i ? '#7fd3ff' : '#ffb347', flip: 1 }, t) + sweat(40, -60, .5))).join('') +
         calendarPage(300 + t * 80, 300, .7, t * 120) + tag(CX + t * 80, 140, '+ ' + y + ' ANS', t, 0, '#fff', OL, 64) +
         bigText(['DES ANNÉES'], t, at(90, 'annees') - at(90, 'danger') - .05, CX + t * 80, 300, '#ff5d5d', 100) },
@@ -521,13 +521,13 @@ B(91, { enter: 'tilt', cam: camPush(1.0, 1.05, .2),
     return grad('#f3efe4', '#e2dccb', -200, -200, W + 400, H + 400) + blackboard(380, 120, 1160, 560, '') +
       G(tr(900, 560, 1.05), path('M-260 0C-260 -220 220 -230 260 0Z', 'rgba(255,255,255,.12)', 6, '#fff') + circ(330, -110, 70, 'rgba(255,255,255,.12)', 6, '#fff') + path('M300 -80C200 -60 120 -40 40 -40C-60 -40 -120 -20 -140 20', 'none', 22, 'rgba(255,170,170,.7)')) +
       G(tr(pxx, py, .35, k * 300), plasticBag({ x: 0, y: 0, s: 1, print: false }, t)) + text(960, 200, 'none', 'Déchets avalés', '#fff', 50) +
-      G(tr(1700, 700), fish({ x: 0, y: 0, s: 1.3, color: '#7fd3ff', rot: -10 }, t) + circ(-65, -18, 26, 'rgba(255,255,255,.3)', 5) + line(-150, 60, -320, -120, 10, '#8a5a3a')); },
+      G(tr(1700, 600), fish({ x: 0, y: 0, s: 1.3, color: '#7fd3ff', rot: -10 }, t) + circ(-65, -18, 26, 'rgba(255,255,255,.3)', 5) + line(-150, 60, -320, -120, 10, '#8a5a3a')); },
   sfx: [[0, 'scratch', .5], [.3, 'pop', .5], [at(91, 'avale'), 'gulp', .9], [at(91, 'avale') + .8, 'whoosh', .4]] });
 // B091b — dans le tube digestif : les aliments font la queue, bloqués derrière le plastique — BOUCHON
 B(91, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .4 }),
   draw: t => grad('#ffd0d6', '#f4a7b3', -200, -200, W + 400, H + 400) + path('M-200 300Q960 230 2120 300L2120 640Q960 700 -200 640Z', '#ff8fa3') + path('M-200 330Q960 270 2120 330M-200 610Q960 670 2120 610', 'none', 8, '#e2687f') +
     G(tr(1450, 470, 1, wave(t, 1, 4)), plasticBag({ x: 0, y: -40, s: 1, print: false }, t)) +
-    [300, 560, 820, 1080].map((x, i) => b_food(x + Math.sin(t * 9 + i) * 6, 480, .95, t, ['#7cc46a', '#ffb347', '#62c26a', '#ff8fb1'][i]) + (i === 3 ? G(tr(x + 60, 380, pop(t, .4)), text(0, 0, OL, 'TUUUT !', '#fff', 46)) : '')).join('') +
+    [300, 560, 820, 1080].map((x, i) => b_food(x + Math.sin(t * 9 + i) * 6, 480, 1.35, t, ['#7cc46a', '#ffb347', '#62c26a', '#ff8fb1'][i]) + (i === 3 ? G(tr(x + 60, 380, pop(t, .4)), text(0, 0, OL, 'TUUUT !', '#fff', 46)) : '')).join('') +
     G(tr(1700, 220, pop(t, .2)), path('M0 -90L90 70L-90 70Z', '#ffd23f', 8) + text(0, 55, 'none', '!', OL, 110)) + tag(760, 160, 'BOUCHÉ', t, at(91, 'obstruer') - at(91, 'ils'), '#ff4d4d', '#fff', 70),
   sfx: [[0, 'el:hit_cine', .4], [.4, 'el:car_horn', .5], [at(91, 'obstruer') - at(91, 'ils'), 'error_beep', .8], [1.4, 'el:traffic', .3]] }, at(91, 'ils'));
 
@@ -535,7 +535,7 @@ B(91, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .4 })
 B(92, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.08, 1.0, t / d), hand: .4 }),
   draw: t => { const P = at(92, 'passes'), k = eInOut(seg(t, P - .2, P + .6));
     return depth({ x: k * 150, zoom: 1 }, [...underLayers(t, { seed: 43 }),
-      { z: 1, svg: plasticBag({ x: 1450, y: 380, s: 1.1, print: false }, t) + G(tr(lerp(500, 1150, k), 760 - Math.sin(k * Math.PI) * 300, 1, -20 * Math.sin(k * Math.PI)), torA({ x: 0, y: 0, s: 2.0, expr: k > .1 ? 'smugger' : 'suspicious', swim: k > .1 ? 1.5 : 0, look: [1, -.6] }, t)) + check(1500, 650, .8, t, P + .5) },
+      { z: 1, svg: plasticBag({ x: 1450, y: 380, s: 1.1, print: false }, t) + G(tr(lerp(500, 1150, k), 760 - Math.sin(k * Math.PI) * 300, 1, -20 * Math.sin(k * Math.PI)), torA({ x: 0, y: 0, s: 2.0, expr: k > .1 ? 'smugger' : 'suspicious', swim: k > .1 ? 1.5 : 0, look: [1, -.6] }, t)) + check(1720, 260, .8, t, P + .5) },
       b_fg(t, { seed: 44, k2: false })]); },
   sfx: [[0, 'hmm', .8], [at(92, 'passes') - .1, 'el:swim_whoosh', .8], [at(92, 'passes') + .5, 'ding', .7]] });
 // B093 — contre-plongée : elle file vers la lumière, guillerette
@@ -550,7 +550,7 @@ B(93, { enter: 'drop', cam: (t, d) => ({ z: 1.04, cy: 300, r: -4 }),
 // ============================================================
 // B094 — plongée depuis le ciel : aube orange, un chalutier vu d'en haut traîne ses lignes
 B(94, { enter: 'none', cam: (t, d) => ({ z: lerp(1.15, 1.02, eOutCubic(t / d)), r: lerp(-6, 0, t / d) }),
-  draw: t => b_waterTop(t, '#f7a35c', '#2a6f96', 'rgba(255,230,180,.5)') + G(tr(760, 400), op(.25, path('M0 -320C110 -220 130 0 120 260L-120 260C-130 0 -110 -220 0 -320Z', '#000', 0))) +
+  draw: t => b_waterTop(t, '#f7a35c', '#2a6f96', 'rgba(255,230,180,.5)') + G(tr(1075, 415, .9), op(.25, path('M0 -320C110 -220 130 0 120 260L-120 260C-130 0 -110 -220 0 -320Z', '#000', 0))) +
     path('M1000 700L700 1200M1060 700L1300 1200M1030 700L1030 1200', 'none', 6, 'rgba(255,255,255,.6)') + Array.from({ length: 6 }, (_, i) => circ(760 + i * 110, 1000 + Math.sin(i) * 30, 16, '#ff8a2a', 5)).join('') +
     b_boatTop(1030, 360, .9, 0) + glow(300, 100, 400, '#fff1c0', .5),
   sfx: [[0, 'el:a_wind', .5], [.1, 'el:car_engine', .25], [.5, 'sting', .4]] });
@@ -561,7 +561,7 @@ B(95, { enter: 'none', cam: () => ({ z: 1.0, hand: .4 }),
     const c = { x: lerp(-150 * 1.7, 0, k), y: lerp(140 * 1.7, 0, k), zoom: z };
     return depth(c, [...underLayers(t, { dark: .35, floor: 1010, seed: 47 }),
       { z: 1.3, svg: b_net(t, { x: 1350, y: 0, w: 1700, h: 1050, n: 16 }) + Array.from({ length: 6 }, (_, i) => fish({ x: 900 + i * 220, y: 300 + (i % 3) * 200, s: .5, color: '#ffb347', rot: wave(t, 4, 20, i / 6), tf: 6 }, t)).join(''), haze: .15, hazeCol: '#163a5a' },
-      { z: 1, svg: torA({ x: 520, y: 780, s: 1.3, expr: t > at(95, 'filet') - .1 ? 'jawdrop' : 'happy', swim: t > I ? 0 : 1, look: [1, -.3] }, t) },
+      { z: 1, svg: torA({ x: 520, y: 730, s: 1.3, expr: t > at(95, 'filet') - .1 ? 'jawdrop' : 'happy', swim: t > I ? 0 : 1, look: [1, -.3] }, t) },
       b_fg(t, { seed: 48, kx: -80, k2: false })]) + (t > I && t < I + .15 ? `<rect width="${W}" height="${H}" fill="rgba(255,255,255,.6)"/>` : ''); },
   sfx: [[0, 'el:swim_whoosh', .5], [at(95, 'immense') - .1, 'el:hit_cine', .9], [at(95, 'immense'), 'sting', .8], [at(95, 'filet'), 'el:net_creak', .7]] });
 
@@ -570,7 +570,7 @@ B(96, { enter: 'whip', cam: (t, d) => ({ z: 1.04, hand: .8 }),
   draw: t => { let f = ''; for (let i = 0; i < 7; i++) f += G(tr(820 + i * 160 + wave(t, 3, 20, i / 7), 300 + (i % 3) * 170 + wave(t, 2.5, 30, i / 3), 1, wave(t, 4, 25, i / 5)), fish({ x: 0, y: 0, s: .75, color: ['#ffb347', '#7fd3ff', '#ff8fb1', '#ffd23f'][i % 4], tf: 7, flip: i % 2 }, t) + sweat(i % 2 ? 60 : -60, -60, .5));
     return depth({ zoom: 1 }, [...underLayers(t, { dark: .35, seed: 49 }),
       { z: 1, svg: f + net(1300, 150, 1300, 760, t, { n: 14, tight: .3 + .1 * Math.sin(t * 3) }) + G(tr(1250, 120, pop(t, .5), -4), rect(-230, -50, 460, 100, '#fff', 14) + text(0, 18, 'none', 'AU SECOURS !', '#ff4d4d', 52)) },
-      { z: .7, svg: torA({ x: 160, y: 820, s: 1.5, expr: 'scared', tremble: 1, look: [1, 0] }, t), blur: 2 }]); },
+      { z: .7, svg: torA({ x: 160, y: 760, s: 1.5, expr: 'scared', tremble: 1, look: [1, 0] }, t), blur: 2 }]); },
   sfx: [[0, 'el:fish_school', .9], [.3, 'el:struggle', .6], [.5, 'pop', .5], [1.2, 'el:net_creak', .6]] });
 
 // B097 — très large : demi-tour en dérapage… le filet l'avale — gel de l'image, TROP TARD
@@ -579,7 +579,7 @@ B(97, { enter: 'none', cam: (t, d) => ({ z: 1.02, shake: t < at(97, 'trop') ? 4 
   draw: t => { const T1 = at(97, 'trop'), tt = Math.min(t, T1), k = eOutCubic(seg(tt, 0, .5)), n = seg(tt, .3, T1);
     return depth({ zoom: 1 }, [...underLayers(tt, { dark: .35, floor: 1010, seed: 50 }),
       { z: 1, svg: (k > .3 ? path(`M${lerp(1100, 800, n) + 200} 720q120 -40 260 0`, 'none', 8, 'rgba(255,255,255,.5)') + b_bub(lerp(1100, 800, n) + 300, 820, tt, 6, 3) : '') +
-        torA({ x: lerp(1100, 800, n), y: 780, s: 1.3, flip: k > .5 ? 1 : 0, expr: k > .5 ? 'terror' : 'shock', swim: 5 }, tt) + b_net(tt, { x: lerp(2600, 1200, eInCubic(n)), y: 0, w: 2200, h: 1100, tight: .2 }) +
+        torA({ x: lerp(1100, 800, n), y: 730, s: 1.3, flip: k > .5 ? 1 : 0, expr: k > .5 ? 'terror' : 'shock', swim: 5 }, tt) + b_net(tt, { x: lerp(2600, 1200, eInCubic(n)), y: 0, w: 2200, h: 1100, tight: .2 }) +
         tag(CX, 150, 'TROP TARD', t, T1, '#ff4d4d', '#fff', 80) },
       b_fg(tt, { seed: 51, kx: 1950, k2: false })]); },
   sfx: [[0, 'el:brake', .7], [.1, 'whoosh', .8], [.6, 'el:net_creak', .7], [at(97, 'trop'), 'el:hit_cine', 1], [at(97, 'trop') + .05, 'sting', .7]] });
@@ -596,7 +596,7 @@ B(98, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.04, 1.14, t / d), hand: .6 }
 B(99, { enter: 'whip', cam: (t, d) => ({ z: 1.06, cy: 900, r: -6, hand: 1.2, shake: 4 }),
   draw: t => { const p = .35 + .2 * Math.abs(Math.sin(t * 7));
     return depth({ zoom: 1 }, [...underLayers(t, { dark: .4, surface: 60, seed: 52 }),
-      { z: 1, svg: net(1400, 60, 1300, 1000, t, { n: 12, pull: [960, 640, p], floats: false }) + torA({ x: 760 - p * 120, y: 800, s: 1.7, flip: 1, rot: 12, expr: 'effort', flail: 1 }, t) + motionLines(260, 580, 3, 120, 180, '#fff') + sweat(380, 560, 1) },
+      { z: 1, svg: net(1400, 60, 1300, 1000, t, { n: 12, pull: [960, 640, p], floats: false }) + torA({ x: 760 - p * 120, y: 760, s: 1.7, flip: 1, rot: 12, expr: 'effort', flail: 1 }, t) + motionLines(260, 580, 3, 120, 180, '#fff') + sweat(380, 560, 1) },
       b_fg(t, { seed: 53, kelp: false })]); },
   sfx: [[0, 'hmm', 1], [.1, 'el:net_creak', .9], [.4, 'el:struggle', .7]] });
 
@@ -610,13 +610,13 @@ B(100, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.15, eInOut(t / d)), r:
 // B101 — moyen, épaule + débullé : elle se débat comme une furie
 B(101, { enter: 'punch', cam: (t, d) => ({ z: 1.08, r: 8, hand: 1.5, shake: 8 }),
   draw: t => depth({ zoom: 1 }, [...underLayers(t, { dark: .45, seed: 54 }),
-    { z: 1, svg: torA({ x: 760, y: 780, s: 1.5, expr: 'panic', flail: 1, tremble: 1 }, t) + b_net(t, { x: 900, y: 200, w: 1500, h: 900, n: 14, tight: .35, floats: false }) + b_bub(900, 600, t, 8, 3, 1.3) + motionLines(400, 500, 3, 100, 200, '#fff') + motionLines(1400, 520, 3, 100, -20, '#fff') }]),
+    { z: 1, svg: torA({ x: 760, y: 720, s: 1.5, expr: 'panic', flail: 1, tremble: 1 }, t) + b_net(t, { x: 900, y: 200, w: 1500, h: 900, n: 14, tight: .35, floats: false }) + b_bub(900, 600, t, 8, 3, 1.3) + motionLines(400, 500, 3, 100, 200, '#fff') + motionLines(1400, 520, 3, 100, -20, '#fff') }]),
   sfx: [[0, 'el:struggle', 1], [.2, 'el:bubbles', .7]] });
 
 // B102a — profil débullé : ENCORE !
 B(102, { enter: 'whip', cam: (t, d) => ({ z: 1.06, r: -8, hand: 1, shake: 6 }),
   draw: t => depth({ zoom: 1 }, [...underLayers(t, { dark: .45, floor: 1000, seed: 55 }),
-    { z: 1, svg: b_tangled(800, 720, 1.2, t, { expr: 'effort' }) + b_net(t, { x: CX, y: 160, w: 1700, h: 900, n: 14, tight: .35, floats: false }) + tag(CX, 150, 'ENCORE !', t, at(102, 'encore'), '#fff', OL, 72) },
+    { z: 1, svg: b_tangled(800, 670, 1.2, t, { expr: 'effort' }) + b_net(t, { x: CX, y: 160, w: 1700, h: 900, n: 14, tight: .35, floats: false }) + tag(CX, 150, 'ENCORE !', t, at(102, 'encore'), '#fff', OL, 72) },
     b_fg(t, { seed: 56, kelp: false })]),
   sfx: [[0, 'el:struggle', .9], [at(102, 'encore'), 'thud', .6], [.6, 'el:net_creak', .6]] });
 // B102b — gros plan visage : effort, sueur, tremblements — ENCORE !!
@@ -662,7 +662,7 @@ B(106, { enter: 'none', cam: (t, d) => ({ z: lerp(1.04, 1.12, t / d), r: lerp(4,
 B(107, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .8 }),
   draw: t => { const k = lerp(.6, .3, seg(t, 0, 1.3));
     return depth({ zoom: 1 }, [...underLayers(t, { dark: .6, floor: 1000, seed: 60 }),
-      { z: 1, svg: b_tangled(650, 740, 1.3, t, { expr: 'worried' }) + net(700, 260, 1100, 800, t, { n: 12, floats: false, rope: false }) + b_o2(1500, 470, 1.0, k, 'O₂', t) + tag(1500, 130, Math.round(k * 100) + ' %', t, 0, '#ffb340', '#fff', 64) },
+      { z: 1, svg: b_tangled(650, 690, 1.3, t, { expr: 'worried' }) + net(700, 260, 1100, 800, t, { n: 12, floats: false, rope: false }) + b_o2(1500, 470, 1.0, k, 'O₂', t) + tag(1500, 130, Math.round(k * 100) + ' %', t, 0, '#ffb340', '#fff', 64) },
       b_fg(t, { seed: 61, kelp: false })]); },
   sfx: [[0, 'el:heart_slow', .9], [.6, 'tick', .6], [1.0, 'tick', .6]] });
 // B107b — très gros plan compte à rebours : O₂ BATTERIE FAIBLE, chrono rouge ; elle panique dans le coin
@@ -678,7 +678,7 @@ B(107, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), shake: 2 }
 B(108, { enter: 'crash', cam: (t, d) => ({ z: 1.08, r: -10, shake: 12, hand: 1 }),
   draw: t => { const p = .5 + .2 * Math.sin(t * 9);
     return depth({ zoom: 1 }, [...underLayers(t, { dark: .6, seed: 62 }),
-      { z: 1, svg: net(1500, 120, 1200, 900, t, { n: 12, pull: [1000, 600, p], floats: false }) + torA({ x: 900 - p * 120, y: 800, s: 2.0, flip: 1, expr: 'rage', flipUp: 1, tremble: 1.5 }, t) + motionLines(200, 520, 4, 150, 180, '#fff') + G(tr(500, 300, pop(t, .3), -10), text(0, 0, OL, 'HNNNGH !', '#fff', 80)) }]); },
+      { z: 1, svg: net(1500, 120, 1200, 900, t, { n: 12, pull: [1000, 600, p], floats: false }) + torA({ x: 900 - p * 120, y: 670, s: 2.0, flip: 1, expr: 'rage', flipUp: 1, tremble: 1.5 }, t) + motionLines(200, 520, 4, 150, 180, '#fff') + G(tr(500, 300, pop(t, .3), -10), text(0, 0, OL, 'HNNNGH !', '#fff', 80)) }]); },
   sfx: [[0, 'el:struggle', 1], [.2, 'el:net_creak', 1], [.4, 'hmm', 1], [1.2, 'el:rope_snap', .2]] });
 
 // B109 — large + médaillon loupe : la corde entaille la nageoire (pudique : petites marques rouges)
@@ -701,7 +701,7 @@ B(110, { enter: 'whip', cam: (t, d) => { const s = Math.sin(t * 6); return { z: 
 
 // B111 — contre-plongée, flash : IMPOSSIBLE ; larmes en fontaine (sous l'eau : en bulles)
 B(111, { flash: 1, enter: 'crash', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), cy: 860, r: -6, shake: 6 }),
-  draw: t => rect(-200, -200, W + 400, H + 400, '#2a0e1a', 0, 0) + rays(t, CX, 400, '#3a1424', '#2a0e1a', 18) + cross(CX, 520, 2.4, t, 0) + torAF({ x: CX, y: 920, r: 125, expr: 'sob', armL: 230, armR: -50 }, t) + b_bub(CX, 600, t, 6, 2, .8) +
+  draw: t => rect(-200, -200, W + 400, H + 400, '#2a0e1a', 0, 0) + rays(t, CX, 400, '#3a1424', '#2a0e1a', 18) + cross(CX, 520, 2.4, t, 0) + torAF({ x: CX, y: 920, r: 125, expr: 'sob', armL: 230, armR: -50 }, t) + b_bub(CX - 240, 600, t, 4, 2, .8) + b_bub(CX + 240, 600, t, 4, 2, .8) +
     bigText(['IMPOSSIBLE'], t, at(111, 'impossible') - .05, CX, 150, '#ff4d4d', 140),
   sfx: [[0, 'el:hit_cine', 1], [at(111, 'impossible'), 'error_beep', .8], [.5, 'el:crowd_aww', .4]] });
 
@@ -713,8 +713,8 @@ B(112, { enter: 'none', cam: (t, d) => ({ z: lerp(1.2, 1.0, eOutCubic(t / d)), r
 // B112b — pédagogique, pudique : silhouettes de tortues dans des filets… un petit fantôme s'élève doucement
 B(112, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d) }),
   draw: t => { const M = at(112, 'mourir') - at(112, 'tortues');
-    return grad('#0b2236', '#050f1b', -200, -200, W + 400, H + 400) + [[500, 700], [960, 640], [1420, 700]].map(([x, y], i) => op(i === 1 ? (t > M ? 0 : 1) : .5, turtle({ age: 'adult', x, y, s: .9, seed: 4 + i, expr: 'sad', shell: '#4f6a5e', shellL: '#6a8576', skin: '#87a59a', bob: 0 }, 0) + net(x, y - 260, 420, 330, t, { n: 8, floats: false, rope: false, col: 'rgba(200,200,190,.6)' }))).join('') +
-      (t > M ? op(.75, turtle({ age: 'adult', x: 960, y: 640, s: .9, ghost: seg(t, M, M + 1.2), expr: 'sad', seed: 5, bob: 0, shell: '#4f6a5e', shellL: '#6a8576', skin: '#87a59a' }, t)) : '') + tag(CX, 140, 'NOYADE', t, M, '#5a6b7c', '#fff', 60); },
+    return grad('#0b2236', '#050f1b', -200, -200, W + 400, H + 400) + [[500, 640], [960, 600], [1420, 640]].map(([x, y], i) => op(i === 1 ? (t > M ? 0 : 1) : .5, turtle({ age: 'adult', x, y, s: .9, seed: 4 + i, expr: 'sad', shell: '#4f6a5e', shellL: '#6a8576', skin: '#87a59a', bob: 0 }, 0) + net(x, y - 260, 420, 330, t, { n: 8, floats: false, rope: false, col: 'rgba(200,200,190,.6)' }))).join('') +
+      (t > M ? op(.75, turtle({ age: 'adult', x: 960, y: 600, s: .9, ghost: seg(t, M, M + 1.2), expr: 'sad', seed: 5, bob: 0, shell: '#4f6a5e', shellL: '#6a8576', skin: '#87a59a' }, t)) : '') + tag(CX, 140, 'NOYADE', t, M, '#5a6b7c', '#fff', 60); },
   sfx: [[0, 'el:heart_slow', .7], [at(112, 'mourir') - at(112, 'tortues'), 'ghost', .5], [at(112, 'mourir') - at(112, 'tortues') + .3, 'angel', .3]] }, at(112, 'tortues'));
 
 // B113 — moyen pédagogique : en piscine olympique, bonnet de bain, chrono record, médaille — elle SAIT nager
@@ -742,7 +742,7 @@ B(114, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), cy: 300, r
 // B115 — très large, épaule violente : elle se débat dans un nuage de sable
 B(115, { enter: 'whip', cam: (t, d) => ({ z: 1.06, r: 10 * Math.sin(t * 3), hand: 1.5, shake: 9 }),
   draw: t => { const r = rng(7); let sand = ''; for (let i = 0; i < 14; i++) { const q = (t * .8 + r()) % 1; sand += circ(400 + r() * 1100 + (r() - .5) * 400 * q, 960 - 300 * q, 40 + 70 * q, `rgba(200,170,120,${.5 * (1 - q)})`, 0); }
-    return depth({ zoom: 1 }, [...underLayers(t, { dark: .6, floor: 960, seed: 66 }), { z: 1, svg: sand + b_tangled(760, 760, 1.2, t, { expr: 'rage' }) + b_net(t, { x: CX, y: 200, w: 1700, h: 900, n: 14, tight: .35, floats: false }) + b_bub(1000, 600, t, 8, 3) + b_o2(1700, 380, .5, .08, '', t) }]); },
+    return depth({ zoom: 1 }, [...underLayers(t, { dark: .6, floor: 960, seed: 66 }), { z: 1, svg: sand + b_tangled(760, 700, 1.2, t, { expr: 'rage' }) + b_net(t, { x: CX, y: 200, w: 1700, h: 900, n: 14, tight: .35, floats: false }) + b_bub(1000, 600, t, 8, 3) + b_o2(1700, 380, .5, .08, '', t) }]); },
   sfx: [[0, 'el:struggle', 1], [.3, 'el:net_creak', .7], [.6, 'el:bubbles', .5]] });
 
 // B116a — très gros plan : une maille abîmée, les fibres lâchent une à une
@@ -764,7 +764,7 @@ B(116, { flash: 1, enter: 'punch', cam: (t, d) => ({ z: 1.12, shake: t < .2 ? 14
 B(117, { flash: 1, enter: 'crash', cam: (t, d) => ({ z: 1.06, shake: 5 }),
   draw: t => { const k = eOutCubic(seg(t, 0, .8)), r = lerp(70, 170, k);
     return grad('#2a6f96', '#0e2a44', -200, -200, W + 400, H + 400) + speedLines(t, CX, 560, 34, 'rgba(255,255,255,.55)') + net(CX, -200, 2600, 1500, t, { n: 10, floats: false, rope: false, sw: 12, pull: [CX, 560, -.9] }) +
-      torAF({ x: CX, y: lerp(820, 950, k), r, expr: 'effort', armL: 250, armR: -70 }, t) + b_bub(CX, 900, t, 8, 3, 1.2); },
+      torAF({ x: CX, y: lerp(820, 950, k), r, expr: 'effort', armL: 250, armR: -70 }, t) + b_bub(CX - 330, 900, t, 5, 3, 1.2) + b_bub(CX + 330, 900, t, 5, 3, 1.2); },
   sfx: [[0, 'whoosh_up', 1], [.05, 'el:swim_whoosh', .9], [.4, 'el:bubbles', .6]] });
 
 // B118 — plongée sur l'abîme : elle remonte vers nous, -8 m… -1 m, O₂ qui clignote
@@ -781,7 +781,7 @@ B(119, { flash: 1, enter: 'none', cam: (t, d) => ({ z: lerp(1.08, 1.0, eOutCubic
     let drops = ''; for (let i = 0; i < 16; i++) { const a = R(195 + i * 10), q = seg(t, 0, 1.4); drops += circ(1060 + Math.cos(a) * 520 * q, wl - 40 + Math.sin(a) * 420 * q + 260 * q * q, 12 + (i % 3) * 6, '#fff', 4, '#9be2f5'); }
     return depth({ zoom: 1 }, [{ z: 3, svg: b_sky(wl, '#ffd7a8', '#fff1d9') + rays(t, 1060, 250, 'rgba(255,240,180,.4)', 'rgba(255,255,255,0)', 20) }, { z: 1, svg: b_water(t, wl) +
       path(`M${1060 - 300} ${wl}Q${1060 - 240} ${wl - 260 * k} ${1060 - 140} ${wl - 40}Q${1060} ${wl - 320 * k} ${1060 + 140} ${wl - 40}Q${1060 + 240} ${wl - 260 * k} ${1060 + 300} ${wl}Z`, 'rgba(255,255,255,.75)', 5, '#9be2f5') +
-      torA({ x: 900, y, s: 1.4, rot: -40, swim: .3, expr: 'panic', face: { mouth: 'o-small' } }, t * .4) + b_puff(900 + 190, y - 259, 56 * 1.4, 1, t) + b_waterFront(t, wl, .25) + drops }]); },
+      torA({ x: 900, y, s: 1.7, rot: -40, swim: .3, expr: 'panic', face: { mouth: 'o-small' } }, t * .4) + b_waterFront(t, wl, .25) + drops }]); },
   sfx: [[0, 'el:surface', 1], [.05, 'el:splash', 1], [.1, 'el:hit_cine', .6], [.5, 'el:wave_crash', .4]] });
 
 // B120 — gros plan : L'INSPIRATION — elle aspire tout, l'air, les nuages, elle gonfle comme un ballon
