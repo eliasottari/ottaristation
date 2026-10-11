@@ -7,7 +7,8 @@
 const TOTAL = 70.4;
 const SCENES = [];
 const NOCAM = () => ({ z: 1 });
-const foc = (px, py, z) => ({ x: (px - W / 2) * z, y: (py - H / 2) * z, zoom: z });
+const ZK = 1.32; // cadrage « 50 mm » serré : les persos prennent la moitié de l'écran
+const foc = (px, py, z, raw) => { z = raw ? z : z * ZK; return { x: (px - W / 2) * z, y: (py - H / 2) * z, zoom: z }; };
 function S(s, o) { o.s = s; SCENES.push(o); return o; }
 const RED = '#e8724a', BLUE = '#4a78c9', TEAL = '#3fa7a0', YEL = '#f2b632', PURP = '#a98be8', GREEN = '#5fb15a', PINK = '#f29ab8';
 const HAIRD = '#3b3040';
@@ -23,7 +24,7 @@ S(0, {
   cam: NOCAM, enter: 'none', rays: { ang: 25, x: -300, o: .2 },
   sfx: [[.84, 'squeak', .8], [1.3, 'pop', .7], [2.74, 'gulp', .9], [2.8, 'pop_hi', .6], [3.42, 'boing', .6], [3.75, 'thud', .9], [3.94, 'whoosh_up', .5], [4.1, 'sparkle', .5]],
   draw(t) {
-    const cam = kf(t, [[0, foc(535, 1010, 1.9)], [3.3, foc(540, 1010, 2.0)], [3.95, foc(600, 1040, 2.0)], [4.9, foc(680, 1100, 2.7)]]);
+    const cam = kf(t, [[0, foc(505, 1010, 1.9)], [3.3, foc(515, 1010, 2.0)], [3.95, foc(600, 1040, 2.0)], [4.9, foc(680, 1100, 2.7)]]);
     const open = val(t, [[.8, 0], [1.15, 1], [2.9, 1], [3.3, 0]], eOutBack);
     const brainIn = t < 1.3;
     const r = 100;
@@ -101,7 +102,7 @@ S(14.75, {
   cam: NOCAM, tin: { type: 'dissolve', d: .5 }, rays: { ang: 20, o: .22, x: 100 },
   sfx: [[0, 'whoosh', .5], [.75, 'sparkle', .6], [1.0, 'magic', .5], [1.5, 'pop', .7], [1.6, 'boing', .5]],
   draw(t) {
-    const cam = kf(t, [[0, foc(600, 1090, 1.85)], [2.1, foc(620, 1100, 2.0)]]);
+    const cam = kf(t, [[0, foc(560, 1040, 1.75)], [2.1, foc(600, 1050, 1.9)]]);
     const n = Math.round(val(t, [[.6, 3], [1.5, 46]], k => k * k));
     const old = pop(t, 1.51, .35);
     const room = rect(-M, -M, W + 2 * M, H + 2 * M, '#f3e6c8', 0, 0) + [0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => circ(-200 + i * 180, 140, 14, '#e8c9a0', 0) + circ(-110 + i * 180, 300, 14, '#e8c9a0', 0)).join('') +
@@ -124,7 +125,7 @@ S(16.85, {
   cam: NOCAM, tin: { type: 'dissolve', d: .45 }, rays: { ang: 18, o: .14 },
   sfx: [[0, 'whoosh', .4], [.9, 'hmm', .5], [1.99, 'whoosh', .8], [2.5, 'thud', .8], [2.55, 'crack', .3], [3.1, 'ding', .5]],
   draw(t) {
-    const cam = kf(t, [[0, foc(545, 1040, 1.7)], [3.6, foc(560, 1040, 1.85)]]);
+    const cam = kf(t, [[0, foc(370, 1010, 1.75)], [1.7, foc(390, 1010, 1.8)], [2.2, foc(700, 1020, 1.75)], [3.6, foc(720, 1020, 1.85)]]);
     const toss = seg(t, 1.99, 2.5);
     const jx = lerp(560, 930, toss), jy = lerp(1060, 1160, toss) - Math.sin(toss * Math.PI) * 420;
     const jarS = toss >= 1 ? '' : jarBrain(jx, jy, .5, t, { r: toss * 300, glow: .3 });
@@ -144,7 +145,7 @@ const S5 = S(20.45, {
   cam: NOCAM, tin: { type: 'dissolve', d: .45 }, rays: { ang: 30, o: .25, c: '#fff3c4' },
   sfx: [[0, 'whoosh', .4], [.2, 'chirp', .5], [.6, 'ring', .4], [1.2, 'chirp', .4]],
   draw(t) {
-    const cam = foc(470 + t * 260, 1020, 1.9);
+    const cam = foc(540 + t * 260, 1000, 1.8);
     const trees = (() => { let s = ''; for (let i = 0; i < 14; i++) s += rect(-300 + i * 340, 500, 40, 700, '#8a6a4a', 6, 0) + circ(-280 + i * 340, 420, 200, ['#9bc75a', '#86b84f', '#a8d066'][i % 3], 0); return s; })();
     const rider = rouge({ x: 520 + t * 260, y: 1250, expr: exprAt(t, [[0, 'glee'], [1.0, 'dot']]), legs: [[40 + Math.sin(t * 8) * 25, 100], [60 - Math.sin(t * 8) * 25, 110]], arms: [[20, 0], [10, -10]], lean: 18, bob: 0, shadow: false }, t);
     const pal = stick({ x: 220 + t * 260, y: 1300, body: GREEN, hair: 'curly', hairColor: '#2b2b33', expr: 'glee', ...walkPose(t, 1.8, 1.2), arms: [[-120, -100], [-60, -80]], seed: 9 }, t);
@@ -200,7 +201,7 @@ S(24.25, {
     ]);
   },
 });
-function S7cam(t) { return kf(t, [[0, foc(420, 1040, 1.9)], [1.1, foc(440, 1030, 1.95)], [1.9, foc(820, 790, 1.95)]]); }
+function S7cam(t) { return kf(t, [[0, foc(420, 1040, 1.9)], [1.1, foc(440, 1030, 1.95)], [1.9, foc(820, 790, 2.25, 1)]]); }
 
 // =========================================================== 8. DANS L'ORDINATEUR (26.15 → 28.05)
 S(26.15, {
@@ -209,7 +210,7 @@ S(26.15, {
   draw(t) {
     const yr = Math.round(val(t, [[.85, 2026], [1.9, 9999]], k => k * k));
     const err = pop(t, 1.35, .3);
-    const guy = stick({ x: 540, y: 1560, s: 2.3, body: PURP, hair: 'beret', hairColor: '#6b52b8', expr: exprAt(t, [[0, 'dot'], [.85, 'dotO'], [1.35, 'gritR']]), arms: t < 1.35 ? [[105, 95], [-80, -150]] : [[-120, -100], [-60, -80]], seed: 2 }, t);
+    const guy = stick({ x: 540, y: 1800, s: 3.0, body: PURP, hair: 'beret', hairColor: '#6b52b8', expr: exprAt(t, [[0, 'dot'], [.85, 'dotO'], [1.35, 'gritR']]), arms: t < 1.35 ? [[105, 95], [-80, -150]] : [[-120, -100], [-60, -80]], seed: 2 }, t);
     return G(tr(0, 0, 1), desktop(t, guy, `01/01/${yr}`) + (err > 0 ? G(tr(540, 820, err), errBox(0, 0, 1)) : '')) + (t > 1.35 ? glitchFx('', 0, t) : '');
   },
 });
@@ -241,16 +242,16 @@ S(28.05, {
     s += sprite3(c, 1.15, 0, 4.25, powerStrip(0, 0, 1.0, eOutBack(yank)), 900);
     // café renversé
     const spill = seg(t, 1.85, 2.4);
-    if (spill > 0) s += sprite3(c, .25, 0, 3.25, ell(0, 0, 170 * spill, 45 * spill, '#6b3e1f', 5, '#4a2a12'), 290);
+    if (spill > 0) s += sprite3(c, .25, 0, 2.9, ell(0, 0, 170 * spill, 45 * spill, '#6b3e1f', 5, '#4a2a12'), 290);
     // le perso qui trébuche
     const wx = val(t, [[.9, -2.4], [1.57, -.3]], k => k), trip = seg(t, 1.57, 2.0), rec = seg(t, 2.2, 2.6);
     if (t > .9) {
       const wp = walkPose(t, 1.4, 1);
       const guy = stick({ body: YEL, hair: 'bowl', hairColor: '#e8892a', expr: exprAt(t, [[0, 'hehe'], [1.57, 'ringO'], [1.75, 'grit'], [2.43, 'gritR']]), tag: '#4caf6a', seed: 8, legs: trip > 0 && rec < 1 ? [[50, 80], [130, 100]] : wp.legs, arms: trip > 0 ? [[-140, -160], [-30, -60]] : [[100, 90], [60, 0]], lean: 34 * Math.sin(trip * Math.PI * .8) * (1 - rec) + (rec > 0 ? -8 : 0), holdR: trip <= 0 ? mug() : '' }, t);
-      s += sprite3(c, wx, 0, 3.15, guy, 290);
+      s += sprite3(c, wx, 0, 2.75, guy, 290);
     }
     // tasse + gouttes qui volent
-    if (trip > 0 && spill < 1) { const k = seg(t, 1.57, 2.0); const [mx, my] = P3(c, lerp(.1, .6, k), 1.2 + Math.sin(k * Math.PI) * .8 - k * 1.2, 3.1); s += G(tr(mx, my, 1.4, k * 400), mug()); for (let i = 0; i < 6; i++) { const [dx, dy] = P3(c, .1 + i * .08 * k, 1.2 + Math.sin(k * Math.PI) * .5 - k * 1.2 - i * .04, 3.1); s += circ(dx, dy, 10, '#6b3e1f', 3, '#4a2a12'); } }
+    if (trip > 0 && spill < 1) { const k = seg(t, 1.57, 2.0); const [mx, my] = P3(c, lerp(.1, .6, k), 1.2 + Math.sin(k * Math.PI) * .8 - k * 1.2, 2.7); s += G(tr(mx, my, 1.4, k * 400), mug()); for (let i = 0; i < 6; i++) { const [dx, dy] = P3(c, .1 + i * .08 * k, 1.2 + Math.sin(k * Math.PI) * .5 - k * 1.2 - i * .04, 2.7); s += circ(dx, dy, 10, '#6b3e1f', 3, '#4a2a12'); } }
     if (yank > 0 && yank < 1) { const [px, py] = P3(c, 1.2, .3, 4.25); s += op(1 - yank, impactStar(px, py, .8) + sparkle(px + 40, py - 60, .6, '#fff3a0')); }
     return s;
   },
@@ -259,7 +260,7 @@ S(28.05, {
 // =========================================================== 10. LABO NEUROCOPIE (31.0 → 38.75)
 const MON10 = { x: 700, y: 520, w: 300, h: 533 };
 const DOME10 = [300, 1160];
-function S10cam(t) { return kf(t, [[0, foc(450, 1000, 1.7)], [1.3, foc(460, 1000, 1.8)], [2.4, foc(380, 1010, 2.0)], [2.95, foc(300, 1010, 2.6)], [4.3, foc(300, 1000, 2.75)], [4.7, foc(850, 790, 2.0)], [6.6, foc(850, 790, 2.05)], [7.2, foc(700, 900, 1.75)], [7.75, foc(800, 860, 1.85)]]); }
+function S10cam(t) { return kf(t, [[0, foc(450, 1000, 1.7)], [1.3, foc(460, 1000, 1.8)], [2.4, foc(380, 1010, 2.0)], [2.95, foc(300, 1000, 2.6, 1)], [4.3, foc(300, 990, 2.75, 1)], [4.7, foc(850, 790, 2.3, 1)], [6.6, foc(850, 790, 2.35, 1)], [7.2, foc(700, 900, 1.75)], [7.75, foc(800, 860, 1.85)]]); }
 S(31.0, {
   cam: NOCAM, tin: { type: 'dissolve', d: .45 }, rays: { ang: 18, o: .1 },
   sfx: [[0, 'whoosh', .4], [2.4, 'whoosh', .6], [2.98, 'whoosh_up', .6], [3.36, 'scratch', .4], [3.4, 'buzz', .6], [4.68, 'whoosh', .8], [4.9, 'typing', .5], [5.36, 'ding', .6], [5.5, 'printer', .4], [6.2, 'ding', .7], [7.52, 'crack', .8], [7.55, 'zap', .7], [7.6, 'tada', .5]],
@@ -372,7 +373,7 @@ S(53.3, {
   cam: NOCAM, enter: 'whip',
   sfx: [[0, 'whoosh', .8], [.15, 'buzz', .3], [1.08, 'tada', .6], [1.1, 'sparkle', .6], [1.6, 'kaching', .5]],
   draw(t) {
-    const cam = kf(t, [[0, foc(520, 960, 1.9)], [2.0, foc(560, 960, 1.7)]]);
+    const cam = kf(t, [[0, foc(430, 960, 1.75)], [1.1, foc(450, 960, 1.7)], [2.0, foc(560, 960, 1.55)]]);
     const sell = stick({ x: 380, y: 1290, body: '#2f3a5a', tie: '#e2463a', coat: true, hair: 'bowl', hairColor: '#f2d24c', expr: exprAt(t, [[0, 'glee'], [.76, 'hehe'], [1.08, 'glee']]), arms: t > 1.08 ? [[-150, -120], [-30, -60]] : [[110, 95], [20, -40]], seed: 2 }, t);
     const cli = stick({ x: 850, y: 1380, s: 1.05, body: YEL, hair: 'bob', hairColor: '#1f1f26', expr: exprAt(t, [[0, 'dot'], [1.08, 'hehe']]), arms: [[110, 95], [70, 90]], seed: 7, shoes: '#333' }, t);
     const counterB = rect(-60, 1040, 960, 300, '#26304f', 10) + text(420, 1200, 'none', 'TÉLÉCHARGEZ-VOUS', '#9fffd6', 50) + rect(660, 960, 120, 90, '#fff', 6, 5);
@@ -457,7 +458,7 @@ const S19 = S(61.4, {
     bg += bloom(rect(120, 380, 280, 280, '#f6d9ff', 4, 0), 20, .8) + rect(760, 520, 220, 160, 'none', 4, 3, 'rgba(255,255,255,.6)') + path('M800 600Q830 550 870 580Q910 540 940 600Q930 640 870 640Q820 650 800 600Z', 'none', 4, 'rgba(255,255,255,.7)');
     const wake = seg(t, .78, 1.4);
     const ex = exprAt(t, [[0, 'calm'], [.78, 'blase'], [1.2, 'dotO'], [2.15, 'glee'], [3.64, 'hehe'], [4.3, 'dot']]);
-    const guy = stick({ x: 540, y: 1560, s: 1.9, body: '#c9b4ff', hair: 'beret', hairColor: '#6b52b8', expr: ex, lean: lerp(-18, 0, wake), tilt: lerp(-14, 0, wake), legs: wake < 1 ? [[60, 100], [120, 80]] : undefined, legLen: lerp(100, 140, wake),
+    const guy = stick({ x: 540, y: 1820, s: 2.5, body: '#c9b4ff', hair: 'beret', hairColor: '#6b52b8', expr: ex, lean: lerp(-18, 0, wake), tilt: lerp(-14, 0, wake), legs: wake < 1 ? [[60, 100], [120, 80]] : undefined, legLen: lerp(100, 140, wake),
       arms: t > 3.64 ? [[105, 95], [-40, -80]] : t > 2.15 ? [[-140, -120], [-40, -60]] : [[100, 90], [80, 90]], holdR: t > 3.64 ? G(tr(40, -60, pop(t, 3.64, .35)), idCard(0, 0, .6, -8)) : '', seed: 2 }, t);
     const photos = [['beach', 220, 640, -10, 2.15], ['duck', 860, 760, 8, 2.4], ['cake', 180, 1080, 6, 2.7], ['bike', 900, 1120, -7, 3.0], ['me', 760, 450, 4, 3.3]];
     const ph = photos.map(([k, x, y, r, t0]) => { const p = pop(t, t0, .4); return p > 0 && t < 3.7 ? G(tr(x + wave(t, .4, 8, x), y + wave(t, .3, 10, y), p * .8, r), polaroid(0, 0, 1, 0, PH[k]())) : ''; }).join('');
@@ -467,7 +468,7 @@ const S19 = S(61.4, {
 
 // =========================================================== 20. BLOC OPÉRATOIRE (66.05 → 70.4)
 const MON20 = { x: 90, y: 300, w: 270, h: 480 };
-function S20cam(t) { return kf(t, [[0, foc(540, 960, 1.0)], [.9, foc(540, 960, 1.0)], [1.6, foc(520, 980, 1.6)], [2.2, foc(620, 980, 1.55)], [4.3, foc(640, 990, 1.65)]]); }
+function S20cam(t) { return kf(t, [[0, foc(540, 960, 1.0)], [.9, foc(540, 960, 1.0)], [1.6, foc(520, 980, 1.55)], [2.2, foc(600, 1000, 1.22)], [4.3, foc(610, 1000, 1.3)]]); }
 S(66.05, {
   cam: NOCAM, tin: { type: 'portalOut', d: .75, rr: 4 }, rays: { ang: 0, o: .08, n: 3, x: 300, c: '#ffffff' },
   sfx: [[.1, 'ecg_beep', .4], [1.1, 'ecg_beep', .4], [2.09, 'whoosh', .7], [2.15, 'scratch', .3], [2.7, 'squeak', .5], [3.3, 'hmm', .5], [3.6, 'sting', .6]],

@@ -8,6 +8,43 @@
 // ============================================================
 const HEADW = '#f8f5ef';
 window.FLOW = true;
+window.INK = true;
+// ---------- PINCEAU À PRESSION (façon brosse Illustrator) ----------
+// le contour d'un tracé devient une forme pleine : fin aux extrémités, épais au milieu, légères variations.
+const _inkP = document.createElementNS('http://www.w3.org/2000/svg', 'path'), _inkC = new Map();
+function inkStroke(d, w, col) {
+  const key = w + '|' + d; let g = _inkC.get(key);
+  if (g === undefined) { g = inkGeom(d, w); if (_inkC.size > 30000) _inkC.clear(); _inkC.set(key, g); }
+  return g ? `<path d="${g}" fill="${col}"/>` : '';
+}
+function inkGeom(d, w) {
+  let out = '';
+  d.trim().split(/(?=M)/).forEach((sd, si) => {
+    _inkP.setAttribute('d', sd);
+    let L = 0; try { L = _inkP.getTotalLength(); } catch (e) { return; }
+    if (!(L > .5)) return;
+    const closed = /[Zz]\s*$/.test(sd);
+    const n = Math.max(8, Math.min(160, Math.ceil(L / 4)));
+    const P = []; for (let i = 0; i <= n; i++) { const p = _inkP.getPointAtLength(L * i / n); P.push([p.x, p.y]); }
+    const ph = si * 1.7 + w * .37 + n * .013, short = L < w * 6;
+    const hw = u => {
+      let k = 1 + .22 * Math.sin(u * 6.283 * 1.3 + ph) + .1 * Math.sin(u * 6.283 * 3.7 + ph * 2.1);
+      if (!closed) { const tp = Math.min(1, u / .2, (1 - u) / .2); k *= (short ? .55 : .14) + (short ? .45 : .86) * Math.sin(tp * Math.PI / 2); }
+      else { const tp = Math.min(1, u / .12, (1 - u) / .12); k *= .95 * (.5 + .5 * Math.sin(tp * Math.PI / 2)); }
+      return w * .56 * k;
+    };
+    const Lf = [], Rt = [];
+    for (let i = 0; i <= n; i++) {
+      const a = P[i === 0 ? (closed ? n - 1 : 0) : i - 1], b = P[i === n ? (closed ? 1 : n) : i + 1];
+      let tx = b[0] - a[0], ty = b[1] - a[1]; const l = Math.hypot(tx, ty) || 1; tx /= l; ty /= l;
+      const h = hw(i / n);
+      Lf.push(f1(P[i][0] - ty * h) + ' ' + f1(P[i][1] + tx * h)); Rt.push(f1(P[i][0] + ty * h) + ' ' + f1(P[i][1] - tx * h));
+    }
+    if (closed) out += 'M' + Lf.join('L') + 'Z' + 'M' + Rt.reverse().join('L') + 'Z';
+    else out += 'M' + Lf.join('L') + 'L' + Rt.reverse().join('L') + 'Z';
+  });
+  return out;
+}
 // dégradé de volume (corps capsule) : déclaré une fois par frame par player.js
 const FLOW_DEFS = `<linearGradient id="stVol" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".30"/><stop offset=".28" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset=".82" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></linearGradient>
 <linearGradient id="stVolV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
@@ -87,7 +124,7 @@ function stLimb(x, y, a1, l1, a2, l2, w = 9, col = OL) {
 //     coat (blouse) tie tag apron | shoes | shadow:false | armsBack
 function stick(o, t = 0) {
   const r = o.hr || 100, col = o.body || '#e8724a';
-  const bw = o.bw || 136, bh = o.bh || 182, legLen = o.legLen ?? 140;
+  const bw = o.bw || 160, bh = o.bh || 205, legLen = o.legLen ?? 140;
   const hipY = -legLen, bob = (o.bob ?? 1) * wave(t, .9, 3, o.seed || 0);
   const bot = hipY + 22, top = bot - bh + bob;
   let s = '';
@@ -126,7 +163,7 @@ function stick(o, t = 0) {
   const upper = (o.armsBack ? armS + body : body) + headS + (o.armsBack ? '' : armS) + (o.over || '');
   s += G(`rotate(${o.lean || 0} 0 ${hipY})`, upper);
   const shadow = o.shadow === false ? '' : ell(0, 6, 90 * (o.shadowK || 1), 15, 'rgba(0,0,0,.17)', 0);
-  if (o.rim !== false) s = `<g filter="url(#rimF)">${s}</g>`;
+  if (o.rim) s = `<g filter="url(#rimF)">${s}</g>`;
   return G(tr(o.x || 0, o.y || 0, o.s || 1, o.rot || 0) + (o.flip ? ' scale(-1 1)' : ''), shadow + s);
 }
 // cycle de marche : renvoie {legs, arms, bob}
