@@ -136,9 +136,9 @@ function a2_nest(t, n, hiI = 52, wakeT = 99, seed = 2) {
   const c = hiI % 14, rw = Math.floor(hiI / 14);
   return s + a2_eggF(180 + c * 120 + (rw % 2) * 60, 130 + rw * 115, 1.15, t, { eyes: t > wakeT ? 'happy' : 'huge', mouth: t > wakeT ? 'grin' : 'o', bow: 1 });
 }
-B(16, { enter: 'none', cam: (t, d) => ({ z: lerp(1.9, 1.0, eInOut(seg(t, 0, 1.6))), cx: 1050, cy: 590, r: lerp(10, 0, eOutCubic(seg(t, 0, 1.6))) }),
+B(16, { enter: 'none', overlay: t => { const n = Math.min(100, Math.floor(1 + 99 * eInCubic(seg(t, .1, at(16, '100') + .15)))); return G(tr(CX, 110, 1 + .15 * Math.max(0, Math.sin(t * 20)) * (n < 100 ? 1 : 0)), rect(-200, -70, 400, 140, '#ffd23f', 40) + text(0, 30, 'none', '×' + n, OL, 90)); }, cam: (t, d) => ({ z: lerp(1.9, 1.0, eInOut(seg(t, 0, 1.6))), cx: 1440, cy: 475, r: lerp(10, 0, eOutCubic(seg(t, 0, 1.6))) }),
   draw: t => { const n = Math.min(100, Math.floor(1 + 99 * eInCubic(seg(t, .1, at(16, '100') + .15)))), F = at(16, 'freres');
-    return sandTop(t, 21) + a2_nest(t, n, 52, F) + G(tr(CX, 110, 1 + .15 * Math.max(0, Math.sin(t * 20)) * (n < 100 ? 1 : 0)), rect(-200, -70, 400, 140, '#ffd23f', 40) + text(0, 30, 'none', '×' + n, OL, 90)) + (t > F ? confetti(t, F, 30) : ''); },
+    return sandTop(t, 21) + a2_nest(t, n, 52, F) + (t > F ? confetti(t, F, 30) : ''); },
   sfx: [[0, 'whoosh_up', .6], [.3, 'coins', .5], [at(16, '100'), 'jackpot', .7], [at(16, 'freres'), 'el:baby_squeak', .8], [at(16, 'freres') + .3, 'el:crowd_aww', .4]] });
 
 // B017a — plan moyen : « Ta mère ? » l'œuf cherche autour de lui
@@ -311,3 +311,335 @@ B(29, { enter: 'none', cam: (t, d) => t < at(29, 'essaye') ? { z: 1.06 } : { z: 
       op(.9, eagle({ x: 1500, y: 360, s: 1.2, flap: 2 }, t).replace(/fill="#[0-9a-f]{6}"/g, 'fill="#14060a"')) + circ(1430, 290, 12, '#ff3b30', 0) +
       a2_eggF(CX, 570, 3.2, t, { eyes: 'huge', mouth: 'scream', brows: 'sad', tremble: 1.5, spray: 1, bow: 1 }) + tag(CX, 170, 'NE MEURS PAS.', t, at(29, 'mourir'), '#ff4d4d', '#fff', 70); },
   sfx: [[0, 'el:record', 1], [at(29, 'essaye'), 'sting', .9], [at(29, 'essaye') + .1, 'el:eagle', .5], [at(29, 'essaye') + .3, 'heartbeat', .8], [at(29, 'mourir'), 'el:hit_cine', .6]] });
+
+// ============================================================
+//  ÉCLOSION
+// ============================================================
+// B030a — plan d'ensemble, nuit : grue vers le nid ; le monticule commence à trembler
+B(30, { enter: 'none', cam: () => ({ z: 1.02, hand: .25 }),
+  draw: (t, d) => { const c = camMove(t, d, { y: -260, zoom: 1.0 }, { y: 30, zoom: 1.15 }, eOutCubic), tb = seg(t, .6, d);
+    return depth(c, [...a2_nightLayers(t, { hz: 400, sy: 580, moonX: 1450, moonY: 170 }),
+      { z: 1, svg: G(tr(800 + Math.sin(t * 50) * 4 * tb, 780), path('M-320 40Q0 -150 320 40Z', '#b9a27a', 6) + G(tr(0, -40, 1, Math.sin(t * 30) * 6 * tb), egg(0, 0, .5, 0, t))) + (tb > 0 ? motionLines(560, 720, 3, 60, 200, '#fff') + motionLines(1040, 720, 3, 60, -20, '#fff') : '') + tag(560, 200, 'UN SOIR…', t, at(30, 'soir') - .2, '#2b2b55', '#fff', 64) },
+      { z: .5, svg: fgGrass(1750, 1150, 1.7, t, '#3d5a3a') + fgGrass(150, 1170, 1.4, t, '#3d5a3a', 6), blur: 9 }]); },
+  sfx: [[0, 'el:a_night', .6], [.2, 'crickets', .6], [.8, 'el:riser', .4], [1.1, 'tick', .5]] });
+// B030b — très gros plan : la fissure court sur la coquille, rais de lumière, éclats
+function a2_crackPath(k) { const P = [[-330, -120], [-250, -170], [-190, -90], [-110, -160], [-40, -80], [40, -170], [110, -90], [190, -170], [260, -100], [330, -150]]; const n = Math.max(1, Math.floor(k * (P.length - 1))); return 'M' + P.slice(0, n + 1).map(p => p.join(' ')).join('L'); }
+B(30, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), shake: t > at(30, 'fissure') - at(30, 'coquille') ? 6 : 1.5 }),
+  draw: (t, d) => { const F = at(30, 'fissure') - at(30, 'coquille'), k = seg(t, .1, F), br = t > F;
+    return rect(-200, -200, W + 400, H + 400, '#3a2e48', 0, 0) + glow(CX, 560, 700, '#fff6c8', .25) + G(tr(CX, 520, 6.4), egg(0, 0, 1, 0, t, { r: Math.sin(t * 40) * 1.5 })) +
+      G(tr(CX, 520), path(a2_crackPath(k), 'none', 16) + (br ? path(a2_crackPath(1), 'none', 30, 'rgba(255,240,160,.8)') + `<path d="M-40 -110L-160 -620L80 -620Z" fill="rgba(255,240,160,.25)"/><path d="M120 -120L300 -620L420 -560Z" fill="rgba(255,240,160,.2)"/>` : '')) +
+      G(tr(CX, 520), a2_eggF(0, 60, 3, t, { eyes: 'huge', mouth: br ? 'scream' : 'o', look: [0, -1], cheeks: true }).replace(/<ellipse cx="0" cy="0" rx="52" ry="56"[^>]*\/>/, '').replace(/<ellipse cx="-18" cy="-22"[^>]*\/>/, '')) +
+      (br ? [[-1, 0], [1, .2], [-.5, .4]].map(([dx, ph], i) => G(tr(CX + dx * 300 + dx * (t - F) * 900, 400 - (t - F) * 700 + 1600 * (t - F) * (t - F), 1, (t - F) * 500 * dx), path('M-40 0L0 -50L50 -10L20 40Z', '#fbf6ea'))).join('') + G(tr(1520, 300, pop(t, F), 10), text(0, 0, OL, 'CRAC !', '#ffd23f', 100)) : ''); },
+  sfx: [[.1, 'el:egg_crack', .8], [.6, 'crack', .6], [at(30, 'fissure') - at(30, 'coquille'), 'crack', 1], [at(30, 'fissure') - at(30, 'coquille') + .05, 'el:egg_crack', 1], [at(30, 'fissure') - at(30, 'coquille') + .2, 'el:baby_squeak', .6]] }, at(30, 'coquille'));
+
+// B031 — plan large en coupe : toute la fratrie creuse vers le haut, fontaines de sable
+B(31, { enter: 'crash', cam: () => ({ z: 1.04, shake: 5 }),
+  draw: t => { let s = a2_cut(t, { sy: 140, night: 1, seed: 16 }); const r = rng(4);
+    for (let i = 0; i < 9; i++) { const x = 180 + i * 200 + r() * 40, y = 900 - r() * 150 - t * 160; if (Math.abs(x - CX) < 140) continue; s += tor({ x, y, s: .75, rot: -70, flail: 1, expr: ['effort', 'panic', 'dizzy'][i % 3], bow: 0, lashes: 0, seed: i }, t) + sandFlying(x, y - 120, t, 5, i); }
+    return s + tor({ x: CX, y: 760 - t * 180, s: 1.05, rot: -70, flail: 1, expr: 'effort' }, t) + sandFlying(CX, 620 - t * 180, t, 10, 9) + motionLines(CX, 380 - t * 180, 3, 70, -90, '#fff') + tag(CX + 420, 200, 'CREUSE !', t, .1, '#ffd23f', OL, 64); },
+  sfx: [[0, 'el:dig', 1], [.1, 'scratch', .7], [.4, 'el:dig', .7], [.6, 'el:baby_squeak', .4]] });
+
+// B032a — gros plan : elle gratte comme une furie, sable qui gicle
+B(32, { enter: 'whip', cam: () => ({ z: 1.06, hand: 1.1 }),
+  draw: t => rect(-200, -200, W + 400, H + 400, '#8a6a44', 0, 0) + a2_cut(t, { sy: -400, night: 1, seed: 21 }) + path(`M-200 -200L${W + 200} -200L${W + 200} 200Q1500 260 1200 210T600 230T-200 200Z`, '#b28d5c', 7) +
+    torF({ x: CX, y: 860, r: 150, expr: 'effort', look: [0, -1], armL: 240 + wave(t, 7, 45), armR: -60 - wave(t, 7, 45, .25), tremble: .6 }, t) + sandFlying(CX - 300, 330, t * 2, 14, 2) + sandFlying(CX + 300, 330, t * 2, 14, 7) +
+    motionLines(CX - 330, 420, 3, 80, 200) + motionLines(CX + 330, 420, 3, 80, -20) + G(tr(1550, 450, pop(t, .2), 8), text(0, 0, OL, 'GRAT GRAT', '#fff', 64)),
+  sfx: [[0, 'scratch', .9], [.25, 'scratch', .8], [.5, 'el:dig', .8], [.75, 'scratch', .7]] });
+// B032b — très gros plan : elle pousse le plafond de sable avec la tête, visage écrasé, vapeur
+B(32, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.05, 1.12, t / d), shake: 4 }),
+  draw: t => rect(-200, -200, W + 400, H + 400, '#8a6a44', 0, 0) + a2_cut(t, { sy: -400, night: 1, seed: 22 }) + G(`translate(${CX} 920) scale(1.15 .9) translate(${-CX} -920)`, torF({ x: CX, y: 960, r: 200, expr: 'effort', face: { mouth: 'teeth' }, armL: 255, armR: -75, tremble: 1.2 }, t)) +
+    path(`M-200 -200L${W + 200} -200L${W + 200} 300Q1400 330 ${CX + 200} 300Q${CX} ${270 - Math.abs(Math.sin(t * 9)) * 15} ${CX - 200} 300Q500 330 -200 300Z`, '#b28d5c', 7) + path(`M${CX - 60} 300l30 -60l-20 -40l40 -60M${CX + 80} 300l-20 -50l30 -50`, 'none', 7) +
+    steam(CX - 230, 330, t, 1) + steam(CX + 230, 330, t + .4, 1) + G(tr(1550, 560, pop(t, .1), -6), text(0, 0, OL, 'HNNNG !', '#ff6b6b', 80)) + sweat(CX + 260, 450, 1.1),
+  sfx: [[0, 'el:struggle', .7], [.1, 'hmm', .9], [.5, 'crack', .5], [.8, 'el:struggle', .5]] }, at(32, 'tu', 2));
+
+// B033a — contre-plongée dans le tunnel : elle grimpe vers la lumière… avalanche, retour en bas
+B(33, { cam: (t, d) => ({ z: 1.04, cy: 300, r: 4, hand: .6, shake: t > at(33, 'efforts') + .3 && t < at(33, 'efforts') + .7 ? 8 : 0 }),
+  draw: t => { const A = at(33, 'efforts') + .2, hit = t > A + .25, sl = seg(t, A + .25, A + .7);
+    return rect(-200, -200, W + 400, H + 400, '#6d5132', 0, 0) + `<path d="M${CX - 70} -100L${CX + 70} -100L${CX + 520} 1200L${CX - 520} 1200Z" fill="#a8845a"/>` + glow(CX, 40, 260, '#fff6c8', .8) + circ(CX, 20, 50, '#fff6c8', 0) +
+      torF({ x: CX, y: 860 + sl * 120, r: 120, expr: hit ? 'dizzy' : 'effort', look: [0, -1], armL: hit ? 200 : 250 + wave(t, 4, 30), armR: hit ? -20 : -70 - wave(t, 4, 30, .5) }, t) +
+      a2_sandRain(CX, -100, 300, t, A, 22, 6) + (hit ? path(`M${CX - 360} 1100Q${CX} ${780 + 120 * sl} ${CX + 360} 1100Z`, '#c9a26a', 7) + stars(CX, 560 + sl * 120, t, 4, 120) : '') + tag(CX + 520, 200, 'EFFORT N°1', t, .1, '#fff', OL, 54); },
+  sfx: [[0, 'el:dig', .6], [at(33, 'efforts') + .2, 'whoosh', .6], [at(33, 'efforts') + .45, 'thud', .9], [at(33, 'efforts') + .5, 'boing', .5], [at(33, 'efforts') + .9, 'hmm', .6]] });
+// B033b — montage « entraînement » : elle soulève UN grain de sable, tremblement maximal
+B(33, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), shake: 2 }),
+  draw: t => rays(t, CX, 520, '#ffcf8a', '#ffb36b', 24) + torF({ x: CX - 100, y: 880, r: 140, expr: 'effort', face: { mouth: 'teeth' }, armL: 200, armR: -88 + Math.sin(t * 50) * 4, tremble: 1.5, holdR: circ(0, 0, 22, '#e2bf7f', 5) + sparkle(20, -20, .3, '#fff') }, t) +
+    sweat(CX + 60, 420, 1) + sweat(CX - 240, 460, .8) + G(tr(1420, 250, pop(t, .1), 6), rect(-250, -60, 500, 120, '#fff', 20) + text(0, 22, 'none', '1 GRAIN = 200 KG', OL, 50)) + meter(220, 180, 460, 70, .03, '#ffd23f', 'SURFACE 3 %') + steam(CX - 100, 420, t, 1.1),
+  sfx: [[0, 'whoosh', .6], [.1, 'el:struggle', .8], [.4, 'squeak', .5], [.8, 'el:struggle', .6]] }, at(33, 'ridicules'));
+// B033c — contre-plongée : épuisée, langue pendante… un frère lui marche sur la tête pour passer
+B(33, { cam: (t, d) => ({ z: 1.04, cy: 400, r: -5, hand: .4 }),
+  draw: t => { const k = seg(t, .1, 1.1);
+    return rect(-200, -200, W + 400, H + 400, '#6d5132', 0, 0) + `<path d="M${CX - 70} -100L${CX + 70} -100L${CX + 620} 1200L${CX - 620} 1200Z" fill="#a8845a"/>` + glow(CX, 40, 260, '#fff6c8', .8) +
+      tor({ x: 700, y: 820, s: 1.9, expr: 'dead', squash: .25, neck: 1, headTilt: 15 }, t) + sib({ x: lerp(400, 1200, k), y: lerp(640, 560, k) - Math.abs(Math.sin(t * 8)) * 20, s: 1.1, expr: 'smugger', walk: 1.5, rot: -10, seed: 3 }, t) +
+      meter(1300, 160, 480, 70, .04, '#ffd23f', 'SURFACE 4 %') + G(tr(1100, 360, pop(t, .9)), text(0, 0, OL, 'pardon !', '#fff', 54)); },
+  sfx: [[0, 'hmm', .6], [.3, 'steps', .7], [.7, 'squeak', .5], [1.0, 'el:baby_squeak', .5]] }, at(33, 'animal'));
+
+// B034 — plongée depuis le ciel à l'aube : le sable gonfle, se fissure… POP ! la tête surgit, chœur d'anges
+B(34, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.12, 1.0, eOutCubic(seg(t, 0, d))), shake: t < at(34, 'surface') ? 2 * seg(t, .3, 1.2) : (t < at(34, 'surface') + .3 ? 10 : 0) }),
+  overlay: t => { const S = at(34, 'surface'); return t > S ? op(1 - seg(t, S, S + .25), `<rect width="${W}" height="${H}" fill="#fff"/>`) : ''; },
+  draw: t => { const S = at(34, 'surface'), b = seg(t, .2, S), k = eOutBack(seg(t, S, S + .4));
+    return sandTop(t, 13) + a2_tint('rgba(255,170,120,.18)') + `<path d="M-200 -200L700 -200L1400 1300L600 1300Z" fill="rgba(255,240,190,.25)"/>` +
+      (t < S ? ell(CX, 560, 120 + 140 * b, 60 + 80 * b, 'rgba(160,120,70,.35)', 0) + path(`M${CX - 40} 520l30 40l-20 30M${CX + 60} 530l-20 40l30 20`, 'none', 6 * b) : ell(CX, 580, 280, 150, '#b38d5c', 0) + sandFlying(CX, 560, t, 18, 5) + G(tr(CX, 560, k), torT({ x: 0, y: 30, s: 2.1, expr: 'ecstatic' }, t)) + stars(CX, 300, t, 6, 260)) +
+      (t > S ? tag(CX, 130, 'SURFACE 100 %', t, S + .1, '#7be07b', OL, 64) : ''); },
+  sfx: [[.2, 'el:dig', .6], [.6, 'el:riser', .5], [at(34, 'surface') - .05, 'el:sand_pop', 1], [at(34, 'surface'), 'pop', .8], [at(34, 'surface') + .1, 'angel', .8]] });
+
+// ============================================================
+//  L'OCÉAN
+// ============================================================
+// B035a — POV de la tortue qui sort du sable : clignements, le bord du trou, puis le ciel immense… et l'océan
+B(35, { enter: 'none', cam: () => ({ z: 1.02, hand: .7 }), overlay: t => povEyes(t, [.3, .62]),
+  draw: (t, d) => { const O = at(35, 'ocean'); const c = { y: lerp(420, -60, eInOut(seg(t, .2, O))) , zoom: lerp(1.25, 1.0, eInOut(seg(t, .2, O + .3))) }; const p = a2_parts(t, { hz: 520, sy: 720, sunX: 1250, sunY: 470 });
+    return depth(c, [{ z: 5, svg: p.sky + Array.from({ length: 3 }, (_, i) => path(`M${300 + i * 90} ${200 + i * 30}q20 -20 40 0q20 -20 40 0`, 'none', 6)).join('') }, { z: 2.5, svg: p.sea + Array.from({ length: 8 }, (_, i) => sparkle(900 + i * 70, 560 + (i % 3) * 30, .25 + .2 * Math.abs(Math.sin(t * 3 + i)), '#fff')).join('') }, { z: 1.4, svg: p.sand, blur: 2 },
+      { z: .5, svg: path(`M-900 1500L-900 700Q-200 980 300 1300Q700 1500 1200 1300Q1700 980 2800 700L2800 1500Z`, '#a8845a', 0) + circ(100, 1000, 120, '#c9a26a', 0) + circ(1800, 980, 140, '#b38d5c', 0), blur: 10 }]) + (t > O + .3 ? bigText(['WOAAAH'], t, O + .3, CX, 160, '#fff', 90) : ''); },
+  sfx: [[.1, 'el:sand_pop', .4], [.3, 'el:a_beach', .6], [.62, 'pop', .3], [at(35, 'ocean'), 'angel', .9], [at(35, 'ocean') + .1, 'el:wave_crash', .4]] });
+// B035b — « Immense » : crash zoom, yeux exorbités, mâchoire qui tombe JUSQU'AU SOL
+B(35, { enter: 'crash', cam: () => ({ z: 1.06, shake: 4 }),
+  draw: t => { const k = eOutBack(seg(t, .05, .35)); const r = 150, hy = 860 - 2.05 * r;
+    return depth({ zoom: 1 }, [{ z: 3, svg: a2_parts(t, { hz: 560, sy: 760, sunX: CX, sunY: 520 }).sky + a2_parts(t, { hz: 560, sy: 760 }).sea, blur: 4 }, { z: 1, svg: rays(t, CX, 520, 'rgba(255,240,200,.0)', 'rgba(255,240,200,.35)', 20) + a2_parts(t, { hz: 560, sy: 760 }).sand +
+      torF({ x: CX, y: 860, r, expr: 'jawdrop', armL: 230, armR: -50 }, t) + path(`M${CX - 70} ${hy + 40}L${CX - 110} ${hy + 60 + 360 * k}Q${CX} ${hy + 150 + 360 * k} ${CX + 110} ${hy + 60 + 360 * k}L${CX + 70} ${hy + 40}Z`, T_BABY_SKIN, 7) + path(`M${CX - 46} ${hy + 50}L${CX - 80} ${hy + 50 + 340 * k}Q${CX} ${hy + 110 + 340 * k} ${CX + 80} ${hy + 50 + 340 * k}L${CX + 46} ${hy + 50}Z`, '#7a2b2b', 6) + ell(CX, hy + 60 + 340 * k, 60 * k, 26 * k, '#ff8a9a', 0) + (k > .9 ? impactStar(CX + 160, hy + 420, .5) + shockRing(CX, hy + 440, t, .35, '#fff') : '') +
+      tag(CX, 130, 'IMMENSE', t, .1, '#5ec4f0', '#fff', 80) }]); },
+  sfx: [[0, 'el:hit_cine', .6], [.15, 'whistle', .6], [.35, 'thud', .9], [.4, 'boing', .7]] }, at(35, 'immense'));
+// B035c — très large : l'océan magnifique au lever du soleil, elle minuscule, larmes de joie
+B(35, { enter: 'none', cam: () => ({ z: 1.0, hand: .2 }),
+  draw: (t, d) => { const c = camMove(t, d, { y: -40, zoom: 1.05 }, { y: 20, zoom: 1.12 });
+    return depth(c, [{ z: 6, svg: a2_parts(t, { hz: 470, sy: 650, sunX: 1250, sunY: 410 }).sky + glow(1250, 420, 600, '#fff2c4', .6) }, { z: 3, svg: a2_parts(t, { hz: 470, sy: 650 }).sea + Array.from({ length: 14 }, (_, i) => sparkle(800 + (i * 97) % 900, 500 + (i * 53) % 130, .2 + .25 * Math.abs(Math.sin(t * 2.5 + i)), '#fff')).join('') + path('M200 300q30 -30 60 0q30 -30 60 0M1600 250q20 -20 40 0q20 -20 40 0', 'none', 6) },
+      { z: 1, svg: a2_parts(t, { hz: 470, sy: 650 }).sand + tor({ x: 520, y: 730, s: 1.0, expr: 'sob', look: [1, -.3] }, t) + Array.from({ length: 3 }, (_, i) => heart(650 + i * 60, 560 - ((t * 70 + i * 40) % 160), .4, '#ff6fa5')).join('') },
+      { z: .5, svg: fgGrass(150, 1150, 1.7, t) + fgShell(1750, 1050, 1.6, -20), blur: 9 }]); },
+  sfx: [[0, 'el:chime', .8], [.2, 'sparkle', .6], [.5, 'el:crowd_aww', .4], [.8, 'el:wave_crash', .3]] }, at(35, 'magnifique'));
+
+// B036 — profil : position de sprinteuse, bandeau, GPS en pointillés jusqu'à la mer
+B(36, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .5 }),
+  draw: t => { const hx = 520 + 148 * 2, hy = 760 - 51 * 2 + wave(t, 1.1, 6, 1);
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 380, sy: 540 }), { z: 1, svg: path(`M950 700Q1250 520 ${lerp(950, 1600, seg(t, .2, 1))} 520`, 'none', 12, '#fff', 'stroke-dasharray="26 26"') + G(tr(1620, 520, pop(t, 1)), line(0, 0, 0, -220, 10) + path('M0 -220L120 -180L0 -140Z', '#7be07b')) +
+      tor({ x: 520, y: 760, s: 2, expr: 'smugger', squash: .12 + .05 * Math.sin(t * 6), headTilt: wave(t, 1, 8) }, t) + G(tr(hx, hy - 30, 1, wave(t, 1, 8)), path('M-130 -40Q0 -80 130 -40', 'none', 30, '#ff4d4d') + path('M-130 -40Q0 -80 130 -40', 'none', 30 - 14, '#ff6b6b')) + tag(1420, 220, 'OBJECTIF', t, .9, '#7be07b', OL, 58) },
+      { z: .5, svg: fgGrass(1800, 1160, 1.5, t), blur: 9 }]); },
+  sfx: [[0, 'whoosh', .6], [.2, 'tick', .5], [.5, 'el:patter', .4], [1.0, 'ding', .8]] });
+
+// B037 — très large, léger travelling : elle minuscule à gauche… la mer tout là-bas à droite, « ≈ 30 m »
+B(37, { enter: 'none', cam: () => ({ z: 1.0, hand: .2 }),
+  draw: (t, d) => { const c = camMove(t, d, { x: -160, zoom: 1.08 }, { x: 160, zoom: 1.02 });
+    const ground = rect(-1800, 640, W + 3600, 900, SAND, 0, 0) + path(`M1560 600Q1500 700 1600 820L${W + 1800} 820L${W + 1800} 600Z`, '#fff', 0) + path(`M1610 590Q1560 690 1660 800L${W + 1800} 800L${W + 1800} 590Z`, SEA, 0) + path(`M1610 590Q1560 690 1660 800`, 'none', 10, '#fff') + Array.from({ length: 4 }, (_, i) => path(`M${1720 + i * 60} ${620 + i * 40}q30 -12 60 0`, 'none', 5, 'rgba(255,255,255,.6)')).join('');
+    return depth(c, [{ z: 6, svg: a2_parts(t, { hz: 560, sy: 700 }).sky }, { z: 2.5, svg: path(`M-1800 680Q-600 520 400 600T2200 560L${W + 1800} 700L-1800 700Z`, '#e8c690', 0) },
+      { z: 1, svg: ground + Array.from({ length: 30 }, (_, i) => ell(-1500 + i * 190, 720 + (i % 4) * 60, 10, 5, SAND_W, 0)).join('') + tor({ x: 260, y: 700, s: .6, expr: 'happy', walk: .8 }, t) + G(tr(lerp(-200, 1500, t / d), 690 - Math.abs(Math.sin(t * 6)) * 40), tumbleweed(0, 0, .5, t * 500)) +
+        line(420, 560, 1560, 560, 10, '#fff') + path(`M460 530L420 560L460 590M1520 530L1560 560L1520 590`, 'none', 10, '#fff') + tag(990, 450, '≈ 30 MÈTRES', t, .3, '#fff', OL, 64) },
+      { z: .5, svg: fgDune(-100, 1000, 900, 220) + fgDune(2100, 980, 900, 240), blur: 8 }]); },
+  sfx: [[0, 'whoosh_up', .6], [.3, 'pop', .7], [.8, 'el:a_wind', .5], [1.4, 'hmm', .4]] });
+
+// B038a — gros plan : « Facile ! » clin d'œil, pouce levé, dent qui brille
+B(38, { enter: 'punch', cam: camPush(1.0, 1.08, .4),
+  draw: t => depth({ zoom: 1 }, [{ z: 3, svg: a2_parts(t, { hz: 420, sy: 620 }).sky + a2_parts(t, { hz: 420, sy: 620 }).sea, blur: 5 }, { z: 1.5, svg: a2_parts(t, { hz: 420, sy: 620 }).sand, blur: 3 },
+    { z: 1, svg: torF({ x: 860, y: 860, r: 150, expr: 'smugger', armL: 200, armR: -35 + wave(t, 2, 6) }, t) + sparkle(880, 600, pop(t, .4) * .7, '#fff') + tag(1450, 250, 'FACILE !', t, .1, '#7be07b', OL, 80) }]),
+  sfx: [[0, 'ding', .7], [.4, 'glint', .9], [.6, 'whistle', .4]] });
+// B038b — rêverie rose : la maternité idéale, berceau, mobile… (pour l'instant)
+B(38, { enter: 'none', flash: 1, cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d) }),
+  draw: (t, d) => { const Mt = at(38, 'maternite') - at(38, 'sauf');
+    return grad('#ffe1ef', '#ffd1e6', -200, -200, W + 400, H + 400) + bokeh(t, 6, 12, ['#fff', '#ffc2dd', '#ffe9f3']) + G(tr(1000, 140), line(-240, 0, 240, 0, 6) + [-200, -60, 80, 220].map((x, i) => line(x, 0, x, 120 + i % 2 * 40, 4) + sparkle(x, 140 + i % 2 * 40, .5, ['#ffd23f', '#9fdcff'][i % 2], wave(t, .5, 20, i / 4))).join('')) +
+      torF({ x: 1000, y: 820, r: 110, expr: 'zen', armL: 210, armR: -30 }, t) + crib(1000, 840, 1.5) + Array.from({ length: 3 }, (_, i) => heart(1200 + i * 50, 500 - ((t * 60 + i * 40) % 160), .4, '#ff6fa5')).join('') +
+      G(tr(470, 400, pop(t, Mt), -4), line(0, 100, 0, 420, 14) + rect(-250, -110, 500, 220, '#fff', 24) + text(0, -10, 'none', 'MATERNITÉ', '#ff6fa5', 64) + heart(0, 60, .55)); },
+  sfx: [[0, 'el:chime', .7], [.2, 'angel', .5], [at(38, 'maternite') - at(38, 'sauf'), 'pop', .7], [at(38, 'maternite') - at(38, 'sauf') + .1, 'el:baby_squeak', .4]] }, at(38, 'sauf'));
+
+// B039 — contre-plongée : néon « BUFFET À VOLONTÉ », crabes géants en bavoir, mouettes affamées
+B(39, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), cy: 500, r: 5, hand: .4 }),
+  draw: t => { const B = at(39, 'buffet'), on = t > B && (t > B + .3 || Math.floor(t * 20) % 2);
+    return depth({ zoom: 1 }, [{ z: 4, svg: a2_parts(t, { hz: 820, sy: 900, sunX: 300, sunY: 500 }).sky }, { z: 2, svg: a2_parts(t, { hz: 820, sy: 900 }).sea },
+      { z: 1, svg: G(tr(CX, 230), line(-420, 0, -420, 700, 18) + line(420, 0, 420, 700, 18) + rect(-520, -120, 1040, 240, '#2b2b33', 30) + text(0, 30, 'none', 'BUFFET À VOLONTÉ', on ? '#ff4d6d' : '#5a3a44', 80, on ? 'style="filter:drop-shadow(0 0 14px #ff4d6d)"' : '')) +
+        eagle({ x: 1250, y: 70, s: .6, gull: 1, expr: 'starving', bib: 1, flip: 1 }, t) + crab({ x: 470, y: 800, s: 1.6, bib: 1, fork: 1, mouth: 'grin', snapF: 9 }, t) + crab({ x: 1450, y: 820, s: 1.7, bib: 1, flip: 1, snapF: 7, angry: 1 }, t) + tor({ x: 860, y: 660, s: 1.0, expr: 'terror', tremble: 1 }, t) },
+      { z: .5, svg: fgShell(150, 1050, 1.8, 10) + fgGrass(1800, 1180, 1.6, t), blur: 9 }]); },
+  sfx: [[0, 'el:hit_cine', .6], [at(39, 'buffet'), 'lightbuzz', .6], [at(39, 'buffet') + .05, 'kaching', .8], [at(39, 'volonte'), 'el:crab', .7], [at(39, 'volonte') + .2, 'el:gull', .6]] });
+
+// B040a — plongée : les crabes guettent depuis leurs trous, l'un aiguise ses pinces (étincelles)
+B(40, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.08, 1.0, t / d), r: -4 }),
+  draw: t => { let s = sandTop(t, 15) + a2_tint('rgba(255,170,120,.12)');
+    for (const [x, y, i] of [[350, 280, 0], [1550, 260, 1], [420, 820, 2], [1500, 830, 3], [980, 180, 4]]) s += ell(x, y, 80, 46, '#7d5f38', 0) + G(tr(x, y - 20), line(-22, 0, -26, -60, 9) + line(22, 0, 26, -60, 9) + circ(-28, -70, 18, '#fff') + circ(28, -70, 18, '#fff') + circ(-28 + Math.sin(t * 2 + i) * 5, -68, 7, OL, 0) + circ(28 + Math.sin(t * 2 + i) * 5, -68, 7, OL, 0) + line(-46, -96, -12, -84, 6) + line(46, -96, 12, -84, 6));
+    s += crab({ x: 1350, y: 560, s: .7, angry: 1, snap: .5 + .5 * Math.sin(t * 20) }, t) + G(tr(1250, 470, 1, 30), knife(0, 0, .8)) + sparkle(1290, 450, .4 * Math.abs(Math.sin(t * 20)), '#ffd23f') + sparkle(1230, 500, .3 * Math.abs(Math.cos(t * 20)), '#fff');
+    return s + torT({ x: 860, y: 560, s: 1.1, tremble: 1 }, t) + sweat(960, 400, .8); },
+  sfx: [[0, 'el:crab_scuttle', .7], [at(40, 'crabes'), 'el:crab', .7], [.6, 'scratch', .5], [.8, 'glint', .7], [1.1, 'scratch', .5]] });
+// B040b — POV des oiseaux : jumelles braquées sur elle, « CIBLE »
+B(40, { enter: 'whip', cam: () => ({ z: 1.03, hand: .9 }), overlay: (t) => a2_binoc(t) + G(tr(CX - 420, 290), text(0, 0, 'none', '● REC', '#ff3b30', 44)) + G(tr(CX + 420, 290, pop(t, .4)), text(0, 0, 'none', 'CIBLE', '#ff3b30', 50)),
+  draw: (t, d) => depth({ x: -wave(t, .3, 60), zoom: 1.2 }, [...a2_beach(t, { hz: 360, sy: 520 }).map(L => Object.assign({}, L, { blur: L.z > 1 ? 3 : 0 })),
+    { z: 1, svg: tor({ x: 820 + t * 60, y: 640, s: 1.5, expr: 'worried', walk: 1, look: [-.5, 0] }, t) + crab({ x: 1500, y: 740, s: .6, snapF: 9 }, t) }]),
+  sfx: [[0, 'shutter', .6], [.1, 'el:gull', .7], [.4, 'zap', .4], [.7, 'el:wings', .4]] }, at(40, 'des', 2));
+
+// B041a — plan moyen : naïve, coquille sur la tête, elle fait coucou au crabe… qui cache sa fourchette
+B(41, { cam: camPush(1.0, 1.06, .4),
+  draw: t => { const hx = 560 + 148 * 1.8, hy = 700 - 51 * 1.8;
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 380, sy: 540 }), { z: 1, svg: tor({ x: 560, y: 700, s: 1.8, expr: 'happy', flipUp: 1, fa: -60 + wave(t, 2, 25) }, t) + a2_shellHat(hx - 10, hy - 110, 1.6, -10) +
+      crab({ x: 1420, y: 780, s: 1.3, mouth: 'grin', snap: .3 }, t) + G(tr(1600, 680, 1, 30), fork(0, 0, .9)) + G(tr(900, 380, pop(t, .2)), text(0, 0, OL, 'coucou !', '#fff', 60)) + G(tr(1420, 470, pop(t, .6)), text(0, 0, OL, 'hé hé', '#fff', 50)) },
+      { z: .5, svg: fgGrass(120, 1170, 1.6, t), blur: 9 }]); },
+  sfx: [[0, 'el:baby_squeak', .7], [.3, 'kiss', .4], [.7, 'el:crab', .4], [1.1, 'hmm', .4]] });
+// B041b — entretien d'embauche : crabe RH à lunettes, elle sue à grosses gouttes
+B(41, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), r: -2 }),
+  draw: t => grad('#d9ecf5', '#c3dcea', -200, -200, W + 400, H + 400) + rect(260, 120, 560, 380, '#8fd3ff', 16) + rect(260, 330, 560, 170, SEA, 0, 0) + rect(260, 120, 560, 380, 'none', 16) + line(540, 120, 540, 500, 7) + plant(1750, 820, .9) +
+    tor({ x: 330, y: 740, s: 1.7, expr: 'embarrassed', tremble: .5, hold: rect(-40, -60, 80, 110, '#fff', 6, 5) }, t) + sweat(720, 480, .9) + sweat(780, 560, .7) +
+    crab({ x: 1300, y: 640, s: 1.1, mouth: 'flat', snap: .2 }, t) + circ(1258, 530, 28, 'rgba(255,255,255,.3)', 6) + circ(1342, 530, 28, 'rgba(255,255,255,.3)', 6) + line(1286, 530, 1314, 530, 6) + desk(1300, 800, 1.6) + G(tr(1150, 770, 1, -8), rect(-80, -50, 160, 100, '#fff', 6, 5)) +
+    G(tr(1300, 230, pop(t, .3)), rect(-260, -70, 520, 130, '#fff', 30) + text(0, 22, 'none', 'Expérience ?', OL, 56)),
+  sfx: [[0, 'whoosh', .6], [.2, 'el:typing', .5], [.4, 'pop', .6], [1.2, 'hmm', .6], [1.6, 'squeak', .4]] }, at(41, 'viens'));
+// B041c — insert CV : « EXPÉRIENCE : AUCUNE », tampon « DÉBUTANTE TOTALE », grillons
+B(41, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: Math.abs(t - (at(41, 'professionnelle') - at(41, 'aucune'))) < .15 ? 10 : 0 }),
+  draw: t => { const P = at(41, 'professionnelle') - at(41, 'aucune');
+    return rect(-200, -200, W + 400, H + 400, '#c58e55', 0, 0) + G(tr(CX, 0, 1, -2), rect(-460, 60, 920, 1100, '#fff', 14) + text(0, 170, 'none', 'CURRICULUM VITAE', OL, 56) + rect(-380, 230, 200, 210, '#cfe9ff', 10, 5) + G(tr(-280, 435), torF({ x: 0, y: 0, r: 46, expr: 'embarrassed' }, t)) +
+      line(-140, 270, 360, 270, 10, '#ddd') + line(-140, 320, 300, 320, 10, '#ddd') + line(-140, 370, 330, 370, 10, '#ddd') + text(-170, 620, 'none', 'Expérience :', '#555', 54) + G(tr(200, 618, pop(t, 0)), text(0, 0, OL, 'AUCUNE', '#e2463a', 76))) +
+      (t > P ? G(tr(CX + 120, 380, lerp(2, 1, eOutCubic(seg(t, P, P + .15))), -14), rect(-330, -70, 660, 140, 'rgba(255,255,255,.2)', 20, 10, '#e2463a') + text(0, 24, 'none', 'DÉBUTANTE TOTALE', '#e2463a', 62)) : '') + (t > P + .3 ? cricket(1650, 900, .6, t) : ''); },
+  sfx: [[0, 'el:record', .6], [.05, 'error_beep', .6], [at(41, 'professionnelle') - at(41, 'aucune'), 'hammer', .9], [at(41, 'professionnelle') - at(41, 'aucune') + .3, 'crickets', .7]] }, at(41, 'aucune'));
+
+// ============================================================
+//  LA COURSE — crabes, oiseaux
+// ============================================================
+function a2_claw(x, y, s, open, r = 0, c = '#ef6a3e') { return G(tr(x, y, s, r), line(0, 0, 400, 0, 70) + line(0, 0, 400, 0, 54, c) + ell(-40, 0, 130, 95, c) + G(`rotate(${-open * 35})`, path('M-60 -30C-200 -150 -330 -80 -320 -10L-90 10Z', c)) + G(`rotate(${open * 25})`, path('M-60 30C-200 120 -300 90 -300 40L-90 20Z', shade(c, -.2)))); }
+// B042 — profil : une sœur sautille en chantonnant… CLAC ! une pince géante surgit du cadre
+B(42, { enter: 'whip', cam: (t, d) => ({ z: 1.04, hand: .6, shake: t > at(42, 'attrape') && t < at(42, 'attrape') + .3 ? 12 : 0 }),
+  draw: t => { const A = at(42, 'attrape'), g = t > A, k = eOutCubic(seg(t, A - .15, A)), up = seg(t, A + .2, A + .9);
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 360, sy: 520 }), { z: 1.8, svg: tor({ x: 300, y: 640, s: 1, expr: g ? 'terror' : 'happy', walk: g ? 0 : .8 }, t), blur: 3 },
+      { z: 1, svg: (g ? '' : sib({ x: 640 + t * 200, y: 760 - Math.abs(Math.sin(t * 7)) * 30, s: 1.7, expr: 'happy', walk: 1, seed: 4 }, t) + G(tr(1000 + t * 200, 480 - t * 60), text(0, 0, OL, '♪ ♫', '#fff', 64))) +
+        a2_claw(lerp(2500, 1500, k) - up * 200, 620 - up * 260, 1.4, g ? .05 : 1) + (g ? G(tr(1100 - up * 280, 600 - up * 360, 1, -20), sib({ x: 0, y: 0, s: 1.4, expr: 'panic', flail: 1, seed: 4 }, t)) + impactStar(1160, 520, .7 * (1 - seg(t, A, A + .3))) + G(tr(1450, 260, pop(t, A)), text(0, 0, OL, 'CLAC !', '#ff6b6b', 100)) : '') },
+      { z: .5, svg: fgShell(180, 1060, 1.6, 10), blur: 9 }]); },
+  sfx: [[0, 'el:patter', .5], [.2, 'whistle', .4], [at(42, 'attrape') - .15, 'whoosh', .8], [at(42, 'attrape'), 'snip', 1], [at(42, 'attrape') + .05, 'el:crab', .8], [at(42, 'attrape') + .2, 'el:baby_squeak', .7]] });
+// B043 — plan large : elle s'enfonce dans le trou… il ne reste qu'un petit drapeau blanc. Plop.
+B(43, { cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .4 }),
+  draw: t => { const D = at(43, 'disparait'), k = eInCubic(seg(t, D, D + .7)), id = 'a2h' + (_gid++);
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 380, sy: 540 }), { z: 1, svg: ell(1200, 820, 190, 56, '#7d5f38', 0) + `<defs><clipPath id="${id}"><rect x="-900" y="-900" width="4000" height="${900 + 820}"/></clipPath></defs><g clip-path="url(#${id})">` +
+        sib({ x: 1180, y: 800 + k * 260, s: 1.3, expr: 'panic', flail: 1, rot: -10, seed: 4 }, t) + G(tr(1260, 640 + k * 300, 1, wave(t, 2, 15)), line(0, 0, 0, 160, 8) + path('M0 0L90 20L0 50Z', '#fff')) + `</g>` +
+        (k >= 1 ? sandFlying(1200, 800, t, 12) + G(tr(1200, 600, pop(t, D + .7)), text(0, 0, OL, 'plop.', '#fff', 64)) : '') + tor({ x: 420, y: 760, s: 1.4, expr: 'sob' }, t) },
+      { z: .5, svg: fgGrass(1800, 1170, 1.6, t), blur: 9 }]); },
+  sfx: [[at(43, 'disparait'), 'el:dig', .7], [at(43, 'disparait') + .5, 'gulp', .8], [at(43, 'disparait') + .7, 'el:sand_pop', .8], [at(43, 'disparait') + .9, 'el:crowd_aww', .5]] });
+
+// B044a — gros plan caméra épaule : elle court en pleurant, larmes à l'horizontale
+B(44, { enter: 'whip', cam: () => ({ z: 1.06, hand: 1.3 }),
+  draw: t => depth({ x: t * 900, zoom: 1 }, [{ z: 4, svg: a2_parts(t, { hz: 420, sy: 600 }).sky }, { z: 2.4, svg: a2_parts(t, { hz: 420, sy: 600 }).sea, blur: 3 }, { z: 1, svg: a2_parts(t, { hz: 420, sy: 600 }).sand, blur: 6 }]) + streaks(t, -1, 12) +
+    torF({ x: CX, y: 860 - Math.abs(Math.sin(t * 9)) * 25, r: 150, expr: 'sob', armL: 220 + wave(t, 4.5, 40), armR: -40 - wave(t, 4.5, 40) }, t) + sweat(CX + 230, 480, 1) + motionLines(CX - 300, 560, 3, 90, 180),
+  sfx: [[0, 'el:patter', 1], [.2, 'el:crowd_aww', .3], [.5, 'squeak', .4], [.8, 'el:patter', .7]] });
+// B044b — une mouette pique droit sur la caméra, bave au vent
+B(44, { enter: 'crash', cam: () => ({ z: 1.04, shake: 6 }),
+  draw: t => { const k = eInCubic(seg(t, 0, .8));
+    return grad('#ffc9a0', '#bfe6ff', -200, -200, W + 400, H + 400) + glow(1400, 300, 500, '#fff3b0', .6) + cloud(400, 220, 1.2) + speedLines(t, CX, 520, 26, 'rgba(255,255,255,.6)') +
+      eagleFront({ x: CX + 200 * (1 - k), y: lerp(300, 600, k), s: lerp(.3, 2.0, k), gull: 1, expr: 'starving', talons: 1 }, t) + a2_lensDrops(t, .7, 5, 8); },
+  sfx: [[0, 'el:dive', 1], [.2, 'el:gull', .9], [.6, 'whoosh', .8]] }, at(44, 'un'));
+
+// B045 — contre-plongée à contre-jour : la mouette remonte avec un bébé qui gigote, plumes qui tombent
+B(45, { enter: 'tilt', cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), r: -6, cy: 400 }),
+  draw: (t, d) => { const k = seg(t, 0, d);
+    return grad('#ff9f7a', '#ffe0b0', -200, -200, W + 400, H + 400) + glow(700, 380, 500, '#fff3b0', .8) + circ(700, 380, 120, '#fff3b0', 0) + rays(t, 700, 380, 'rgba(255,240,190,0)', 'rgba(255,240,190,.3)', 18) +
+      eagle({ x: lerp(1000, 1500, k), y: lerp(560, 220, k), s: 1.2, gull: 1, expr: 'happy', flap: 2.5, flip: 1, held: sib({ x: 0, y: 0, s: .7, expr: 'panic', flail: 1, rot: 15, seed: 6 }, t) }, t) +
+      Array.from({ length: 4 }, (_, i) => G(tr(1100 + i * 90 + wave(t, .6, 40, i / 4), 300 + ((t * 200 + i * 120) % 500), 1, wave(t, .8, 40, i / 3)), path('M0 -30Q14 0 0 30Q-14 0 0 -30Z', '#fff', 4))).join('') +
+      path(`M-200 1100L-200 960Q500 900 960 940T${W + 200} 900L${W + 200} 1100Z`, '#d9a86a', 0) + G(tr(1600, 160, pop(t, .9)), text(0, 0, OL, 'BYE…', '#fff', 60)); },
+  sfx: [[0, 'el:wings', .9], [.2, 'el:gull', .8], [.5, 'el:baby_squeak', .7], [1.0, 'whoosh_up', .5]] });
+
+// B046 — plongée : TURBO ! flammes aux fesses, traînée de sable
+B(46, { enter: 'whip', cam: () => ({ z: 1.06, shake: 7, hand: .8 }),
+  draw: t => { const x = 700 + t * 500;
+    return G(tr(-t * 1800 % 600, 0), sandTop(t, 17)) + a2_tint('rgba(255,170,120,.12)') + streaks(t, 1, 14) + sandFlying(x - 260, 560, t * 2, 14) + G(tr(x - 200, 540, 1, -90), flames(0, 0, 140, 260, t, 3)) + torT({ x, y: 540, s: 1.6, rot: 90, walk: 10 }, t) + tag(CX, 150, 'TURBO', t, .1, '#ff8a3d', '#fff', 80); },
+  sfx: [[0, 'el:patter', 1], [.05, 'fire', .6], [.1, 'whoosh', .9], [.5, 'el:patter', .7]] });
+
+// ============================================================
+//  L'AIGLE AFFAMÉ
+// ============================================================
+// B047 — « Et c'est là… » : arrêt net, les couleurs s'éteignent, zoom brutal
+B(47, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.25, eOutCubic(seg(t, 0, d))) }),
+  draw: t => rect(-200, -200, W + 400, H + 400, '#2b2238', 0, 0) + `<path d="M${CX - 120} -60L${CX + 120} -60L${CX + 460} 1100L${CX - 460} 1100Z" fill="rgba(255,240,180,.2)"/>` + torF({ x: CX, y: 860, r: 150, expr: 'shock', armL: 210, armR: -30 }, t) + emark(CX + 260, 330, pop(t, .05)),
+  sfx: [[0, 'sting', .9], [.05, 'el:record', .5]] });
+// B048a — profil : l'aigle traverse le ciel en bavoir, la bave en traînée, le ventre qui gargouille
+B(48, { enter: 'whip', cam: () => ({ z: 1.02, hand: .4 }),
+  draw: (t, d) => { const x = lerp(1500, 750, t / d);
+    return depth({ x: -t * 200, zoom: 1 }, [{ z: 6, svg: grad('#7a5aa8', '#ffb38a', -900, -900, W + 1800, H + 1800) }, { z: 3, svg: Array.from({ length: 5 }, (_, i) => cloud(-400 + i * 600, 200 + (i % 2) * 300, 1.2, '#ffd9c7')).join(''), haze: .2 },
+      { z: 1, svg: eagle({ x, y: 430, s: 1.6, expr: 'starving', bib: 1, flap: 1.8 }, t) + Array.from({ length: 8 }, (_, i) => circ(x + 120 + i * 70, 560 + i * 30 + wave(t, 2, 8, i / 8), 12 - i, '#bfe8ff', 3, '#7cc4e8')).join('') + G(tr(x + 120, 300, pop(t, .5), 10), text(0, 0, OL, 'GRRRBLL', '#fff', 60)) },
+      { z: .5, svg: cloud(((t * -1600) % 2400) + 2200, 900, 2.2, '#ffe2d4'), blur: 10 }]); },
+  sfx: [[0, 'el:wings', .8], [.2, 'el:eagle', .8], [.5, 'growl', 1], [1.0, 'el:munch', .4]] });
+// B048b — crash zoom de face : l'aigle affamé, couteau-fourchette, bave à flots, « LE RETOUR »
+B(48, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), shake: 4, bars: 1 }),
+  draw: t => rays(t, CX, 480, '#3b2a4f', '#55396e', 24) + glow(CX, 480, 500, '#ff5d73', .3) + eagleFront({ x: CX, y: 650, s: 1.4, expr: 'starving', bib: 1, flap: 1.8 }, t) +
+    fork(360, 560, 1.6, -25 + wave(t, 2, 10)) + knife(1560, 560, 1.6, 25 - wave(t, 2, 10)) + bigText(['LE RETOUR'], t, .3, CX, 200, '#ffd23f', 100) + a2_lensDrops(t, .9, 4, 11),
+  sfx: [[0, 'el:hit_cine', 1], [.1, 'el:eagle2', 1], [.5, 'growl', .8], [1.0, 'el:munch', .6]] }, at(48, 'reg'));
+
+// B049a — POV de l'aigle : vue de chasse, le viseur verrouille la petite tortue qui court
+B(49, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.2, t / d), cx: 900, cy: 560, hand: .5 }), overlay: t => povEagle(t, 900 + t * 120, 560, seg(t, .1, .7)),
+  draw: t => sandTop(t, 9) + a2_tint('rgba(255,170,120,.12)') + ell(900 + t * 120, 600, 50, 20, 'rgba(0,0,0,.15)', 0) + torT({ x: 900 + t * 120, y: 560, s: .5, rot: 90, walk: 6 }, t) + crab({ x: 400, y: 300, s: .25 }, t) + crab({ x: 1500, y: 800, s: .25 }, t) + sibT({ x: 300, y: 820, s: .4, rot: 80, walk: 4 }, t),
+  sfx: [[0, 'el:eagle', .7], [.2, 'el:riser', .4], [.65, 'ding', .7]] });
+// B049b — plan large au ras du sol : l'ombre passe, tout s'assombrit, elle se fait pipi dessus
+B(49, { enter: 'none', cam: (t, d) => ({ z: 1.04, hand: .8, shake: t > .5 ? 2 : 0 }),
+  draw: (t, d) => { const sx = lerp(-500, W + 500, seg(t, 0, d)), dk = Math.max(0, 1 - Math.abs(sx - 960) / 700);
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 380, sy: 540 }), { z: 1, svg: birdShadow(sx, 800, 3.4, .45) + tor({ x: 820, y: 700, s: 1.9, expr: 'terror', look: [0, -1], tremble: 1.5, pee: seg(t, .3, 1.1), neck: .8 }, t) + emark(1250, 420, pop(t, .2), '#ff4d4d', 10) },
+      { z: .5, svg: fgGrass(1800, 1170, 1.6, t), blur: 9 }]) + a2_tint(`rgba(10,0,30,${(.45 * dk).toFixed(2)})`); },
+  sfx: [[0, 'el:wings', .9], [.1, 'whoosh', .8], [.4, 'el:crowd_gasp', .4], [.6, 'spray', .4], [.8, 'heartbeat', .7]] }, at(49, 'passe'));
+
+// B050 — gros plan épaule : virage en dérapage, fumée, « SCRIIIK »
+B(50, { enter: 'whip', cam: () => ({ z: 1.06, hand: 1.5, shake: 3 }),
+  draw: t => { const D = at(50, 'direction'), tn = t > D;
+    return depth({ x: (tn ? -1 : 1) * t * 400, zoom: 1 }, [{ z: 4, svg: a2_parts(t, { hz: 420, sy: 600 }).sky }, { z: 2.4, svg: a2_parts(t, { hz: 420, sy: 600 }).sea, blur: 3 }, { z: 1, svg: a2_parts(t, { hz: 420, sy: 600 }).sand, blur: 6 }]) +
+      G(`translate(${CX} 0) scale(${tn ? -1 : 1} 1) translate(${-CX} 0)`, torF({ x: CX, y: 860, r: 150, expr: 'panic', look: [-1, 0], armL: 250, armR: -70, rot: tn ? 0 : -8 }, t) + motionLines(CX + 300, 560, 4, 120, 0)) +
+      (tn ? [0, 1, 2, 3].map(i => circ(CX - 200 + i * 130, 960 - i * 10, 60 + 50 * seg(t, D, D + .5), 'rgba(255,255,255,.7)', 0)).join('') + G(tr(CX + 420, 300, pop(t, D), 8), text(0, 0, OL, 'SCRIIIK', '#fff', 90)) : ''); },
+  sfx: [[0, 'el:patter', .8], [at(50, 'direction') - .05, 'brake', .3], [at(50, 'direction'), 'squeak', 1], [at(50, 'direction') + .05, 'whoosh', .8]] });
+
+// B051 — contre-plongée : il pique, il grossit… « encore » : crash, bave sur l'objectif
+B(51, { enter: 'drop', cam: (t, d) => ({ z: 1.02, cy: 300, r: 5, shake: t > at(51, 'encore') ? 10 : 3 }),
+  draw: t => { const E = at(51, 'encore'), s = t < E ? lerp(.5, 1.1, eInCubic(seg(t, 0, E))) : lerp(1.6, 2.4, eOutCubic(seg(t, E, E + .5)));
+    return grad('#ffb38a', '#9fd8ff', -200, -200, W + 400, H + 400) + glow(400, 200, 400, '#fff3b0', .6) + cloud(300, 300, 1.3) + cloud(1600, 160, 1.1) + speedLines(t, CX, 400, 28, 'rgba(255,255,255,.55)') +
+      eagleFront({ x: CX, y: 560, s, expr: 'starving', talons: 1, flap: 2 }, t) + (t > E ? G(tr(1560, 200, pop(t, E), 10), text(0, 0, OL, 'ENCORE !', '#ff4d4d', 80)) : '') + a2_lensDrops(t, E + .1, 6, 5) +
+      path(`M-200 1100L-200 1000Q600 940 1100 980T${W + 200} 960L${W + 200} 1100Z`, '#d9a86a', 0); },
+  sfx: [[0, 'el:dive', 1], [.3, 'el:eagle', .8], [at(51, 'encore'), 'el:hit_cine', .8], [at(51, 'encore') + .05, 'el:eagle2', .9], [at(51, 'encore') + .3, 'spray', .5]] });
+
+// B052a — RALENTI (letterbox), plongée : l'ombre l'avale, les serres descendent au ralenti
+function a2_talons(x, y, s, open) { let g = ''; for (const sd of [-1, 1]) g += G(tr(sd * 150, 0, 1, sd * 8), line(0, -900, 0, 0, 60) + line(0, -900, 0, 0, 40, '#ffc93c') + [-45, 0, 45].map(a => G(`rotate(${a * (.3 + open) + 90})`, path('M0 0L90 0Q130 10 136 56', 'none', 34) + path('M0 0L90 0', 'none', 18, '#ffc93c'))).join('')); return G(tr(x, y, s), g); }
+B(52, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), bars: 1, hand: .3 }),
+  draw: (t, d) => { const k = seg(t, 0, d);
+    return sandTop(t * .1, 19) + a2_tint('rgba(30,30,60,.35)') + birdShadow(CX, 600, lerp(2, 4, k), .45 + .2 * k) + torT({ x: CX, y: 580, s: 1.3, walk: .3 }, t * .1) + sweat(CX + 100, 420, .9) + sweat(CX - 110, 440, .7) +
+      a2_talons(CX, lerp(-60, 330, k), .9, 1 - k * .3); },
+  sfx: [[0, 'el:riser', .9], [.1, 'heartbeat', .9], [.8, 'heartbeat', .9], [.9, 'el:wings', .4]] });
+// B052b — très gros plan au ralenti : gouttes de sueur suspendues, pipi, les serres à quelques centimètres
+B(52, { enter: 'none', cam: (t, d) => ({ z: lerp(1.04, 1.14, t / d), bars: 1 }),
+  draw: (t, d) => { const k = seg(t, 0, d);
+    return grad('#6a5c7a', '#b9a4a0', -200, -200, W + 400, H + 400) + rect(-200, 820, W + 400, 400, '#9c8664', 0, 0) +
+      torF({ x: CX, y: 910, r: 140, expr: 'terror', look: [0, -1], armL: 240, armR: -60, tremble: .3, pee: k }, t * .08) + [[-300, 480], [280, 430], [-220, 330], [330, 560], [-380, 620]].map(([x, y]) => sweat(CX + x, y, .9)).join('') +
+      a2_talons(CX, lerp(-60, 200, k), 1.1, .9) + G(tr(1600, 220), text(0, 0, OL, 'ralenti…', '#fff', 50)); },
+  sfx: [[0, 'heartbeat', 1], [.3, 'el:inhale', .6], [.6, 'heartbeat', 1]] }, at(52, 'serres'));
+
+// B053 — la VAGUE explose : flash, rouleau géant, écume plein cadre
+B(53, { enter: 'crash', flash: 1, cam: () => ({ z: 1.08, shake: 14 }),
+  draw: t => { const k = eOutCubic(seg(t, 0, .6)), f = seg(t, .35, .8);
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 360, sy: 520 }), { z: 1, svg: torF({ x: 760, y: 860, r: 120, expr: 'shock', armL: 230, armR: -50 }, t) + a2_talons(800, 140 - k * 200, .7, .5) +
+      G(tr(lerp(2100, 300, k), 0), path('M0 1300L0 520C0 200 300 40 560 160C700 220 710 380 600 440C520 480 460 420 480 360C320 400 280 560 330 680L1900 1300Z', '#4fc3e6') + path('M0 520C0 200 300 40 560 160C700 220 710 380 600 440', 'none', 40, '#fff')) +
+      op(f, rect(-900, -900, W + 1800, H + 1800, 'rgba(240,252,255,.92)', 0, 0) + Array.from({ length: 16 }, (_, i) => circ((i * 233) % W, 200 + (i * 151) % 800, 60 + (i % 4) * 30, '#fff', 0)).join('')) + shockRing(900, 600, t, .3, '#fff') + bigText(['SPLAAASH !'], t, .3, CX, 200, '#5ec4f0', 130) }]); },
+  sfx: [[0, 'el:wave_crash', 1], [.1, 'el:hit_cine', .7], [.3, 'el:splash', .9], [.5, 'boom', .4]] });
+
+// B054a — dans le rouleau, profil : elle tourne comme dans une machine à laver… et kiffe
+B(54, { enter: 'none', cam: () => ({ z: 1.06, hand: 1 }),
+  draw: t => { let sw = ''; for (let i = 0; i < 6; i++) sw += G(tr(CX, 540, 1, t * 200 + i * 60), path(`M${150 + i * 60} 0A${150 + i * 60} ${150 + i * 60} 0 0 1 0 ${150 + i * 60}`, 'none', 14, 'rgba(255,255,255,.45)'));
+    return grad('#6fd6ef', '#1f7fae', -200, -200, W + 400, H + 400) + sw + fgBubbles(t, 5, 12) + G(tr(CX, 520, 1, t * 420), tor({ x: 0, y: 70, s: 1.6, expr: t < .7 ? 'dizzy' : 'ecstatic', flail: 1 }, t)) + (t > .7 ? G(tr(1500, 250, pop(t, .7), 8), text(0, 0, OL, 'WOUHOU !', '#fff', 70)) : ''); },
+  sfx: [[0, 'el:splash', .7], [.1, 'el:bubbles', .8], [.4, 'el:swim_whoosh', .6], [.7, 'el:baby_squeak', .6]] });
+// B054b — l'aigle rate : il se plante bec le premier dans le sable, pattes en l'air, le crabe se tord de rire
+B(54, { enter: 'whip', cam: (t, d) => ({ z: 1.04, hand: .4, shake: Math.abs(t - (at(54, 'rate') - at(54, 'l'))) < .2 ? 12 : 0 }),
+  draw: t => { const R_ = at(54, 'rate') - at(54, 'l'), k = eInCubic(seg(t, 0, R_)), hit = t > R_;
+    return depth({ zoom: 1 }, [...a2_beach(t, { hz: 360, sy: 520 }), { z: 1, svg: eagle({ x: lerp(1500, 1150, k), y: lerp(200, 690, k), s: 1.3, rot: lerp(-30, -95, k), expr: 'shock', talons: hit ? 'open' : 'grab', wingA: hit ? 30 + wave(t, 3, 30) : -20 }, t) +
+      path('M840 900Q1080 640 1320 900Z', SAND_D, 6) + (hit ? impactStar(1080, 760, .8 * (1 - seg(t, R_, R_ + .3))) + sandFlying(1080, 780, t, 14) + stars(1200, 430, t, 5, 130) + G(tr(1500, 260, pop(t, R_)), text(0, 0, OL, 'RATÉ !', '#ff4d4d', 100)) : '') +
+      crab({ x: 400, y: 790, s: 1, mouth: 'grin', rot: hit ? wave(t, 3, 12) : 0 }, t) + (hit ? G(tr(400, 560, pop(t, R_ + .1)), text(0, 0, OL, 'HA HA', '#fff', 56)) : '') },
+      { z: .5, svg: fgShell(1780, 1050, 1.6, 20), blur: 9 }]); },
+  sfx: [[0, 'el:dive', .7], [at(54, 'rate') - at(54, 'l'), 'thud', 1], [at(54, 'rate') - at(54, 'l') + .05, 'el:eagle', .8], [at(54, 'rate') - at(54, 'l') + .1, 'boing', .7], [at(54, 'rate') - at(54, 'l') + .3, 'rimshot', .7]] }, at(54, 'l'));
+
+// B055a — plan large : elle flotte, ultra chill, lunettes de soleil, cocktail, cœurs
+B(55, { enter: 'none', cam: (t, d) => ({ z: 1.0, hand: .15 }),
+  draw: (t, d) => { const c = camMove(t, d, { y: 0, zoom: 1.0 }, { y: -20, zoom: 1.1 }); const p = a2_parts(t, { hz: 400, sy: 1400, sunX: 1400, sunY: 260 });
+    return depth(c, [{ z: 6, svg: p.sky }, { z: 1, svg: p.sea + G(tr(CX, 660 + wave(t, .4, 14), 1, wave(t, .4, 5)), tor({ x: 0, y: 0, s: 1.6, expr: 'chill', face: { eyes: 'shades', mouth: 'bliss' }, swim: .2, hold: G(tr(0, 0, .6), path('M-40 -60L40 -60L0 20Z', '#8fe0ff', 6) + line(0, 20, 0, 80, 6)) }, t) + ell(0, 20, 220, 30, 'rgba(255,255,255,.5)', 0)) +
+      Array.from({ length: 4 }, (_, i) => heart(1100 + i * 70, 500 - ((t * 50 + i * 45) % 180), .45, '#ff6fa5')).join('') + G(tr(560, 300, pop(t, .4), -6), text(0, 0, OL, 'chiiiiill…', '#fff', 80)) },
+      { z: .5, svg: fgBubbles(t, 2, 5), blur: 8 }]); },
+  sfx: [[0, 'el:a_beach', .6], [.2, 'el:chime', .5], [.6, 'waves', .5], [1.4, 'kiss', .3]] });
+// B055b — médaille d'or « JOUR 1 ✔ », feux d'artifice
+B(55, { enter: 'punch', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d) }),
+  draw: t => rays(t, CX, 520, '#ffe9a8', '#ffd36b', 24) + confetti(t, 0, 50, 8) + Array.from({ length: 3 }, (_, i) => { const k = seg((t + i * .4) % 1.2, 0, .8); return G(tr(300 + i * 660, 300 + (i % 2) * 120), Array.from({ length: 10 }, (_, j) => line(Math.cos(j * .628) * 40 * k, Math.sin(j * .628) * 40 * k, Math.cos(j * .628) * 140 * k, Math.sin(j * .628) * 140 * k, 10, ['#ff6fa5', '#5ec4f0', '#7be07b'][i])).join('')); }).join('') +
+    torF({ x: CX, y: 880, r: 150, expr: 'proud', armL: 240, armR: -60 }, t) + a2_medal(CX, 760, 1.2, t) + bigText(['JOUR 1 ✔'], t, .1, CX, 150, '#7be07b', 120),
+  sfx: [[0, 'tada', .9], [.1, 'el:applause', .6], [.4, 'pop', .6], [.8, 'pop_hi', .6]] }, at(55, 'premier'));
+
+// B056 — disque rayé : gros plan blasé, la médaille glisse, chrono « 00:07 »
+B(56, { enter: 'none', cam: (t, d) => ({ z: lerp(1.06, 1.12, t / d) }),
+  draw: t => { const P = at(56, 'premieres');
+    return rect(-200, -200, W + 400, H + 400, '#a9b4bf', 0, 0) + torF({ x: 700, y: 860, r: 150, expr: 'deadpan', armL: 200, armR: -20 }, t) + a2_medal(700, lerp(760, 1200, eInCubic(seg(t, .3, 1.2))), 1.2, 0) +
+      G(tr(1380, 380, pop(t, .2)), circ(0, 0, 200, '#fff') + circ(0, 0, 200, 'none', 14, '#2b2b33') + rect(-30, -250, 60, 50, '#2b2b33', 10) + text(0, 30, 'none', '00:07', '#ff5d4d', 90)) + (t > P ? tag(1380, 680 - 60, 'MINUTES', t, P, '#ff5d4d', '#fff', 60) : ''); },
+  sfx: [[0, 'el:record', 1], [.2, 'tick', .8], [.6, 'tick', .8], [at(56, 'premieres'), 'error_beep', .6], [1.2, 'thud', .4]] });
+
+// B057 — contre-plongée sous l'eau : sa silhouette contre la surface lumineuse
+B(57, { enter: 'none', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), cy: 300, r: -4 }),
+  draw: t => depth({ zoom: 1 }, [...underLayers(t, { surface: 160 }), { z: 1, svg: glow(CX, 160, 600, '#fff', .45) + G(tr(CX + t * 80, 360, 1, -10), tor({ x: 0, y: 0, s: 1.5, expr: 'shock', swim: 1.2 }, t)) },
+    { z: .5, svg: fgBubbles(t, 8, 6), blur: 8 }]),
+  sfx: [[0, 'el:plunge', 1], [.15, 'el:bubbles', .7], [.4, 'el:m_underwater', .3], [.6, 'sting', .5]] });
+// B058 — plongée vertigineuse : minuscule dans le bleu immense, des ombres rôdent dessous
+B(58, { enter: 'none', cam: (t, d) => ({ z: lerp(1.6, 1.0, eOutCubic(seg(t, 0, d))), cy: 480 }),
+  draw: t => grad('#2a9fd0', '#061a33', -200, -200, W + 400, H + 400) + Array.from({ length: 9 }, (_, i) => `<path d="M${-300 + i * 300} -100L${-200 + i * 300} -100L${100 + i * 300} ${H + 100}L${0 + i * 300} ${H + 100}Z" fill="rgba(255,255,255,.04)"/>`).join('') +
+    op(.55, shark({ x: 1350 - t * 200, y: 860, s: .9, color: '#0b2a48', flip: 1 }, t).replace(/fill="#[0-9a-f]{6}"/g, 'fill="#0b2a48"').replace(/stroke="#2b2420"/g, 'stroke="#0b2a48"')) + op(.4, shark({ x: 400 + t * 150, y: 980, s: .7, color: '#0b2a48' }, t).replace(/fill="#[0-9a-f]{6}"/g, 'fill="#0b2a48"')) +
+    fgBubbles(t, 4, 6) + torT({ x: CX, y: 480, s: .7, swim: 1 }, t) + tag(CX, 150, "BIENVENUE DANS L'OCÉAN", t, at(58, 'ocean'), '#1f7fae', '#fff', 56),
+  sfx: [[0, 'el:bubbles', .7], [.2, 'el:m_underwater', .4], [at(58, 'ocean'), 'el:sonar', .6], [.6, 'el:shark', .3]] });
