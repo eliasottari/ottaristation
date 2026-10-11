@@ -1,53 +1,9 @@
 <!doctype html>
-<html><head><meta charset="utf-8">
-<style>
-@font-face{font-family:Fredoka;src:url(assets/fredoka.woff2) format('woff2');font-weight:700}
-html,body{margin:0;background:#000;overflow:hidden}
-#stage{width:1080px;height:1920px;display:block}
-</style></head>
+<html><head><meta charset="utf-8"></head>
 <body>
 <svg id="stage" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="1080" height="1920"></svg>
-<script src="lib.js"></script>
+<script src="../engine/lib.js"></script>
+<script src="../engine/bugs.js"></script>
 <script src="scenes.js"></script>
-<script>
-const stage = document.getElementById('stage');
-function sceneAt(T) {
-  for (let i = SCENES.length - 1; i >= 0; i--) if (T >= SCENES[i].s) return [SCENES[i], i];
-  return [SCENES[0], 0];
-}
-function renderFrame(T) {
-  _gid = 0;
-  const [sc, i] = sceneAt(T);
-  const e = (SCENES[i + 1] ? SCENES[i + 1].s : TOTAL);
-  const t = T - sc.s, d = e - sc.s;
-  let inner = sc.draw(t, d, T);
-  // caméra : zoom/pan propres à la scène
-  const c = sc.cam ? sc.cam(t, d) : { z: lerp(1.0, 1.06, eInOut(clamp(t / d))) };
-  let z = c.z ?? 1, x = c.x ?? 0, y = c.y ?? 0, r = c.r ?? 0;
-  // punch d'entrée
-  const enter = sc.enter ?? 'punch';
-  if (enter === 'punch') z *= 1 + .08 * (1 - eOutCubic(seg(t, 0, .3)));
-  if (enter === 'whip') x += 700 * Math.pow(1 - eOutCubic(seg(t, 0, .28)), 2) * (i % 2 ? -1 : 1);
-  if (enter === 'drop') y -= 500 * Math.pow(1 - eOutCubic(seg(t, 0, .3)), 2);
-  if (c.shake) { const [sx, sy] = shake(T, c.shake); x += sx; y += sy; }
-  const cx = c.cx ?? 540, cy = c.cy ?? 960;
-  let out = `<g transform="translate(${cx + x} ${cy + y}) rotate(${r}) scale(${z}) translate(${-cx} ${-cy})">${inner}</g>`;
-  if (sc.overlay) out += sc.overlay(t, d, T);
-  out += dust(T, 7, 18, 'rgba(255,255,255,.35)');
-  out += vignette(.28);
-  // flash blanc d'entrée sur certaines scènes
-  if (sc.flash) out += op(1 - seg(t, 0, .18), `<rect width="1080" height="1920" fill="#fff"/>`);
-  // fondu de fin
-  if (T > TOTAL - .5) out += op(seg(T, TOTAL - .5, TOTAL), `<rect width="1080" height="1920" fill="#000"/>`);
-  stage.innerHTML = out;
-}
-window.renderFrame = renderFrame;
-window.getCues = () => {
-  const cues = [];
-  SCENES.forEach(sc => (sc.sfx || []).forEach(([dt, name, vol]) => cues.push({ t: +(sc.s + dt).toFixed(3), name, vol: vol ?? 1 })));
-  return cues;
-};
-const q = new URLSearchParams(location.search);
-if (q.has('t')) document.fonts.ready.then(() => renderFrame(+q.get('t')));
-</script>
+<script src="../engine/player.js"></script>
 </body></html>

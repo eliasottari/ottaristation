@@ -444,6 +444,15 @@ function blackboard(x, y, w, h, inner = '') { return rect(x, y, w, h, '#3c5a48',
 function desk(x, y, s = 1, c = '#c58e55') { return G(tr(x, y, s), rect(-230, -30, 460, 40, shade(c, .15), 6) + rect(-210, 10, 420, 220, c, 4)); }
 function building(x, y, w, h, c, win = '#cfe8ff') { let s = rect(x, y - h, w, h, c, 4); const cols = Math.floor(w / 80), rows = Math.floor((h - 60) / 110); for (let i = 0; i < cols; i++) for (let j = 0; j < rows; j++) s += rect(x + 20 + i * (w - 40) / cols + 6, y - h + 40 + j * 110, (w - 40) / cols - 24, 64, win, 4, 4); return s; }
 
+function bubble(x, y, w, h, inner, k = 1) {
+  return G(tr(x, y, k), circ(-w * .45, h * .62, 18, '#fff', 6) + circ(-w * .55, h * .82, 11, '#fff', 5) +
+    path(`M${-w / 2} 0C${-w / 2} ${-h * .7} ${w / 2} ${-h * .7} ${w / 2} 0C${w / 2 + 30} ${h * .5} ${-w / 2} ${h * .7} ${-w / 2} 0Z`, '#fff', 7) + inner);
+}
+function lerpColor(a, b, k) {
+  const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
+  const c = [16, 8, 0].map(s => Math.round(lerp((pa >> s) & 255, (pb >> s) & 255, k)));
+  return '#' + ((1 << 24) + (c[0] << 16) + (c[1] << 8) + c[2]).toString(16).slice(1);
+}
 function lerpPose(a, b, k) { return [lerp(a[0], b[0], k), lerp(a[1], b[1], k)]; }
 
 if (typeof module !== 'undefined') module.exports = {};

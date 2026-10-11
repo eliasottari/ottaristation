@@ -364,6 +364,93 @@ def hmm():
     return norm(lp(x, 900, 2) * env(d, .05, .35), .5)
 
 
+# ---------- épisode 2 : nature ----------
+def crack():
+    c = hp(noise(.04), 1500) * env(.04, .0005, .008)
+    return norm(at(.35, [(0, c), (.06, c * .7), (.15, c), (.2, c * .5)]), .7)
+
+
+def chomp():
+    b = drum(180, 90, .15) * .8
+    cr = hp(noise(.18), 2500) * np.exp(-T(.18) / .05)
+    return norm(at(.3, [(0, b), (0, cr * .7), (.09, cr * .5)]), .85)
+
+
+def chirp():
+    out = []
+    for i in range(3):
+        d = .07
+        out.append((i * .11, np.sin(sweep(3200, 5200, d)) * env(d, .005, .03) * .4))
+    return at(.45, out)
+
+
+def angel(d=1.4):
+    t = T(d)
+    chord = [523, 659, 784, 1047]
+    x = sum(np.sin(2 * np.pi * np.cumsum(f * (1 + .004 * np.sin(2 * np.pi * 5 * t))) / SR) for f in chord)
+    return norm(lp(x, 2500, 1) * env(d, .25) * np.clip((d - t) / .5, 0, 1), .45)
+
+
+def buzz(d=2.4):
+    t = T(d)
+    f = 210 + 25 * np.sin(2 * np.pi * 1.3 * t) + 15 * np.sin(2 * np.pi * 3.7 * t)
+    x = saw(1, d) * 0
+    ph = np.cumsum(f) / SR
+    x = (2 * (ph % 1) - 1)
+    am = .6 + .4 * np.sin(2 * np.pi * .9 * t) ** 2
+    return norm(lp(x, 1800, 1) * am * env(d, .1) * np.clip((d - t) / .2, 0, 1), .35)
+
+
+def thunder(d=2.2):
+    t = T(d)
+    x = lp(noise(d), 180, 3) * (np.exp(-t / .8) + .5 * np.exp(-np.abs(t - .3) / .2))
+    cr = hp(noise(d), 1500) * np.exp(-t / .08) * .4
+    return norm(np.tanh((x * 6 + cr) * 1.5), .95)
+
+
+def growl(d=1.1):
+    t = T(d)
+    x = lp(noise(d), 160, 3) * (1 + np.sin(2 * np.pi * 7 * t)) * env(d, .1) * np.clip((d - t) / .3, 0, 1)
+    tone = np.sin(sweep(90, 60, d)) * .3 * env(d, .1, .5)
+    return norm(x * 6 + tone, .8)
+
+
+def gulp():
+    return norm(at(.3, [(0, np.sin(sweep(500, 150, .08)) * env(.08, .002, .03)), (.1, np.sin(sweep(300, 120, .1)) * env(.1, .002, .04))]), .7)
+
+
+def ghost(d=1.3):
+    t = T(d)
+    f = 500 + 250 * np.sin(np.pi * t / d) + 30 * np.sin(2 * np.pi * 6 * t)
+    return norm(np.sin(2 * np.pi * np.cumsum(f) / SR) * env(d, .2) * np.clip((d - t) / .4, 0, 1), .4)
+
+
+def wolf():
+    a = np.sin(sweep(900, 2600, .25)) * env(.25, .02)
+    b = np.sin(sweep(1400, 700, .45)) * env(.45, .01, .3)
+    return norm(at(.9, [(0, a), (.32, b)]), .45)
+
+
+def kiss():
+    return norm(at(.2, [(0, hp(noise(.03), 2000) * env(.03, .001, .01)), (.01, np.sin(sweep(1400, 2400, .05)) * env(.05, .002, .02))]), .6)
+
+
+def hammer():
+    h = at(.3, [(0, bell(1800, .3, decay=.08)), (0, drum(300, 200, .1) * .5)])
+    return norm(at(1.0, [(0, h), (.3, h), (.6, h)]), .6)
+
+
+def tiptoe(n=6, gap=.3):
+    s = lambda: hp(noise(.03), 1500) * env(.03, .001, .008)
+    return norm(at(n * gap + .1, [(i * gap, s()) for i in range(n)]), .35)
+
+
+def siren(d=1.4):
+    t = T(d)
+    f = 700 + 300 * np.sign(np.sin(2 * np.pi * 2.5 * t))
+    return norm(lp(np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)), 3000, 1) * env(d, .02) * np.clip((d - t) / .2, 0, 1), .35)
+
+
 LIB = {k: v for k, v in globals().items() if callable(v) and k not in (
     'T', 'env', 'sweep', 'noise', 'onepole_lp', 'lp', 'hp', 'norm', 'cat', 'at', 'bell', 'saw', 'read_wav', 'write_wav', 'main', 'mix', 'step')}
 

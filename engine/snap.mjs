@@ -8,6 +8,7 @@ const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 const errs=[]; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type()==='error') errs.push(m.text()); });
 await p.goto('file://' + path.resolve('index.html'));
 await p.evaluate(() => document.fonts.ready);
+if (process.env.GUIDE) await p.evaluate(() => { window.GUIDE = true; });
 const files = [];
 for (const [i, t] of ts.entries()) { await p.evaluate(t => renderFrame(t), +t); const f = `/tmp/claude-0/-home-user-ottaristation/7a5acb2b-c3bc-5114-9346-982522533dbc/scratchpad/snap_${i}.png`; await p.screenshot({ path: f }); files.push(f); }
 await b.close();

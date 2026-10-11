@@ -89,10 +89,6 @@ function dnaChar(x, y, s, t, o = {}) {
   return G(tr(x, y, s, o.rot || 0), arms + dna(0, 0, 1, t, 10, o.hi ?? 6) + face);
 }
 function headOnly(o, x, y, s, t) { return G(tr(x, y, s, o.rot || 0), head(o, t)); }
-function bubble(x, y, w, h, inner, k = 1) {
-  return G(tr(x, y, k), circ(-w * .45, h * .62, 18, '#fff', 6) + circ(-w * .55, h * .82, 11, '#fff', 5) +
-    path(`M${-w / 2} 0C${-w / 2} ${-h * .7} ${w / 2} ${-h * .7} ${w / 2} 0C${w / 2 + 30} ${h * .5} ${-w / 2} ${h * .7} ${-w / 2} 0Z`, '#fff', 7) + inner);
-}
 
 // ============================================================
 const SCENES = [
@@ -629,8 +625,3 @@ const SCENES = [
   },
 ];
 
-function lerpColor(a, b, k) {
-  const pa = parseInt(a.slice(1), 16), pb = parseInt(b.slice(1), 16);
-  const c = [16, 8, 0].map(s => Math.round(lerp((pa >> s) & 255, (pb >> s) & 255, k)));
-  return '#' + ((1 << 24) + (c[0] << 16) + (c[1] << 8) + c[2]).toString(16).slice(1);
-}

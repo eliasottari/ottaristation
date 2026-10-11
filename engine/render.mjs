@@ -1,7 +1,8 @@
 // Rendu image par image (30 fps) en parallèle -> segments mp4 -> concat + audio mixé
 import { chromium } from 'playwright';
 import { spawn, execFileSync } from 'child_process';
-import fs from 'fs'; import path from 'path';
+import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
+const ENGINE = path.dirname(fileURLToPath(import.meta.url));
 const FPS = 30, WORKERS = +(process.env.WORKERS || 4);
 const OUT = process.argv[2] || 'out/roux_9x16.mp4';
 const VOICE = process.argv[3];
@@ -36,7 +37,7 @@ await browser.close();
 fs.writeFileSync('out/tmp/list.txt', Array.from({ length: WORKERS }, (_, w) => `file 'seg${w}.mp4'`).join('\n'));
 execFileSync('ffmpeg', ['-y', '-v', 'error', '-f', 'concat', '-safe', '0', '-i', 'out/tmp/list.txt', '-c', 'copy', 'out/tmp/video.mp4'], { stdio: 'inherit' });
 if (VOICE) {
-  execFileSync('python3', ['sfx.py', 'mix', 'out/tmp/cues.json', VOICE, 'out/tmp/mix.wav', String(TOTAL)], { stdio: 'inherit' });
+  execFileSync('python3', [path.join(ENGINE, 'sfx.py'), 'mix', 'out/tmp/cues.json', VOICE, 'out/tmp/mix.wav', String(TOTAL)], { stdio: 'inherit' });
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', 'out/tmp/video.mp4', '-i', 'out/tmp/mix.wav', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', OUT], { stdio: 'inherit' });
 }
 console.log('OK ->', OUT);
