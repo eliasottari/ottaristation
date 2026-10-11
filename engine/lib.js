@@ -2,7 +2,8 @@
 //  Mini moteur d'animation 2D (SVG) — style "cartoon flat"
 //  Toutes les fonctions renvoient des chaînes SVG.
 // ============================================================
-const W = 1080, H = 1920;
+// format : 9:16 par défaut ; un épisode 16:9 déclare `var STAGE = [1920, 1080]` avant de charger lib.js
+const W = (typeof STAGE !== 'undefined' ? STAGE[0] : 1080), H = (typeof STAGE !== 'undefined' ? STAGE[1] : 1920);
 const OL = '#2b2420';          // couleur de contour
 const SW = 7;                  // épaisseur de contour
 const SKIN = '#f2c9a0';
@@ -75,7 +76,7 @@ function dust(t, seed = 3, n = 26, c = 'rgba(255,255,255,.55)') {
 }
 function vignette(o = .35) {
   const id = 'v' + (_gid++);
-  return `<defs><radialGradient id="${id}" cx="540" cy="960" r="1250" gradientUnits="userSpaceOnUse"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${o}"/></radialGradient></defs><rect width="${W}" height="${H}" fill="url(#${id})"/>`;
+  return `<defs><radialGradient id="${id}" cx="${W / 2}" cy="${H / 2}" r="${f1(Math.hypot(W, H) * .57)}" gradientUnits="userSpaceOnUse"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity="${o}"/></radialGradient></defs><rect width="${W}" height="${H}" fill="url(#${id})"/>`;
 }
 function speedLines(t, cx, cy, n = 40, c = 'rgba(255,255,255,.7)', seed = 9) {
   const r = rng(seed); let s = '';

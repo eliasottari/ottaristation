@@ -1,3 +1,4 @@
 node_modules/
 __pycache__/
 sfx_preview/
+.env

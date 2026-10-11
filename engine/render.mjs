@@ -17,14 +17,16 @@ const browser = await launch();
 const probe = await browser.newPage();
 await probe.goto('file://' + path.resolve('index.html'));
 const TOTAL = await probe.evaluate(() => TOTAL);
+const [SW_, SH_] = await probe.evaluate(() => [W, H]);
 fs.writeFileSync('out/tmp/cues.json', JSON.stringify(await probe.evaluate(() => getCues())));
 await probe.close();
 const N = Math.round(TOTAL * FPS);
+const SKIPVIDEO = !!process.env.AUDIO_ONLY && fs.existsSync('out/tmp/video.mp4');
 const chunk = Math.ceil(N / WORKERS);
 let done = 0;
 async function work(w) {
   const a = w * chunk, b = Math.min(N, a + chunk);
-  const p = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
+  const p = await browser.newPage({ viewport: { width: SW_, height: SH_ } });
   p.on('pageerror', e => console.error('pageerror', e.message));
   await p.goto('file://' + path.resolve('index.html'));
   await p.evaluate(() => document.fonts.ready);
@@ -37,12 +39,14 @@ async function work(w) {
   }
   ff.stdin.end(); await new Promise(r => ff.on('close', r)); await p.close();
 }
-await Promise.all(Array.from({ length: WORKERS }, (_, w) => work(w)));
+if (!SKIPVIDEO) {
+  await Promise.all(Array.from({ length: WORKERS }, (_, w) => work(w)));
+  fs.writeFileSync('out/tmp/list.txt', Array.from({ length: WORKERS }, (_, w) => `file 'seg${w}.mp4'`).join('\n'));
+  execFileSync('ffmpeg', ['-y', '-v', 'error', '-f', 'concat', '-safe', '0', '-i', 'out/tmp/list.txt', '-c', 'copy', 'out/tmp/video.mp4'], { stdio: 'inherit' });
+}
 await browser.close();
-fs.writeFileSync('out/tmp/list.txt', Array.from({ length: WORKERS }, (_, w) => `file 'seg${w}.mp4'`).join('\n'));
-execFileSync('ffmpeg', ['-y', '-v', 'error', '-f', 'concat', '-safe', '0', '-i', 'out/tmp/list.txt', '-c', 'copy', 'out/tmp/video.mp4'], { stdio: 'inherit' });
 if (VOICE) {
-  execFileSync('python3', [path.join(ENGINE, 'sfx.py'), 'mix', 'out/tmp/cues.json', VOICE, 'out/tmp/mix.wav', String(TOTAL)], { stdio: 'inherit' });
+  if (!process.env.NOMIX) execFileSync('python3', [path.join(ENGINE, 'sfx.py'), 'mix', 'out/tmp/cues.json', VOICE, 'out/tmp/mix.wav', String(TOTAL)], { stdio: 'inherit' });
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', 'out/tmp/video.mp4', '-i', 'out/tmp/mix.wav', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-shortest', '-movflags', '+faststart', OUT], { stdio: 'inherit' });
 }
 console.log('OK ->', OUT);

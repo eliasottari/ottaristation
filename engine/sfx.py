@@ -470,28 +470,92 @@ def read_audio(fn):
     return np.frombuffer(raw, np.float32).astype(np.float64)
 
 
+EXT_GAIN = .22   # bruitages ElevenLabs (normalisés en crête)
+BED_GAIN = .12  # niveau RMS de référence des nappes (musique ~12 dB sous la voix)
+VOICE_GAIN = 1.0
+_ext = {}
+
+
+def ext_audio(name):
+    """Cue 'el:clef' -> assets/sfx/clef.mp3 (généré par engine/eleven.py), normalisé."""
+    if name not in _ext:
+        fn = os.path.join('assets', 'sfx', name[3:] + '.mp3')
+        if not os.path.exists(fn):
+            print('fichier absent:', fn); _ext[name] = None
+        else:
+            _ext[name] = norm(read_audio(fn), .9)
+    return _ext[name]
+
+
+def voice_envelope(voice, n):
+    """Enveloppe de la voix (attaque rapide, relâche lente) pour le ducking de la musique."""
+    hop = 441  # 10 ms
+    m = len(voice) // hop
+    rms = np.sqrt(np.mean(voice[:m * hop].reshape(m, hop) ** 2, axis=1))
+    env = np.zeros(m); e = 0.
+    for k in range(m):
+        e = rms[k] if rms[k] > e else e * .975  # relâche ~400 ms
+        env[k] = e
+    # attaque adoucie (~60 ms) puis interpolation à la fréquence audio
+    env = np.convolve(env, np.ones(6) / 6)[:m]
+    return np.interp(np.arange(n), np.arange(m) * hop + hop / 2, env, right=0)
+
+
+def place_bed(out, x, t0, t1, vol, fin, fout):
+    """Pose une nappe (musique/ambiance) en boucle entre t0 et t1 avec fondus."""
+    i0, i1 = int(t0 * SR), min(int(t1 * SR), len(out))
+    L = i1 - i0
+    if L <= 0: return np.zeros(0), i0
+    reps = int(np.ceil(L / len(x)))
+    y = np.tile(x, reps)[:L] * vol
+    a, b = int(fin * SR), int(fout * SR)
+    if a: y[:min(a, L)] *= np.linspace(0, 1, min(a, L))
+    if b: y[-min(b, L):] *= np.linspace(1, 0, min(b, L))
+    return y, i0
+
+
 def mix(cues_fn, voice_fn, out_fn, dur=None):
-    cues = json.load(open(cues_fn))
+    data = json.load(open(cues_fn))
+    cues, beds = (data, []) if isinstance(data, list) else (data['cues'], data.get('beds', []))
     voice = read_audio(voice_fn)
     dur = float(dur) if dur else len(voice) / SR + .8
-    out = np.zeros(int(dur * SR) + SR)
-    out[:len(voice)] += voice * 1.0
+    n = int(dur * SR) + SR
+    out = np.zeros(n)
+    out[:len(voice)] += voice * VOICE_GAIN
+    # nappes : musique (ducking sous la voix) + ambiances
+    if beds:
+        env = voice_envelope(voice, n)
+        for bd in beds:
+            x = ext_audio(bd['name'])
+            if x is None: continue
+            x = x * (BED_GAIN / (np.sqrt(np.mean(x ** 2)) + 1e-9))  # nappes normalisées en RMS (vol = niveau relatif)
+            y, i0 = place_bed(out, x, bd['t0'], bd['t1'], bd.get('vol', .5), bd.get('fin', 1.5), bd.get('fout', 1.5))
+            duck = bd.get('duck', .55)
+            if duck:
+                g = 1 - duck * np.clip(env[i0:i0 + len(y)] / .045, 0, 1)
+                y = y * g
+            out[i0:i0 + len(y)] += y
     cache = {}
     for c in cues:
         name = c['name']
-        if name not in LIB:
-            print('SFX inconnu:', name); continue
-        if name not in cache:
-            cache[name] = LIB[name]()
-        x = cache[name] * c.get('vol', 1) * SFX_GAIN
+        if name.startswith('el:'):
+            x = ext_audio(name)
+            if x is None: continue
+            x = x * c.get('vol', 1) * EXT_GAIN
+        else:
+            if name not in LIB:
+                print('SFX inconnu:', name); continue
+            if name not in cache:
+                cache[name] = LIB[name]()
+            x = cache[name] * c.get('vol', 1) * SFX_GAIN
         i = int(c['t'] * SR)
-        n = min(len(x), len(out) - i)
-        if n > 0:
-            out[i:i + n] += x[:n]
+        m = min(len(x), len(out) - i)
+        if m > 0:
+            out[i:i + m] += x[:m]
     out = out[:int(dur * SR)]
     out = np.tanh(out * 1.1) / np.tanh(1.1)  # limiteur doux
     write_wav(out_fn, out * .95)
-    print('mix ->', out_fn, f'{len(cues)} sfx')
+    print('mix ->', out_fn, f'{len(cues)} sfx, {len(beds)} nappes')
 
 
 if __name__ == '__main__':
