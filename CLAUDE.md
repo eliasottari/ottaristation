@@ -10,6 +10,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 |---|---|---|---|
 | `roux/`  | Pourquoi c'est l'enfer de naître roux ? (33 plans) | 75 s | ✅ validé par l'utilisateur |
 | `mante/` | Pourquoi c'est horrible de naître mante religieuse ? (35 plans) | 64,6 s | ✅ livré |
+| `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
