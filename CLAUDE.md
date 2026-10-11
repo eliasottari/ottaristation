@@ -10,7 +10,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 |---|---|---|---|
 | `roux/`  | Pourquoi c'est l'enfer de naître roux ? (33 plans) | 75 s | ✅ validé par l'utilisateur |
 | `mante/` | Pourquoi c'est horrible de naître mante religieuse ? (35 plans) | 64,6 s | ✅ livré |
-| `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs, **16:9 YouTube**, bande-son ElevenLabs) | 7 min 02 | ✅ livré |
+| `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
@@ -38,7 +38,15 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 - Contenu sensible traité en cartoon pudique (cœurs derrière une feuille, miettes plutôt que sang).
 - Niveau audio : SFX ~10–16 dB sous la voix (`SFX_GAIN` synthés, `EXT_GAIN` ElevenLabs dans `engine/sfx.py`),
   musique ~13 dB sous la voix en moyenne (`BED_GAIN`) avec ducking automatique pendant que la voix parle.
-- En 16:9 (YouTube) pas de zone sous-titres à éviter : cadrer librement sur 1920×1080.
+- **CADRAGE 16:9 (retour utilisateur)** : même règle qu'en 9:16 — il met ses sous-titres en bas. Textes et infos clés
+  entre y≈90 et y≈650 (sur 1080), visages au-dessus de y≈700 ; dessous = décor/corps. `GUIDE=1` affiche la bande (y 700–920).
+- **Style V2 validé en demande (tortue)** : très CINÉ et CARTOON EXTRÊME — fausse 3D (couches `depth()`, premier plan flou,
+  parallaxe), beaucoup de valeurs de plan (très large → insert), plongées, contre-plongées, POV, caméra épaule (`hand`),
+  débullés, crash zooms, whip pans ; réactions exagérées à fond (yeux exorbités, mâchoire au sol, pipi de peur, bave),
+  « même quand c'est chill, c'est chill de ouf ». Musique un peu présente (+4 dB demandé : `BED_GAIN = .19`).
+- **SYNCHRO** : les temps du BEATFLOW peuvent être FAUX (jusqu'à 5 s d'avance sur la voix réelle !). Toujours recaler sur la
+  voix : transcription mot à mot avec faster-whisper (`pip install faster-whisper`, voir « Recalage » plus bas), puis BT = début
+  réel de chaque bloc et `at(n, 'mot')` pour caler chaque action/SFX sur le mot prononcé.
 
 ## Architecture
 ```
@@ -49,6 +57,9 @@ engine/            moteur commun à tous les épisodes
                    aigle/mouette (eagle, gull:1), crabe, poissons, requin, méduse, sac plastique, sargasses, filet,
                    hôtels, route, voiture (phares), lampadaire, thermomètre, ♂/♀, Terre magnétique,
                    décors 16:9 : bgBeach, bgNightBeach, bgSand (coupe), bgUnder, bgSplit (surface)
+  cine.js          fausse 3D : depth(cam, layers) (parallaxe + flou + brume), camMove, handheld, letterbox, povEyes (POV tortue),
+                   povEagle (viseur), streaks, shockRing, premiers plans (fgGrass/fgRock/fgShell/fgBubbles/fgKelp/bokeh), eagleFront
+  check.mjs        vérifie tous les plans (erreurs JS / NaN) : `node ../engine/check.mjs` depuis l'épisode
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs
   player.js        renderFrame(T) : caméra (cam/enter/flash/shake), overlay, poussières, vignette, fondu final
   sfx.py           ~55 bruitages synthétisés en numpy + mixage voix/SFX/nappes (ducking, limiteur doux)
@@ -76,6 +87,21 @@ node ../engine/render.mjs out/<nom>_9x16.mp4 assets/<voix>   # rendu complet (~2
 AUDIO_ONLY=1 node ../engine/render.mjs out/x.mp4 assets/voix.mp3 # remixe seulement l'audio (réutilise out/tmp/video.mp4)
 python3 ../engine/eleven.py [clef...]                          # génère les sons manquants (ou régénère les clefs données)
 ```
+
+## Recalage sur la voix (OBLIGATOIRE)
+```bash
+pip install faster-whisper   # modèle 'small' (~2 min pour 7 min de voix sur CPU)
+```
+Script : transcrire la voix avec `word_timestamps=True` (passer l'audio en numpy 16 kHz via ffmpeg, PyAV peut planter),
+écrire `assets/words.json` + `words.js` (`const WORDS = [[début, fin, mot], ...]`), aligner le texte de chaque bloc sur les mots
+(difflib) → `BT` = début du 1er mot − 0,25 s. Dans scenes.js : `at(n, 'mot', k)` (temps relatif au bloc), `dur(n)`.
+Voir tortue/scenes.js (aides) et tortue/words.js.
+
+## Livraison
+- Fichiers envoyés à l'utilisateur : limite 30 Mo par fichier. Il veut le **1080p qualité max découpé en parties**
+  (`ffmpeg -i x.mp4 -c copy -f segment -segment_time 50 -reset_timestamps 1 partie_%d.mp4`, keyframes toutes les 2 s dans render.mjs),
+  numérotées 1, 2, 3… ; il les recolle dans CapCut. Pas d'aperçu basse qualité.
+- Dans le dépôt : fichiers < 100 Mo (GitHub) → ré-encoder la copie commitée (`-crf 22 -tune animation`).
 
 ## ElevenLabs (bande-son)
 - Clé API : dans `engine/.env` (`ELEVENLABS_API_KEY=...`, **gitignoré, ne jamais committer ni écrire la clé ailleurs**).

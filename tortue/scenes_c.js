@@ -159,7 +159,7 @@ B(132, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), hand: .4 })
     return depth({ zoom: 1 }, [...underLayers(t, { dark: .25 }), { z: 1, svg: f + torA({ x: 900, y: 720, s: 1.8, expr: 'wow', swim: .3, headTilt: -8 }, t) +
       thought(1450, 300, 300, 240, G(tr(0, 0), circ(0, 0, 80, '#fff') + G(`rotate(${wave(t, .8, 30)})`, path('M0 -60L16 0L-16 0Z', '#ff4d4d', 4) + path('M0 60L16 0L-16 0Z', '#eee', 4))), pop(t, .5)) +
       Array.from({ length: 6 }, (_, i) => { const k = (t * .8 + i / 6) % 1; return op(1 - k, text(lerp(200, 1100, k), 300 + i * 50, 'none', i % 2 ? '1' : '0', '#7cf0ff', 40)); }).join('') }]); },
-  sfx: [[0, 'whoosh', .5], [.4, 'el:sonar', .7], [.9, 'typing', .4], [1.5, 'magic', .6]] });
+  sfx: [[0, 'whoosh', .5], [.4, 'el:sonar', .7], [.9, 'el:typing', .4], [1.5, 'magic', .6]] });
 // B132b — très large dans l'espace : la Terre et son champ magnétique, une mini-tortue surfe sur une ligne
 B(132, { enter: 'none', cam: (t, d) => ({ z: lerp(1.15, 1.0, eOutCubic(t / d)) }),
   draw: t => { const a = R(-120 + t * 50); return grad('#070d22', '#1b2552', -300, -300, W + 600, H + 600) + Array.from({ length: 70 }, (_, i) => circ((i * 397) % W, (i * 211) % H, 2, 'rgba(255,255,255,.6)', 0)).join('') + glow(CX, 560, 700, '#3a7bd5', .3) + magEarth(CX, 560, 1.5, t) +
