@@ -5,7 +5,7 @@ import { execSync } from 'child_process';
 let chromium;
 try { ({ chromium } = await import('playwright')); }
 catch { chromium = createRequire(execSync('npm root -g').toString().trim() + '/')('playwright').chromium; }
-const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(() => chromium.launch());
+const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }).catch(() => chromium.launch({ args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }));
 import { spawn, execFileSync } from 'child_process';
 import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
 const ENGINE = path.dirname(fileURLToPath(import.meta.url));

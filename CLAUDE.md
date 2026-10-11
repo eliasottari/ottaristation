@@ -13,6 +13,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
+| `cerveau/` | Et si on mettait ton cerveau dans un ordinateur ? (20 plans, 9:16, **style FLOW / option A**, 3D Three.js) | 70,4 s | 🟡 V1 livrée |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
@@ -67,6 +68,15 @@ engine/            moteur commun à tous les épisodes
   check.mjs        vérifie tous les plans (erreurs JS / NaN) : `node ../engine/check.mjs` depuis l'épisode
   hair.js          cheveux qui tombent : mane({loss, comb, wind, shaved}) pour person/head (hairFn), hairPile, wig,
                    follicle, dhtMonster, bottleProd, rosemaryOil, clippers, searchBar
+  flow.js          STYLE FLOW (option A, recréé d'après une vidéo de référence « Would you upload your brain ») :
+                   persos `stick()` (grosse tête blanche, corps capsule en volume, membres fil, mains points ; coiffures HAIRS,
+                   expressions ring/grit/blase/hehe/glee…), `walkPose`, passe lumière (lightRays, bloom, grain, chroma, glitchFx),
+                   caméra 3D-lite `cam3/P3/floor3/wall3/sprite3/rect3` (vrais sols carrelés en perspective), `portalTf/inRect/drect`.
+                   → transitions dans player.js : sc.tin = {type:'portal'|'portalOut'|'dissolve'|'glitch'|'wipe', d} ;
+                   'portal' = zoom DANS l'écran défini par SCENES[i-1].portal(t) ; 'portalOut' = on ressort de sc.portal(t).
+                   Règle du style : quasi AUCUNE coupe sèche, chaque plan s'enchaîne (travelling, fondu raccord, zoom dans un écran/photo).
+  fly3d.js         VRAIE 3D Three.js (engine/vendor/three.min.js r149, WebGL logiciel) : mouche low-poly, monde « jeu vidéo »
+                   (t3WorldFrame), scan fil de fer qui se construit (t3ScanFrame) → data-URL posée avec img3() dans le SVG.
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs
   player.js        renderFrame(T) : caméra (cam/enter/flash/shake), overlay, poussières, vignette, fondu final
   sfx.py           ~55 bruitages synthétisés en numpy + mixage voix/SFX/nappes (ducking, limiteur doux)

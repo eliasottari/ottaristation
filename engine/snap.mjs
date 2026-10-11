@@ -5,9 +5,9 @@ import { execSync } from 'child_process';
 let chromium;
 try { ({ chromium } = await import('playwright')); }
 catch { chromium = createRequire(execSync('npm root -g').toString().trim() + '/')('playwright').chromium; }
-const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(() => chromium.launch());
+const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }).catch(() => chromium.launch({ args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] }));
 import { execFileSync } from 'child_process';
-import path from 'path';
+import path from 'path'; import os from 'os';
 const [out, ...ts] = process.argv.slice(2);
 const b = await launch();
 const probe = await b.newPage(); await probe.goto('file://' + path.resolve('index.html'));
@@ -26,7 +26,7 @@ for (const a of ts) {
   times.push(...await p.evaluate(([n, k]) => { const out = []; SCENES.forEach((sc, i) => { if (sc.n === n) { const e = SCENES[i + 1] ? SCENES[i + 1].s : TOTAL; out.push(sc.s + (e - sc.s) * k); } }); return out; }, [+b, f ? +f : .6]));
 }
 const files = [];
-for (const [i, t] of times.entries()) { await p.evaluate(t => renderFrame(t), +t); const f = `/tmp/claude-0/-home-user-ottaristation/7a5acb2b-c3bc-5114-9346-982522533dbc/scratchpad/snap_${process.pid}_${i}.png`; await p.screenshot({ path: f }); files.push(f); }
+for (const [i, t] of times.entries()) { await p.evaluate(t => renderFrame(t), +t); const f = path.join(os.tmpdir(), `snap_${process.pid}_${i}.png`); await p.screenshot({ path: f }); files.push(f); }
 await b.close();
 if (errs.length) console.log('ERR', errs.slice(0,5));
 const cols = Math.min(files.length, SW_ > SH_ ? 4 : 6), rows = Math.ceil(files.length / cols);

@@ -1,6 +1,6 @@
 import { createRequire } from 'module'; import { execSync } from 'child_process'; import path from 'path';
 const { chromium } = createRequire(execSync('npm root -g').toString().trim() + '/')('playwright');
-const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome', args: ['--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
 const p = await b.newPage({ viewport: { width: 1920, height: 1080 } });
 const errs = []; p.on('pageerror', e => errs.push(e.message));
 await p.goto('file://' + path.resolve('index.html'));
