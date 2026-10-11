@@ -11,6 +11,7 @@ window.FLOW = true;
 // dégradé de volume (corps capsule) : déclaré une fois par frame par player.js
 const FLOW_DEFS = `<linearGradient id="stVol" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".30"/><stop offset=".28" stop-color="#fff" stop-opacity=".22"/><stop offset=".5" stop-color="#fff" stop-opacity=".04"/><stop offset=".82" stop-color="#000" stop-opacity=".16"/><stop offset="1" stop-color="#000" stop-opacity=".38"/></linearGradient>
 <linearGradient id="stVolV" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".18"/><stop offset=".6" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
+<filter id="rimF" x="-15%" y="-15%" width="130%" height="130%"><feMorphology in="SourceAlpha" operator="dilate" radius="8" result="d"/><feFlood flood-color="#fffdf6" flood-opacity=".92"/><feComposite in2="d" operator="in" result="w"/><feGaussianBlur in="w" stdDeviation="1.2" result="wb"/><feMerge><feMergeNode in="wb"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
 <linearGradient id="rayG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
 <filter id="grainF" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".85" numOctaves="1" seed="SEED" result="n"/><feColorMatrix type="saturate" values="0"/></filter>`;
 
@@ -86,10 +87,10 @@ function stLimb(x, y, a1, l1, a2, l2, w = 9, col = OL) {
 //     coat (blouse) tie tag apron | shoes | shadow:false | armsBack
 function stick(o, t = 0) {
   const r = o.hr || 100, col = o.body || '#e8724a';
-  const bw = o.bw || 106, bh = o.bh || 178, legLen = o.legLen ?? 140;
+  const bw = o.bw || 136, bh = o.bh || 182, legLen = o.legLen ?? 140;
   const hipY = -legLen, bob = (o.bob ?? 1) * wave(t, .9, 3, o.seed || 0);
   const bot = hipY + 22, top = bot - bh + bob;
-  let s = o.shadow === false ? '' : ell(0, 6, 90 * (o.shadowK || 1), 15, 'rgba(0,0,0,.17)', 0);
+  let s = '';
   // jambes
   const legs = o.legs || [[97, 92], [83, 88]];
   if (legLen > 0) [-1, 1].forEach((sd, i) => {
@@ -98,8 +99,10 @@ function stick(o, t = 0) {
     s += L.svg + ell(L.x + dir, L.y + 2, 23, 11, o.shoes || '#f0a0b4', 5);
   });
   // corps capsule en volume
-  const rx = Math.min(bw * .48, bh * .5);
-  const bodyR = (fill, sw) => rect(-bw / 2, top, bw, bot - top, fill, rx, sw);
+  // corps en cloche (épaules étroites, bas large et arrondi)
+  const tw = bw * .34, rb = bw * .3;
+  const bodyD = `M${-tw} ${top + tw}Q${-tw} ${top} 0 ${top}Q${tw} ${top} ${tw} ${top + tw}L${bw / 2} ${bot - rb}Q${bw / 2} ${bot} ${bw / 2 - rb} ${bot}L${-bw / 2 + rb} ${bot}Q${-bw / 2} ${bot} ${-bw / 2} ${bot - rb}Z`;
+  const bodyR = (fill, sw) => path(bodyD, fill, sw);
   let body = bodyR(col, 0) + bodyR('url(#stVol)', 0) + bodyR('url(#stVolV)', 0);
   if (o.coat) body += path(`M${-bw * .2} ${top + 6}L0 ${top + bh * .42}L${bw * .2} ${top + 6}`, o.tie ? '#fff' : 'none', 0) + (o.tie ? path(`M-10 ${top + 10}L10 ${top + 10}L6 ${top + bh * .32}L0 ${top + bh * .4}L-6 ${top + bh * .32}Z`, o.tie, 4) : '') + path(`M${-bw * .22} ${top + 4}L${-bw * .04} ${top + bh * .5}M${bw * .22} ${top + 4}L${bw * .04} ${top + bh * .5}L${bw * .04} ${bot - 4}`, 'none', 5);
   if (o.apron) body += path(`M${-bw * .36} ${top + bh * .3}L${bw * .36} ${top + bh * .3}L${bw * .42} ${bot - 6}L${-bw * .42} ${bot - 6}Z`, o.apron, 5) + path(`M${-bw * .34} ${top + bh * .3}Q0 ${top - 10} ${bw * .34} ${top + bh * .3}`, 'none', 5);
@@ -122,7 +125,9 @@ function stick(o, t = 0) {
   const headS = G(tr(0, top - r * .78, 1, o.tilt || 0), o.headWrap ? o.headWrap(hd + must, r, t) : hd + must);
   const upper = (o.armsBack ? armS + body : body) + headS + (o.armsBack ? '' : armS) + (o.over || '');
   s += G(`rotate(${o.lean || 0} 0 ${hipY})`, upper);
-  return G(tr(o.x || 0, o.y || 0, o.s || 1, o.rot || 0) + (o.flip ? ' scale(-1 1)' : ''), s);
+  const shadow = o.shadow === false ? '' : ell(0, 6, 90 * (o.shadowK || 1), 15, 'rgba(0,0,0,.17)', 0);
+  if (o.rim !== false) s = `<g filter="url(#rimF)">${s}</g>`;
+  return G(tr(o.x || 0, o.y || 0, o.s || 1, o.rot || 0) + (o.flip ? ' scale(-1 1)' : ''), shadow + s);
 }
 // cycle de marche : renvoie {legs, arms, bob}
 function walkPose(t, sp = 1, amp = 1) {
