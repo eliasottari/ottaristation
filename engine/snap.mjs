@@ -18,8 +18,15 @@ const errs=[]; p.on('pageerror', e => errs.push(e.message)); p.on('console', m =
 await p.goto('file://' + path.resolve('index.html'));
 await p.evaluate(() => document.fonts.ready);
 if (process.env.GUIDE) await p.evaluate(() => { window.GUIDE = true; });
+// arguments : temps en secondes, ou « B12 » (tous les sous-plans du bloc 12 à 60 %) / « B12:.3 » (à 30 %)
+const times = [];
+for (const a of ts) {
+  if (a[0] !== 'B') { times.push(+a); continue; }
+  const [b, f] = a.slice(1).split(':');
+  times.push(...await p.evaluate(([n, k]) => { const out = []; SCENES.forEach((sc, i) => { if (sc.n === n) { const e = SCENES[i + 1] ? SCENES[i + 1].s : TOTAL; out.push(sc.s + (e - sc.s) * k); } }); return out; }, [+b, f ? +f : .6]));
+}
 const files = [];
-for (const [i, t] of ts.entries()) { await p.evaluate(t => renderFrame(t), +t); const f = `/tmp/claude-0/-home-user-ottaristation/7a5acb2b-c3bc-5114-9346-982522533dbc/scratchpad/snap_${i}.png`; await p.screenshot({ path: f }); files.push(f); }
+for (const [i, t] of times.entries()) { await p.evaluate(t => renderFrame(t), +t); const f = `/tmp/claude-0/-home-user-ottaristation/7a5acb2b-c3bc-5114-9346-982522533dbc/scratchpad/snap_${i}.png`; await p.screenshot({ path: f }); files.push(f); }
 await b.close();
 if (errs.length) console.log('ERR', errs.slice(0,5));
 const cols = Math.min(files.length, SW_ > SH_ ? 4 : 6), rows = Math.ceil(files.length / cols);

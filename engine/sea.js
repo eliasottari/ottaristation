@@ -93,7 +93,13 @@ function turtle(o, t = 0) {
   if (o.hurt) front += G(tr(rx * .5, -h * .12, 1, 35 + fa), path(`M${flen * .45} -14l10 14l-8 6l10 12`, 'none', 5, '#e2463a'));
   const body = back + (neck > .15 ? neckS : '') + (o.headBehind ? headS : '') + shell + (o.headBehind ? '' : headS) + front;
   const sq = o.squash || 0;
-  return G(tr(o.x || 0, o.y || 0, o.s || 1, o.rot || 0) + (o.flip ? ' scale(-1 1)' : '') + (sq ? ` scale(${1 + sq * .2} ${1 - sq * .2})` : ''), body);
+  const tj = o.tremble ? [Math.sin(t * 61) * 4 * o.tremble, Math.cos(t * 57) * 3 * o.tremble] : [0, 0];
+  let under = '', over = '';
+  if (o.pee) { const k = clamp(o.pee); under += ell(-rx * .55, 6, rx * 1.3 * k, 16 + 22 * k, 'rgba(255,214,60,.75)', 4, 'rgba(200,150,20,.6)') + ell(-rx * .7, 2, rx * .4 * k, 6 * k, 'rgba(255,255,255,.6)', 0);
+    if (k < 1) for (let i = 0; i < 3; i++) { const q = (t * 3 + i / 3) % 1; over += circ(-rx * .8, -h * .1 + q * h * .2, 6, '#ffd63c', 3, '#c9961a'); } }
+  if (o.zzz) for (let i = 0; i < 3; i++) { const q = (t * .5 + i / 3) % 1; over += op(1 - q, G(tr(hx + 40 + q * 90, hy - hr - 20 - q * 150, .5 + q * .6), text(0, 0, OL, 'z', '#fff', 70))); }
+  if (o.ghost) { const q = clamp(o.ghost); over += op(.75 * q, G(tr(hx, hy - hr * 1.6 - q * 120, 1, wave(t, 1, 8)), path(`M${-hr * .8} 0C${-hr} ${-hr * 1.7} ${hr} ${-hr * 1.7} ${hr * .8} 0Q${hr * .5} ${-hr * .2} ${hr * .3} ${hr * .2}Q0 ${-hr * .1} ${-hr * .3} ${hr * .2}Q${-hr * .5} ${-hr * .2} ${-hr * .8} 0Z`, '#ffffff', 5) + circ(-hr * .3, -hr * .8, 8, OL, 0) + circ(hr * .3, -hr * .8, 8, OL, 0) + ell(0, -hr * .45, 12, 16, OL, 0))); }
+  return G(tr((o.x || 0) + tj[0], (o.y || 0) + tj[1], o.s || 1, o.rot || 0) + (o.flip ? ' scale(-1 1)' : '') + (sq ? ` scale(${1 + sq * .2} ${1 - sq * .2})` : ''), under + body + over);
 }
 
 // TORTUE DE FACE (gros plans) — origine au sol. r = rayon de la tête. armL/armR = angles des nageoires.
@@ -117,7 +123,9 @@ function turtleFront(o, t = 0) {
   const hs = G(tr(0, -r * 2.05 + bobY, 1, o.headTilt || 0), tHead(Object.assign({ look: [0, 0] }, o), r, t, P.skin));
   s += path(`M0 ${-r * 1.4}L0 ${-r * 2.0}`, 'none', r * 1.0 + SW * 2) + path(`M0 ${-r * 1.4}L0 ${-r * 2.0}`, 'none', r * 1.0, P.skin);
   s += o.armsBack ? arms + hs : hs + arms;
-  return G(tr(o.x || 0, o.y || 0, o.s || 1, o.rot || 0), s);
+  if (o.pee) s = ell(0, 0, r * 1.9 * clamp(o.pee), r * .3 * clamp(o.pee) + 6, 'rgba(255,214,60,.75)', 4, 'rgba(200,150,20,.6)') + s;
+  const tj = o.tremble ? [Math.sin(t * 61) * 5 * o.tremble, Math.cos(t * 57) * 4 * o.tremble] : [0, 0];
+  return G(tr((o.x || 0) + tj[0], (o.y || 0) + tj[1], o.s || 1, o.rot || 0), s);
 }
 
 // TORTUE VUE DE DESSUS (plans en plongée) — tête vers le haut (rot pour orienter)
@@ -188,9 +196,15 @@ function eagle(o, t = 0) {
   if (ex === 'shock') s += circ(eyeX, eyeY, 18, '#fff', 5) + circ(eyeX - 3, eyeY, 7, OL, 0);
   else if (ex === 'happy') s += path(`M${eyeX - 14} ${eyeY + 4}Q${eyeX} ${eyeY - 12} ${eyeX + 14} ${eyeY + 4}`, 'none', 7);
   else if (ex === 'sad') s += circ(eyeX, eyeY, 9, OL, 0) + line(eyeX - 22, eyeY - 30, eyeX + 12, eyeY - 18, 7);
-  else s += circ(eyeX, eyeY, 13, '#ffd23f', 5) + circ(eyeX - 3, eyeY, 7, OL, 0);
+  else if (ex !== 'starving') s += circ(eyeX, eyeY, 13, '#ffd23f', 5) + circ(eyeX - 3, eyeY, 7, OL, 0);
   if (ex === 'angry' || ex === 'hungry') s += line(eyeX - 26, eyeY - 30, eyeX + 16, eyeY - 14, 9);
   if (ex === 'hungry') s += path(`M${hx - 90} ${hy + 44}q-4 20 4 34`, 'none', 7, '#8fd0ff') + circ(hx - 86, hy + 82, 7, '#8fd0ff', 0);
+  if (ex === 'starving') {
+    s += circ(eyeX, eyeY, 22, '#fff7c2', 5) + path(`M${eyeX - 20} ${eyeY}l9 2M${eyeX + 18} ${eyeY - 8}l-8 4M${eyeX} ${eyeY + 20}l1 -8`, 'none', 3, '#ff4d4d') + circ(eyeX - 4 + Math.sin(t * 29) * 3, eyeY, 5, OL, 0) + line(eyeX - 30, eyeY - 38, eyeX + 20, eyeY - 18, 10);
+    s += path(`M${hx - 70} ${hy + 30}q-10 30 -40 26`, '#ff8a9a', 5);
+    for (let i = 0; i < 3; i++) { const k = (t * 1.1 + i / 3) % 1; const dx = hx - 95 + i * 22; s += path(`M${dx} ${hy + 40}q${-6 + i * 3} ${60 + k * 160} ${2} ${80 + k * 200}`, 'none', 10 - i * 2, 'rgba(190,232,255,.95)') + circ(dx + 2, hy + 84 + k * 200, 9 - i * 2, '#bfe8ff', 3, '#7cc4e8'); }
+    s += op(.8, G(tr(60, 70), path('M-30 0q10 -14 20 0t20 0t20 0', 'none', 5, '#fff')));
+  }
   if (o.bib) s += G(tr(hx + 10, hy + 40, .55), bib(0, 0));
   s += wing(0, C.wing, 1.15);
   if (o.held) s += G(tr(30, 120), o.held);
@@ -476,4 +490,40 @@ function bgSplit(t, o = {}) {
   s += path(`M-200 ${wl}` + Array.from({ length: 24 }, (_, k) => `q50 ${wave(t, .5, 8, k / 5) - 12} 100 0`).join('') + `L${W + 200} ${wl + 30}L-200 ${wl + 30}Z`, 'rgba(255,255,255,.6)', 0);
   for (let i = 0; i < 5; i++) { const x = 150 + i * 380 + wave(t, .05, 50, i / 5); s += `<path d="M${x} ${wl}L${x + 90} ${wl}L${x + 300} ${H + 50}L${x + 120} ${H + 50}Z" fill="rgba(255,255,255,.07)"/>`; }
   return s;
+}
+
+// ---------- décors en pièces détachées pour la fausse 3D (à mettre dans depth()) ----------
+// renvoie { sky, far, sea, sand } : sky (z≈6), far = hôtels lointains (z≈4, brume), sea (z≈2.5), sand (z≈1)
+function beachParts(t, o = {}) {
+  const hz = o.hz ?? 430, sy = o.sy ?? 640, M = 900, night = o.dusk || 0;
+  const sky = grad(lerpColor('#8fd3ff', '#5b5d9e', night), lerpColor('#dff3ff', '#ffb38a', night), -M, -M, W + 2 * M, hz + M + 200) +
+    (o.sun !== false ? glow(o.sunX ?? 1550, o.sunY ?? 150, 300, '#fff3b0', .5) + circ(o.sunX ?? 1550, o.sunY ?? 150, 70, night ? '#ffb15a' : '#fff3b0', 0) : '') +
+    cloud(300 + wave(t, .02, 40), 140, .8) + cloud(1100 + wave(t, .015, 50, .3), 90, .6) + cloud(-300, 200, .7) + cloud(2100, 160, .9);
+  let far = '';
+  if (o.hotels) for (let i = -2; i < 8; i++) far += hotel(80 + i * 300, hz + 4, 160 + ((i + 9) % 3) * 40, 120 + ((i + 9) * 37 % 90), 0, '#d7dde6', i + 12).replace(/stroke="#2b2420"/g, 'stroke="#9aa6b5"');
+  let sea = grad(SEA, SEA_D, -M, hz, W + 2 * M, sy - hz + 80);
+  for (let i = 0; i < 6; i++) { const y = hz + 20 + i * (sy - hz) / 6, off = (t * (20 + i * 8)) % 200; sea += path(`M${-M - off} ${y}` + Array.from({ length: 20 }, () => 'q50 -10 100 0t100 0').join(''), 'none', 4, 'rgba(255,255,255,.35)'); }
+  const wv = wave(t, .18, 26, o.seed || 0);
+  let sand = path(`M${-M} ${sy + wv}` + Array.from({ length: 38 }, () => 'q50 -18 100 0').join('') + `L${W + M} ${sy + 80}L${-M} ${sy + 80}Z`, 'rgba(255,255,255,.85)', 0);
+  sand += grad(o.sand1 || SAND, o.sand2 || SAND_D, -M, sy + 20 + wv, W + 2 * M, H - sy + M);
+  sand += path(`M${-M} ${sy + 20 + wv}` + Array.from({ length: 38 }, () => 'q50 14 100 0').join(''), 'none', 5, 'rgba(255,255,255,.7)');
+  const r = rng(o.seed || 5);
+  for (let i = 0; i < 40; i++) { const x = -600 + r() * (W + 1200), y = sy + 80 + r() * (H - sy + 200); sand += ell(x, y, 6 + r() * 8, 3 + r() * 3, SAND_W, 0); }
+  return { sky, far, sea, sand };
+}
+// mise en profondeur standard d'une plage : renvoie la liste de couches (ajouter perso z=1 et premier plan z<1)
+function beachLayers(t, o = {}) { const p = beachParts(t, o); return [{ z: 6, svg: p.sky }, { z: 4, svg: p.far, haze: .35, hazeCol: o.dusk ? '#f3c7b0' : '#e3f1ff' }, { z: 2.4, svg: p.sea }, { z: 1, svg: p.sand }]; }
+// sous l'eau en profondeur : fond (z 5), silhouettes de poissons/kelp lointains (z 2.5, brume), sol (z 1)
+function underLayers(t, o = {}) {
+  const dk = o.dark || 0, M = 900;
+  const back = grad(lerpColor('#5fd0ea', '#123a5a', dk), lerpColor('#1b6fa3', '#061a33', dk), -M, -M, W + 2 * M, H + 2 * M) +
+    Array.from({ length: 8 }, (_, i) => { const x = -400 + i * 380 + wave(t, .05, 60, i / 6); return `<path d="M${x} -300L${x + 120} -300L${x + 520} ${H + 300}L${x + 220} ${H + 300}Z" fill="rgba(255,255,255,${.07 * (1 - dk)})"/>`; }).join('') +
+    (o.surface !== undefined ? path(`M${-M} ${o.surface}` + Array.from({ length: 38 }, (_, k) => `q50 ${wave(t, .4, 10, k / 7) + 10} 100 0`).join('') + `L${W + M} -600L${-M} -600Z`, 'rgba(220,250,255,.4)', 0) : '');
+  const r = rng(o.seed || 11); let mid = '';
+  for (let i = 0; i < 7; i++) { const x = ((r() * (W + 1200) - t * 50 * (1 + i * .2)) % (W + 1200) + W + 1200) % (W + 1200) - 600; mid += fish({ x, y: 120 + r() * 700, s: .45, color: '#0d4c74' }, t); }
+  if (o.floor) for (let i = 0; i < 7; i++) mid += kelp(-300 + i * 420 + r() * 80, o.floor + 60, 300 + r() * 200, t, '#2f6f5a', i);
+  let near = '';
+  if (o.floor) { near += path(`M${-M} ${o.floor}Q${W * .3} ${o.floor - 40} ${W * .6} ${o.floor + 10}T${W + M} ${o.floor}L${W + M} ${H + M}L${-M} ${H + M}Z`, lerpColor('#e8d29a', '#3e4b5a', dk), 0); for (let i = 0; i < 5; i++) near += kelp(-100 + i * 500 + r() * 80, o.floor + 30, 220 + r() * 160, t, '#4fae6a', i + 3); }
+  for (let i = 0; i < 14; i++) { const x = r() * W, sp = 40 + r() * 60, y = ((r() * H - t * sp) % H + H) % H; near += circ(x + wave(t, .5, 8, r()), y, 4 + r() * 8, 'rgba(255,255,255,.35)', 3, 'rgba(255,255,255,.6)'); }
+  return [{ z: 5, svg: back }, { z: 2.5, svg: mid, haze: .5, hazeCol: lerpColor('#3fa6d0', '#0b2a48', dk) }, { z: 1, svg: near }];
 }

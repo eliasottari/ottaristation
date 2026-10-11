@@ -22,14 +22,24 @@ function renderFrame(T) {
   if (enter === 'punch') z *= 1 + .08 * (1 - eOutCubic(seg(t, 0, .3)));
   if (enter === 'whip') x += W * .65 * Math.pow(1 - eOutCubic(seg(t, 0, .28)), 2) * (i % 2 ? -1 : 1);
   if (enter === 'drop') y -= H * .26 * Math.pow(1 - eOutCubic(seg(t, 0, .3)), 2);
+  if (enter === 'crash') z *= 1 + .5 * Math.pow(1 - eOutCubic(seg(t, 0, .25)), 2);
+  if (enter === 'tilt') { r += 8 * Math.pow(1 - eOutCubic(seg(t, 0, .35)), 2) * (i % 2 ? -1 : 1); z *= 1 + .1 * (1 - eOutCubic(seg(t, 0, .35))); }
   if (c.shake) { const [sx, sy] = shake(T, c.shake); x += sx; y += sy; }
+  if (c.hand && typeof handheld === 'function') { const [hx, hy, hr] = handheld(T, c.hand); x += hx; y += hy; r += hr; z *= 1 + .03 * c.hand; }
   const cx = c.cx ?? W / 2, cy = c.cy ?? H / 2;
   let out = `<g transform="translate(${cx + x} ${cy + y}) rotate(${r}) scale(${z}) translate(${-cx} ${-cy})">${inner}</g>`;
+  // flou de mouvement pendant les entrées rapides
+  if (typeof blur === 'function') {
+    if (enter === 'whip' && t < .22) out = blur(40 * (1 - t / .22), out, 'h');
+    if (enter === 'crash' && t < .15) out = blur(10 * (1 - t / .15), out);
+  }
   if (sc.overlay) out += sc.overlay(t, d, T);
   if (sc.dust !== false) out += dust(T, 7, 18, 'rgba(255,255,255,.35)');
   out += vignette(.28);
+  if (c.bars && typeof letterbox === 'function') out += letterbox(c.bars);
   if (sc.flash) out += op(1 - seg(t, 0, .18), `<rect width="${W}" height="${H}" fill="#fff"/>`);
   if (T > TOTAL - .5) out += op(seg(T, TOTAL - .5, TOTAL), `<rect width="${W}" height="${H}" fill="#000"/>`);
+  if (window.GUIDE && W > H) out += `<rect y="700" width="${W}" height="220" fill="rgba(255,0,0,.25)"/><rect y="920" width="${W}" height="160" fill="rgba(0,0,0,.3)"/>`;
   if (window.GUIDE && H > W) out += `<rect y="1250" width="1080" height="420" fill="rgba(255,0,0,.25)"/><rect y="1670" width="1080" height="250" fill="rgba(0,0,0,.35)"/>`;
   stage.innerHTML = out;
 }

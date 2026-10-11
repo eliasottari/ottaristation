@@ -471,7 +471,7 @@ def read_audio(fn):
 
 
 EXT_GAIN = .22   # bruitages ElevenLabs (normalisés en crête)
-BED_GAIN = .12  # niveau RMS de référence des nappes (musique ~12 dB sous la voix)
+BED_GAIN = .19  # niveau RMS de référence des nappes (musique ~9 dB sous la voix, +4 dB demandé par l'utilisateur)
 VOICE_GAIN = 1.0
 _ext = {}
 

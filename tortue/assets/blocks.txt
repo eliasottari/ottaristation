@@ -1,0 +1,182 @@
+B001 0.00-2.72 | wide establishing shot | Pourquoi c'est horrible de naître tortue ?
+B002 2.72-5.24 | close-up | Tu viens à peine de découvrir ce qu'est la vie…
+B003 5.24-8.87 | low-angle view looking upward | et un aigle a déjà décidé que tu serais son petit-déjeuner.
+B004 8.87-9.84 | high-angle view looking downwa | Tu cours.
+B005 9.84-11.24 | medium shot | Enfin… tu fais ce que tu peux.
+B006 11.24-20.54 | side-profile view | Tu mesures quelques centimètres, tes jambes ressemblent à des petites cuillères et au-dessus de toi, un oiseau arrive avec des serres capables de te soulever comme un vulgaire nugget.
+B007 20.54-22.81 | wide establishing shot | Tu essaies de rentrer ta tête dans ta carapace.
+B008 22.81-24.61 | close-up | Sauf que… SURPRISE!
+B009 24.61-30.82 | low-angle view looking upward | Contrairement à beaucoup de tortues terrestres, les tortues marines ne peuvent pas complètement rentrer leur tête dans leur carapace.
+B010 30.82-34.48 | high-angle view looking downwa | Magnifique. Tu as littéralement une armure sur le dos…
+B011 34.48-36.34 | medium shot | et tu ne peux même pas te cacher dedans.
+B012 36.34-40.15 | side-profile view | Mais reprenons. Parce que ton existence avait déjà très mal commencé.
+B013 40.15-42.06 | wide establishing shot | Deux mois plus tôt.
+B014 42.06-43.26 | close-up | Tu es un œuf.
+B015 43.26-44.49 | low-angle view looking upward | Enterré sous le sable.
+B016 44.49-46.91 | high-angle view looking downwa | Avec environ cent frères et sœurs.
+B017 46.91-48.34 | medium shot | Ta mère? Partie. Oui.
+B018 48.34-52.80 | side-profile view | Elle t'a pondu, enterré, puis elle est retournée dans l'océan.
+B019 52.80-54.44 | wide establishing shot | Pas de câlin. Pas de biberon.
+B020 54.44-57.84 | close-up | Même pas un petit message pour savoir si tout se passe bien.
+B021 57.84-61.02 | low-angle view looking upward | Bienvenue dans la famille. Et voici une première information complètement absurde.
+B022 61.02-65.28 | high-angle view looking downwa | Chez les tortues marines, la température du sable influence ton sexe.
+B023 65.28-68.96 | medium shot | Du sable plus frais favorise la naissance de mâles.
+B024 68.96-71.60 | side-profile view | Du sable plus chaud favorise celle de femelles.
+B025 71.60-72.95 | wide establishing shot | Donc avant même ta naissance…
+B026 72.95-76.80 | close-up | la météo a déjà participé à déterminer qui tu seras.
+B027 76.80-78.56 | low-angle view looking upward | Et toi, dans notre histoire…
+B028 78.56-80.34 | high-angle view looking downwa | tu es une petite femelle. Félicitations.
+B029 80.34-82.08 | medium shot | Maintenant, essaie de ne pas mourir.
+B030 82.08-85.03 | side-profile view | Un soir, ta coquille se fissure.
+B031 85.03-86.43 | wide establishing shot | Tu creuses.
+B032 86.43-87.86 | close-up | Tu grattes. Tu pousses.
+B033 87.86-92.87 | low-angle view looking upward | Et après des efforts absolument ridicules pour un animal qui vient de naître…
+B034 92.87-94.88 | high-angle view looking downwa | tu atteins enfin la surface.
+B035 94.88-96.55 | medium shot | Devant toi… l'océan. Immense. Magnifique.
+B036 96.55-99.06 | side-profile view | Tu dois simplement le rejoindre.
+B037 99.06-102.64 | wide establishing shot | Quelques dizaines de mètres de sable.
+B038 102.64-106.44 | close-up | Facile, non? Sauf que cette plage ressemble moins à une maternité…
+B039 106.44-108.31 | low-angle view looking upward | qu'à un buffet à volonté.
+B040 108.31-110.51 | high-angle view looking downwa | Des crabes t'attendent. Des oiseaux surveillent le sable.
+B041 110.51-115.40 | medium shot | Et toi, tu viens de sortir de ton œuf avec absolument aucune expérience professionnelle.
+B042 115.40-117.45 | side-profile view | Un crabe attrape une de tes sœurs.
+B043 117.45-119.96 | wide establishing shot | Elle disparaît dans le sable.
+B044 119.96-121.27 | close-up | Tu continues. Un oiseau plonge.
+B045 121.27-122.73 | low-angle view looking upward | Un autre bébé est emporté.
+B046 122.73-123.73 | high-angle view looking downwa | Tu accélères.
+B047 123.73-124.88 | medium shot | Et c'est là…
+B048 124.88-127.77 | side-profile view | que nous retrouvons notre aigle affamé du début.
+B049 127.77-129.58 | wide establishing shot | Son ombre passe au-dessus de toi.
+B050 129.58-131.16 | close-up | Tu changes de direction.
+B051 131.16-132.17 | low-angle view looking upward | Il descend. Encore.
+B052 132.17-134.28 | high-angle view looking downwa | Et juste au moment où ses serres arrivent…
+B053 134.28-136.44 | medium shot | une vague te recouvre.
+B054 136.44-138.51 | side-profile view | Tu es emportée. L'oiseau rate sa prise.
+B055 138.51-142.17 | wide establishing shot | Tu viens de survivre à ton premier jour sur Terre.
+B056 142.17-143.42 | close-up | Enfin… à tes premières minutes.
+B057 143.42-144.26 | low-angle view looking upward | Parce que maintenant…
+B058 144.26-146.08 | high-angle view looking downwa | tu es dans l'océan.
+B059 146.08-149.30 | medium shot | Et tu vas découvrir quelque chose d'encore plus merveilleux.
+B060 149.30-151.40 | side-profile view | **Tout le monde veut te manger.** Des poissons.
+B061 151.40-152.76 | wide establishing shot | Des requins.
+B062 152.76-157.13 | close-up | Des prédateurs qui, contrairement à toi, savent parfaitement ce qu'ils font.
+B063 157.13-159.84 | low-angle view looking upward | Tu nages aussi vite que possible.
+B064 159.84-161.80 | high-angle view looking downwa | Tu te caches entre des algues flottantes.
+B065 161.80-164.96 | medium shot | Et pendant quelque temps, ces algues vont devenir ta maison.
+B066 164.96-167.40 | side-profile view | Mais voici un petit détail auquel personne ne pense.
+B067 167.40-169.24 | wide establishing shot | Tu es une tortue MARINE.
+B068 169.24-171.67 | close-up | Tu vis dans l'eau.
+B069 171.67-174.98 | low-angle view looking upward | Et pourtant… TU NE PEUX PAS RESPIRER SOUS L'EAU.
+B070 174.98-176.58 | high-angle view looking downwa | Oui. Tu possèdes des poumons.
+B071 176.58-180.30 | medium shot | Donc tu dois régulièrement remonter à la surface pour respirer.
+B072 180.30-182.02 | side-profile view | C'est quand même extraordinaire.
+B073 182.02-185.90 | wide establishing shot | La nature t'a donné une maison sous l'eau…
+B074 185.90-187.31 | close-up | sans installer l'option respiration aquatique.
+B075 187.31-188.20 | low-angle view looking upward | Les années passent.
+B076 188.20-189.14 | high-angle view looking downwa | Tu grandis.
+B077 189.14-192.21 | medium shot | Ta carapace devient plus solide.
+B078 192.21-197.44 | side-profile view | Tu commences enfin à ressembler à un animal que les autres doivent prendre au sérieux.
+B079 197.44-199.74 | wide establishing shot | Et pendant un moment… la vie devient presque agréable.
+B080 199.74-201.23 | close-up | Tu nages. Tu manges.
+B081 201.23-203.13 | low-angle view looking upward | Tu parcours des kilomètres.
+B082 203.13-206.87 | high-angle view looking downwa | Personne ne te demande de remplir un tableau Excel.
+B083 206.87-209.62 | medium shot | Honnêtement… ça commence à ressembler à une excellente existence.
+B084 209.62-214.29 | side-profile view | Jusqu'au jour où tu aperçois quelque chose qui flotte.
+B085 214.29-215.15 | wide establishing shot | Un objet transparent. Souple.
+B086 215.15-217.40 | close-up | Ça ressemble presque à une méduse.
+B087 217.40-220.94 | low-angle view looking upward | Sauf que ce n'en est pas une.
+B088 220.94-222.46 | high-angle view looking downwa | C'est un sac plastique.
+B089 222.46-228.85 | medium shot | Parce qu'apparemment, les humains ont réussi à inventer un matériau qui sert à transporter trois tomates pendant dix minutes…
+B090 228.85-232.18 | side-profile view | puis peut devenir un danger pour des animaux pendant des années.
+B091 232.18-236.22 | wide establishing shot | Et si une tortue avale certains de ces déchets, ils peuvent obstruer son appareil digestif.
+B092 236.22-238.26 | close-up | Mais aujourd'hui, tu passes à côté.
+B093 238.26-239.70 | low-angle view looking upward | Tu continues.
+B094 239.70-240.79 | high-angle view looking downwa | Puis un matin…
+B095 240.79-243.08 | medium shot | tu aperçois un immense filet.
+B096 243.08-245.64 | side-profile view | Des poissons s'agitent à l'intérieur.
+B097 245.64-247.56 | wide establishing shot | Tu changes de direction. Trop tard.
+B098 247.56-250.21 | close-up | Une de tes nageoires se coince.
+B099 250.21-251.06 | low-angle view looking upward | Tu tires.
+B100 251.06-251.81 | high-angle view looking downwa | Le filet se resserre.
+B101 251.81-253.56 | medium shot | Tu te débats.
+B102 253.56-254.90 | side-profile view | Encore. Encore. Et soudain…
+B103 254.90-255.81 | wide establishing shot | tu comprends le problème.
+B104 255.81-257.80 | close-up | Tu dois respirer.
+B105 257.80-260.21 | low-angle view looking upward | Mais tu ne peux plus remonter.
+B106 260.21-262.03 | high-angle view looking downwa | Tes poumons ont besoin d'air.
+B107 262.03-265.57 | medium shot | Ton corps consomme les réserves d'oxygène qui lui restent.
+B108 265.57-267.26 | side-profile view | Tu tires de toutes tes forces.
+B109 267.26-269.09 | wide establishing shot | La corde entaille ta nageoire.
+B110 269.09-271.05 | close-up | Tu essaies de faire demi-tour.
+B111 271.05-271.88 | low-angle view looking upward | Impossible.
+B112 271.88-276.26 | high-angle view looking downwa | Et c'est précisément comme ça que des tortues marines peuvent mourir noyées.
+B113 276.26-278.82 | medium shot | Pas parce qu'elles ne savent pas nager.
+B114 278.82-280.76 | side-profile view | Mais parce qu'elles ne peuvent plus atteindre la surface.
+B115 280.76-282.90 | wide establishing shot | Tu continues à te débattre.
+B116 282.90-284.87 | close-up | Puis une maille abîmée finit par céder.
+B117 284.87-285.75 | low-angle view looking upward | Tu te dégages.
+B118 285.75-286.95 | high-angle view looking downwa | Tu remontes. Encore quelques mètres.
+B119 286.95-288.93 | medium shot | Tu atteins la surface.
+B120 288.93-290.07 | side-profile view | Et tu respires.
+B121 290.07-291.54 | wide establishing shot | Tu viens de survivre. Encore.
+B122 291.54-293.27 | close-up | Trente-cinq ans passent.
+B123 293.27-294.50 | low-angle view looking upward | Oui.
+B124 294.50-296.42 | high-angle view looking downwa | TRENTE-CINQ ANS.
+B125 296.42-298.04 | medium shot | Et maintenant…
+B126 298.04-299.38 | side-profile view | quelque chose t'appelle.
+B127 299.38-300.84 | wide establishing shot | Cette plage.
+B128 300.84-303.58 | close-up | Celle où tu es née.
+B129 303.58-305.88 | low-angle view looking upward | Celle où un oiseau a failli te manger.
+B130 305.88-308.03 | high-angle view looking downwa | Tu ne l'as pas vue depuis des décennies.
+B131 308.03-311.20 | medium shot | Mais les tortues marines possèdent une capacité de navigation extraordinaire.
+B132 311.20-318.04 | side-profile view | Elles utilisent notamment des informations liées au champ magnétique terrestre pour retrouver leur région de naissance.
+B133 318.04-321.23 | wide establishing shot | Pendant des années, tu as traversé l'océan.
+B134 321.23-322.03 | close-up | Et aujourd'hui…
+B135 322.03-323.08 | low-angle view looking upward | tu reviens.
+B136 323.08-326.17 | high-angle view looking downwa | Tu remontes péniblement sur le sable.
+B137 326.17-327.89 | medium shot | Tu creuses un trou.
+B138 327.89-330.08 | side-profile view | Tu y déposes tes œufs. Un à un.
+B139 330.08-332.15 | wide establishing shot | Puis tu les recouvres.
+B140 332.15-334.04 | close-up | Et là, tu réalises quelque chose.
+B141 334.04-336.52 | low-angle view looking upward | Tu es devenue ta mère.
+B142 336.52-343.26 | high-angle view looking downwa | Tu viens de déposer tes bébés dans exactement le même monde qui a passé trente-cinq ans à essayer de te tuer.
+B143 343.26-345.19 | medium shot | Mais au moins… ils auront une chance.
+B144 345.19-347.51 | side-profile view | Tu retournes à l'eau.
+B145 347.51-349.33 | wide establishing shot | Deux mois plus tard. Sous le sable…
+B146 349.33-351.28 | close-up | une petite coquille se fissure.
+B147 351.28-352.29 | low-angle view looking upward | Puis une deuxième.
+B148 352.29-355.82 | high-angle view looking downwa | Des dizaines de bébés commencent à émerger.
+B149 355.82-358.21 | medium shot | L'un d'eux sort la tête.
+B150 358.21-359.47 | side-profile view | Il regarde autour de lui.
+B151 359.47-360.82 | wide establishing shot | Et là… un problème.
+B152 360.82-366.60 | close-up | Normalement, les petites tortues s'orientent notamment vers l'horizon lumineux de la mer.
+B153 366.60-368.22 | low-angle view looking upward | Sauf que depuis ta naissance…
+B154 368.22-369.76 | high-angle view looking downwa | la plage a changé.
+B155 369.76-371.14 | medium shot | Il y a des hôtels.
+B156 371.14-372.30 | side-profile view | Des routes. Des parkings.
+B157 372.30-374.08 | wide establishing shot | Et surtout… des lumières.
+B158 374.08-376.16 | close-up | Beaucoup de lumières.
+B159 376.16-378.26 | low-angle view looking upward | Alors ton bébé regarde devant lui.
+B160 378.26-380.05 | high-angle view looking downwa | Il voit une immense lumière.
+B161 380.05-382.08 | medium shot | Il commence à avancer.
+B162 382.08-383.55 | side-profile view | Sauf que cette lumière…
+B163 383.55-385.05 | wide establishing shot | ce n'est pas l'océan.
+B164 385.05-386.40 | close-up | C'est un hôtel.
+B165 386.40-389.14 | low-angle view looking upward | Et pendant que ses frères et sœurs cherchent la mer…
+B166 389.14-391.48 | high-angle view looking downwa | lui marche dans l'autre direction.
+B167 391.48-392.72 | medium shot | Vers la route.
+B168 392.72-393.68 | side-profile view | Une voiture approche.
+B169 393.68-395.99 | wide establishing shot | Ses phares éclairent le sable.
+B170 395.99-397.70 | close-up | Le petit continue d'avancer.
+B171 397.70-399.21 | low-angle view looking upward | Il ne comprend pas.
+B172 399.21-400.91 | high-angle view looking downwa | Il suit simplement la lumière.
+B173 400.91-402.56 | medium shot | Comme son instinct le lui demande.
+B174 402.56-404.68 | side-profile view | Et quelque part, au large…
+B175 404.68-406.28 | wide establishing shot | tu continues de nager.
+B176 406.28-407.88 | close-up | Tu as survécu aux oiseaux.
+B177 407.88-408.63 | low-angle view looking upward | Aux crabes.
+B178 408.63-409.54 | high-angle view looking downwa | Aux requins. Aux filets.
+B179 409.54-410.36 | medium shot | Aux déchets.
+B180 410.36-414.60 | side-profile view | Tu as passé trente-cinq ans à retrouver le chemin de cette plage…
+B181 414.60-417.51 | wide establishing shot | sans savoir qu'il suffirait d'une lumière artificielle…
+B182 417.51-422.01 | close-up | pour que ton bébé ne trouve jamais celui de l'océan.

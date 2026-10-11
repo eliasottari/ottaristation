@@ -30,7 +30,7 @@ async function work(w) {
   p.on('pageerror', e => console.error('pageerror', e.message));
   await p.goto('file://' + path.resolve('index.html'));
   await p.evaluate(() => document.fonts.ready);
-  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', `out/tmp/seg${w}.mp4`], { stdio: ['pipe', 'inherit', 'inherit'] });
+  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-', '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-g', '60', '-pix_fmt', 'yuv420p', `out/tmp/seg${w}.mp4`], { stdio: ['pipe', 'inherit', 'inherit'] });
   for (let f = a; f < b; f++) {
     await p.evaluate(t => renderFrame(t), f / FPS);
     const buf = await p.screenshot({ type: 'jpeg', quality: 93 });

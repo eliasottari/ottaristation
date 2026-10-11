@@ -169,6 +169,21 @@ const EXPR = {
   proud: { eyes: 'closed', mouth: 'grin', brows: 'up' },
   cool: { eyes: 'shades', mouth: 'smirk' },
   shadesGrin: { eyes: 'shades', mouth: 'grin' },
+  // --- expressions cartoon EXTRÊMES ---
+  terror: { eyes: 'huge', mouth: 'scream', brows: 'sad', sweatSpray: 1 },
+  panic: { eyes: 'pop', mouth: 'scream', brows: 'sad', sweatSpray: 1 },
+  chatter: { eyes: 'huge', mouth: 'chatter', brows: 'sad', sweat: 1 },
+  jawdrop: { eyes: 'pop', mouth: 'jaw', brows: 'up' },
+  starving: { eyes: 'crazy', mouth: 'drool', brows: 'angry' },
+  dizzy: { eyes: 'spiral', mouth: 'wavy' },
+  chill: { eyes: 'chill', mouth: 'bliss' },
+  zen: { eyes: 'closed', mouth: 'bliss', blush: 1 },
+  sob: { eyes: 'closedSad', mouth: 'wail', brows: 'sad', fountain: 1 },
+  rage: { eyes: 'crazy', mouth: 'teeth', brows: 'angry', steamHead: 1 },
+  ecstatic: { eyes: 'star', mouth: 'laugh', brows: 'up' },
+  dead: { eyes: 'x', mouth: 'tongue' },
+  effort: { eyes: 'squint', mouth: 'teeth', brows: 'angry', sweat: 1 },
+  smugger: { eyes: 'half', mouth: 'smirk', brows: 'skeptic', blush: 1 },
 };
 
 function eyesSvg(type, r, t, lx, ly, seed) {
@@ -190,6 +205,14 @@ function eyesSvg(type, r, t, lx, ly, seed) {
       case 'x': s += path(`M${x - side * r * .11} ${y - r * .09}L${x + side * r * .09} ${y}L${x - side * r * .11} ${y + r * .09}`, 'none', 7); break;
       case 'star': s += G(tr(x, y, r / 260, t * 90), path('M0 -40Q6 -6 40 0Q6 6 0 40Q-6 6 -40 0Q-6 -6 0 -40Z', '#ffd23f', 6)); break;
       case 'heart': s += heart(x, y, r / 230); break;
+      case 'huge': { const jx = Math.sin(t * 47 + side) * r * .02, jy = Math.cos(t * 53 + side) * r * .02;
+        s += ell(side * ex * 1.08 + lx * .5, ey - r * .06, r * .3, r * .36, '#fff', 6) + path(`M${side * ex * 1.05 - r * .2} ${ey + r * .05}l${r * .07} ${-r * .03}M${side * ex * 1.05 + r * .19} ${ey + r * .08}l${-r * .06} ${-r * .05}`, 'none', 3, '#ff7a7a') + circ(x + jx, y + jy, r * .045, OL, 0); break; }
+      case 'pop': { const k = 1 + .08 * Math.sin(t * 20); const px = side * r * .5 + lx, py = -r * .62;
+        s += line(side * ex * .8, ey, px, py, 6) + ell(px, py, r * .36 * k, r * .42 * k, '#fff', 6) + path(`M${px - r * .25} ${py + r * .1}l${r * .1} ${-r * .04}M${px + r * .24} ${py + r * .14}l${-r * .09} ${-r * .07}`, 'none', 4, '#ff7a7a') + circ(px + lx * .5, py + ly * .5, r * .08, OL, 0) + circ(px + lx * .5 + r * .03, py + ly * .5 - r * .03, r * .025, '#fff', 0); break; }
+      case 'spiral': { let d = ''; for (let a = 0; a < 14; a++) { const rr = r * .015 * a, an = a * .9 + t * 8 * side; d += (a ? 'L' : 'M') + f1(x + Math.cos(an) * rr) + ' ' + f1(y + Math.sin(an) * rr); } s += path(d, 'none', 5); break; }
+      case 'crazy': { const big = side < 0 ? 1.25 : .95, tw = Math.sin(t * 31) * r * .015;
+        s += circ(side * ex, ey - r * .02, r * .2 * big, '#fff7c2', 6) + path(`M${side * ex - r * .17 * big} ${ey}l${r * .08} ${r * .02}M${side * ex + r * .15 * big} ${ey - r * .08}l${-r * .07} ${r * .04}M${side * ex} ${ey + r * .17 * big}l${r * .01} ${-r * .07}`, 'none', 3, '#ff5a5a') + circ(x + tw, y, r * .04, OL, 0); break; }
+      case 'chill': s += path(`M${x - r * .12} ${y - r * .01}Q${x} ${y + r * .07} ${x + r * .12} ${y - r * .01}`, 'none', 7) + line(x - r * .13, y - r * .03, x + r * .13, y - r * .03, 5) + path(`M${x - r * .12} ${y - r * .03}A${r * .12} ${r * .06} 0 0 0 ${x + r * .12} ${y - r * .03}Z`, OL, 0); break;
     }
   }
   if (type === 'shades') {
@@ -224,6 +247,18 @@ function mouthSvg(type, r, t, lx, ly) {
     case 'smirk': return path(`M${x - r * .1} ${y + r * .05}Q${x + r * .05} ${y + r * .07} ${x + r * .14} ${y - r * .03}`, 'none', 6);
     case 'teeth': return rect(x - r * .16, y - r * .02, r * .32, r * .13, '#fff', 8, 5) + line(x - r * .16, y + r * .045, x + r * .16, y + r * .045, 3);
     case 'wail': return path(`M${x - r * .16} ${y + r * .2}Q${x - r * .16} ${y - r * .04} ${x} ${y - r * .04}Q${x + r * .16} ${y - r * .04} ${x + r * .16} ${y + r * .2}Z`, '#7a2b2b', 6);
+    case 'scream': { const o = .9 + .1 * Math.sin(t * 25);
+      return path(`M${x - r * .32} ${y - r * .1}Q${x} ${y - r * .2} ${x + r * .32} ${y - r * .1}Q${x + r * .36} ${y + r * .62 * o} ${x} ${y + r * .66 * o}Q${x - r * .36} ${y + r * .62 * o} ${x - r * .32} ${y - r * .1}Z`, '#6b1f24', 6) +
+        path(`M${x - r * .26} ${y - r * .1}L${x + r * .26} ${y - r * .1}L${x + r * .22} ${y - r * .01}L${x - r * .22} ${y - r * .01}Z`, '#fff', 0) + ell(x, y + r * .5 * o, r * .17, r * .1, '#ff8a9a', 0) + path(`M${x} ${y - r * .02}q${-r * .03} ${r * .08} 0 ${r * .12}q${r * .03} ${-r * .04} 0 ${-r * .12}Z`, '#ff8a9a', 3); }
+    case 'jaw': return path(`M${x - r * .26} ${y - r * .06}Q${x} ${y - r * .12} ${x + r * .26} ${y - r * .06}L${x + r * .3} ${y + r * 1.1}Q${x} ${y + r * 1.25} ${x - r * .3} ${y + r * 1.1}Z`, '#6b1f24', 6) + ell(x, y + r * 1.0, r * .2, r * .1, '#ff8a9a', 0);
+    case 'drool': { const k = (t * 1.3) % 1;
+      return path(`M${x - r * .24} ${y - r * .06}Q${x} ${y - r * .02} ${x + r * .24} ${y - r * .06}Q${x + r * .2} ${y + r * .26} ${x} ${y + r * .26}Q${x - r * .2} ${y + r * .26} ${x - r * .24} ${y - r * .06}Z`, '#7a2b2b', 6) +
+        path(`M${x + r * .02} ${y + r * .1}q${r * .06} ${r * .3} ${r * .02} ${r * .5}q${-r * .08} ${-r * .02} ${-r * .06} ${-r * .3}Z`, '#ff8a9a', 5) +
+        path(`M${x - r * .16} ${y + r * .18}q${-r * .02} ${r * (.25 + k * .6)} ${r * .01} ${r * (.3 + k * .7)}`, 'none', 9, '#bfe8ff') + circ(x - r * .15, y + r * (.5 + k * .75), r * .05, '#bfe8ff', 3, '#7cc4e8'); }
+    case 'chatter': { const g = Math.abs(Math.sin(t * 40)) * r * .07;
+      return rect(x - r * .2, y - r * .04, r * .4, r * .1 + g, '#6b1f24', 6, 5) + rect(x - r * .2, y - r * .06, r * .4, r * .07, '#fff', 4, 4) + rect(x - r * .2, y + r * .04 + g, r * .4, r * .07, '#fff', 4, 4) + line(x - r * .07, y - r * .06, x - r * .07, y + r * .01, 3) + line(x + r * .07, y - r * .06, x + r * .07, y + r * .01, 3); }
+    case 'bliss': return path(`M${x - r * .22} ${y - r * .02}Q${x} ${y + r * .22} ${x + r * .22} ${y - r * .02}`, 'none', 7) + ell(x + r * .08, y + r * .12, r * .05, r * .04, '#ff8a9a', 0);
+    case 'tongue': return path(`M${x - r * .14} ${y}Q${x} ${y + r * .06} ${x + r * .14} ${y}`, 'none', 6) + path(`M${x - r * .02} ${y + r * .03}q${-r * .01} ${r * .16} ${r * .08} ${r * .16}q${r * .08} ${-r * .02} ${r * .04} ${-r * .17}Z`, '#ff8a9a', 5);
     case 'talk': { const o = Math.abs(Math.sin(t * 15)) * .9 + Math.abs(Math.sin(t * 7.3)) * .3; return o < .25 ? path(`M${x - r * .1} ${y}Q${x} ${y + r * .08} ${x + r * .1} ${y}`, 'none', 6) : ell(x, y + r * .05, r * .1, r * .05 + r * .07 * Math.min(o, 1), '#7a2b2b', 5); }
   }
   return '';
@@ -294,6 +329,9 @@ function head(o, t = 0) {
   if (o.mask) s += path(`M${-r * .7} ${r * .05}Q0 ${-r * .05} ${r * .7} ${r * .05}L${r * .6} ${r * .55}Q0 ${r * .75} ${-r * .6} ${r * .55}Z`, '#9fd6e6', 6) + line(-r * .7, r * .1, -r * .98, -r * .1, 4) + line(r * .7, r * .1, r * .98, -r * .1, 4);
   if (o.cap) s += path(`M${-r * .95} ${-r * .3}A${r} ${r} 0 0 1 ${r * .95} ${-r * .3}Q0 ${-r * .45} ${-r * .95} ${-r * .3}Z`, o.cap, 6);
   if (ex.sweat) s += sweat(r * .85, -r * .55 + (t * 30 % 20), r / 110);
+  if (ex.sweatSpray) for (let i = 0; i < 6; i++) { const k = (t * 2.2 + i / 6) % 1, sd = i % 2 ? 1 : -1, a = R(-60 - i * 12); s += op(1 - k, sweat(sd * (r * .7 + Math.cos(a) * r * 1.1 * k), -r * .5 + Math.sin(a) * r * .9 * k + r * 1.4 * k * k, r / 140 * (1 - k * .3))); }
+  if (ex.fountain) for (const sd of [-1, 1]) for (let i = 0; i < 6; i++) { const k = (t * 2.5 + i / 6) % 1; s += circ(sd * (r * .35 + r * 1.2 * k), r * .05 - r * .6 * k + r * 1.6 * k * k, r * .07, '#8fd0ff', 3, '#5aaee0'); }
+  if (ex.steamHead) s += steam(-r * .6, -r * .9, t, r / 120) + steam(r * .6, -r * .9, t + .3, r / 120);
   if (ex.tears) { const k = (t * 2) % 1; s += path(`M${-r * .34} ${r * .1}q${-r * .05} ${r * .3} ${-r * .02} ${r * .5}`, 'none', 10, '#8fd0ff') + path(`M${r * .34} ${r * .1}q${r * .05} ${r * .3} ${r * .02} ${r * .5}`, 'none', 10, '#8fd0ff') + circ(-r * .4, r * (.6 + k * .5), r * .05, '#8fd0ff', 0) + circ(r * .4, r * (.6 + k * .5), r * .05, '#8fd0ff', 0); }
   if (o.burn) s += op(o.burn, circ(0, 0, r - 3, '#ff3b30', 0, OL).replace('/>', ' opacity=".55"/>'));
   return s;
