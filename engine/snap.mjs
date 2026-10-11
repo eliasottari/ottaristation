@@ -1,9 +1,15 @@
 // usage: node snap.mjs out.png t1 t2 ...  -> planche contact
-import { chromium } from 'playwright';
+import { createRequire } from 'module';
+import { execSync } from 'child_process';
+// playwright : local (engine/node_modules) sinon installation globale de l'environnement
+let chromium;
+try { ({ chromium } = await import('playwright')); }
+catch { chromium = createRequire(execSync('npm root -g').toString().trim() + '/')('playwright').chromium; }
+const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(() => chromium.launch());
 import { execFileSync } from 'child_process';
 import path from 'path';
 const [out, ...ts] = process.argv.slice(2);
-const b = await chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(()=>chromium.launch());
+const b = await launch();
 const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 const errs=[]; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type()==='error') errs.push(m.text()); });
 await p.goto('file://' + path.resolve('index.html'));

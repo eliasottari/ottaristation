@@ -1,5 +1,11 @@
 // Rendu image par image (30 fps) en parallèle -> segments mp4 -> concat + audio mixé
-import { chromium } from 'playwright';
+import { createRequire } from 'module';
+import { execSync } from 'child_process';
+// playwright : local (engine/node_modules) sinon installation globale de l'environnement
+let chromium;
+try { ({ chromium } = await import('playwright')); }
+catch { chromium = createRequire(execSync('npm root -g').toString().trim() + '/')('playwright').chromium; }
+const launch = () => chromium.launch({ executablePath: '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' }).catch(() => chromium.launch());
 import { spawn, execFileSync } from 'child_process';
 import fs from 'fs'; import path from 'path'; import { fileURLToPath } from 'url';
 const ENGINE = path.dirname(fileURLToPath(import.meta.url));
@@ -7,8 +13,7 @@ const FPS = 30, WORKERS = +(process.env.WORKERS || 4);
 const OUT = process.argv[2] || 'out/roux_9x16.mp4';
 const VOICE = process.argv[3];
 fs.mkdirSync('out/tmp', { recursive: true });
-const exe = '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
-const browser = await chromium.launch({ executablePath: exe });
+const browser = await launch();
 const probe = await browser.newPage();
 await probe.goto('file://' + path.resolve('index.html'));
 const TOTAL = await probe.evaluate(() => TOTAL);
