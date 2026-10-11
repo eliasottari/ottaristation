@@ -13,7 +13,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
-| `cerveau/` | Et si on mettait ton cerveau dans un ordinateur ? (20 plans, 9:16, **style FLOW / option A**, 3D Three.js) | 70,4 s | 🟡 V1 livrée |
+| `cerveau/` | Et si on mettait ton cerveau dans un ordinateur ? (20 plans, 9:16, **style FLOW / option A**, 3D Three.js) | 70,4 s | ✅ V1 livrée (2 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
