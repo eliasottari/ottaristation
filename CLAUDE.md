@@ -10,6 +10,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 |---|---|---|---|
 | `roux/`  | Pourquoi c'est l'enfer de naître roux ? (33 plans) | 75 s | ✅ validé par l'utilisateur |
 | `mante/` | Pourquoi c'est horrible de naître mante religieuse ? (35 plans) | 64,6 s | ✅ livré |
+| `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
@@ -35,6 +36,9 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
   → Visages et infos clés entre **y≈380 et y≈1150** (sur 1920). **Sous y≈1250 : décor seulement**
   (sol, herbe, branche, table…). Vérifier avec `GUIDE=1` (bande rouge = zone sous-titres).
 - Pas de sous-titres incrustés par nous (il les met lui-même).
+- **TITRE 9:16** : plus petit et loin des bords (YouTube Shorts zoome/recadre) → 3 lignes ~74/74/84 px, largeur ≤ ~760 px
+  (x 160→920), vers y 300–560 (voir `title()` dans calvitie/scenes.js).
+- Shorts : musique ElevenLabs PAS nécessaire — SFX synthétisés seulement (sauf demande).
 - Contenu sensible traité en cartoon pudique (cœurs derrière une feuille, miettes plutôt que sang).
 - Niveau audio : SFX ~10–16 dB sous la voix (`SFX_GAIN` synthés, `EXT_GAIN` ElevenLabs dans `engine/sfx.py`),
   musique ~13 dB sous la voix en moyenne (`BED_GAIN`) avec ducking automatique pendant que la voix parle.
@@ -60,6 +64,8 @@ engine/            moteur commun à tous les épisodes
   cine.js          fausse 3D : depth(cam, layers) (parallaxe + flou + brume), camMove, handheld, letterbox, povEyes (POV tortue),
                    povEagle (viseur), streaks, shockRing, premiers plans (fgGrass/fgRock/fgShell/fgBubbles/fgKelp/bokeh), eagleFront
   check.mjs        vérifie tous les plans (erreurs JS / NaN) : `node ../engine/check.mjs` depuis l'épisode
+  hair.js          cheveux qui tombent : mane({loss, comb, wind, shaved}) pour person/head (hairFn), hairPile, wig,
+                   follicle, dhtMonster, bottleProd, rosemaryOil, clippers, searchBar
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs
   player.js        renderFrame(T) : caméra (cam/enter/flash/shake), overlay, poussières, vignette, fondu final
   sfx.py           ~55 bruitages synthétisés en numpy + mixage voix/SFX/nappes (ducking, limiteur doux)

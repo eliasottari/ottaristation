@@ -451,6 +451,48 @@ def siren(d=1.4):
     return norm(lp(np.sign(np.sin(2 * np.pi * np.cumsum(f) / SR)), 3000, 1) * env(d, .02) * np.clip((d - t) / .2, 0, 1), .35)
 
 
+def ring(d=1.6):
+    """sonnerie de téléphone moderne (deux tons alternés, en rafales)"""
+    t = T(d)
+    f = np.where((t * 12) % 2 < 1, 1320, 1760)
+    gate = ((t % .5) < .32).astype(float)
+    return norm((np.sin(2 * np.pi * np.cumsum(f) / SR) * .7 + np.sin(4 * np.pi * np.cumsum(f) / SR) * .2) * gate * env(d, .01), .5)
+
+
+def vibrate(d=1.0):
+    t = T(d)
+    gate = ((t % .4) < .25).astype(float)
+    return norm(lp(np.sign(np.sin(2 * np.pi * 150 * t)), 600, 2) * gate * env(d, .01), .5)
+
+
+def wind(d=2.5):
+    t = T(d)
+    n = noise(d)[:len(t)]
+    sw = np.sin(np.pi * t / d) ** 1.5
+    fc = 300 + 900 * sw + 200 * np.sin(2 * np.pi * .7 * t)
+    return norm(onepole_lp(n, fc) * sw * 3, .6)
+
+
+def gasp(d=1.0):
+    """foule qui fait « ooooh ! » (bruit formanté)"""
+    t = T(d)
+    n = noise(d)[:len(t)]
+    v = 0
+    for f in (500, 900, 1300, 2300):
+        v = v + lp(hp(n, f * .8), f * 1.2, 2)
+    vox = sum(np.sin(2 * np.pi * (180 + k * 37) * t * (1 - .15 * t)) * .15 for k in range(8))
+    return norm((v + vox) * env(d, .05, decay=.6), .55)
+
+
+def typing(d=1.6, rate=11):
+    out = np.zeros(int(d * SR)); r = np.random.default_rng(3)
+    for k in range(int(d * rate)):
+        i = int((k / rate + r.random() * .03) * SR)
+        c = hp(noise(.02), 2000) * env(.02, .001, decay=.008)
+        out[i:i + len(c)] += c[:len(out) - i] * (.6 + .4 * r.random())
+    return norm(out, .5)
+
+
 LIB = {k: v for k, v in globals().items() if callable(v) and k not in (
     'T', 'env', 'sweep', 'noise', 'onepole_lp', 'lp', 'hp', 'norm', 'cat', 'at', 'bell', 'saw', 'read_wav', 'write_wav', 'main', 'mix', 'step')}
 

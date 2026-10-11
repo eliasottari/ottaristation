@@ -311,7 +311,7 @@ function head(o, t = 0) {
   const r = o.hr || 100;
   const ex = Object.assign({}, EXPR[o.expr || 'neutral'] || EXPR.neutral, o.face || {});
   const [lx, ly] = (o.look || [0, 0]).map(v => v * r * .12);
-  const [hb, hf] = hairSvg(o.hair || 'short', o.hairColor || '#4a3428', r, t);
+  const [hb, hf] = o.hairFn ? o.hairFn(r, t, o) : hairSvg(o.hair || 'short', o.hairColor || '#4a3428', r, t);
   const skin = o.skin || SKIN;
   let s = hb;
   s += circ(0, 0, r, skin, SW);
