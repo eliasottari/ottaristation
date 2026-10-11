@@ -235,39 +235,3 @@ B(182, { cam: zin(1.0, 1.12),
     G(tr(400, 300), circ(0, 0, 60, '#fff6d6', 0) + glow(0, 0, 200, '#fff6d6', .2)) + kidF({ x: 900, y: 1160, r: 160, expr: 'happy', look: [1, -.5], armL: 210, armR: -30 }, t) + rect(-200, -200, W + 400, H + 400, `rgba(0,0,0,${k * .85})`, 0, 0); },
   sfx: [[.5, 'el:baby_squeak', .4], [1.8, 'el:hit_cine', .3]] });
 
-SCENES.sort((a, b) => a.s - b.s);
-
-// ============================================================
-//  BANDE-SON : musiques (ducking automatique sous la voix) + ambiances
-// ============================================================
-const BEDS = [
-  // musique
-  { name: 'el:m_chase', t0: 0, t1: 40.6, vol: .32, fin: .2, fout: 2 },
-  { name: 'el:m_mystery', t0: 39.8, t1: 61.4, vol: .3, fin: 1.5, fout: 1.5 },
-  { name: 'el:m_quirky', t0: 60.6, t1: 82.6, vol: .28, fin: 1.5, fout: 1.5 },
-  { name: 'el:m_wonder', t0: 82.0, t1: 103, vol: .3, fin: 2, fout: 1.5 },
-  { name: 'el:m_danger', t0: 102.4, t1: 136.8, vol: .32, fin: 1, fout: 1.5 },
-  { name: 'el:m_wonder', t0: 136.2, t1: 149.6, vol: .3, fin: 1, fout: 1.5 },
-  { name: 'el:m_danger', t0: 149.2, t1: 162.4, vol: .32, fin: .6, fout: 1.5 },
-  { name: 'el:m_quirky', t0: 161.6, t1: 187.6, vol: .28, fin: 1.5, fout: 1.2 },
-  { name: 'el:m_happy', t0: 187.2, t1: 210.2, vol: .28, fin: 1, fout: 2 },
-  { name: 'el:m_mystery', t0: 209.4, t1: 222.6, vol: .3, fin: 1.5, fout: 1 },
-  { name: 'el:m_suspense', t0: 222.2, t1: 237, vol: .22, fin: 1, fout: 1.5 },
-  { name: 'el:m_underwater', t0: 236, t1: 241.2, vol: .3, fin: 1, fout: 1 },
-  { name: 'el:m_suspense', t0: 240.6, t1: 285.4, vol: .34, fin: .5, fout: 1.2 },
-  { name: 'el:m_wonder', t0: 285.6, t1: 297, vol: .34, fin: .8, fout: 2 },
-  { name: 'el:m_emotional', t0: 296, t1: 348, vol: .32, fin: 2, fout: 2 },
-  { name: 'el:m_mystery', t0: 347.2, t1: 360, vol: .3, fin: 1.5, fout: 1 },
-  { name: 'el:m_suspense', t0: 359.4, t1: 402.4, vol: .3, fin: 1, fout: .6 },
-  { name: 'el:m_sad', t0: 402.2, t1: 422.6, vol: .5, fin: 1.5, fout: 3 },
-  // ambiances
-  { name: 'el:a_beach', t0: 0, t1: 40.4, vol: .2, duck: .2, fin: .3, fout: 1.5 },
-  { name: 'el:a_sand', t0: 40.2, t1: 92.9, vol: .08, duck: .2, fin: 1.5, fout: 1.5 },
-  { name: 'el:a_beach', t0: 92.6, t1: 144.4, vol: .22, duck: .2, fin: 1, fout: .8 },
-  { name: 'el:a_underwater', t0: 144.2, t1: 286.9, vol: .14, duck: .2, fin: .5, fout: .8 },
-  { name: 'el:a_beach', t0: 286.9, t1: 296.6, vol: .2, duck: .2, fin: .2, fout: 1 },
-  { name: 'el:a_underwater', t0: 296.4, t1: 322, vol: .12, duck: .2, fin: 1, fout: 1 },
-  { name: 'el:a_beach', t0: 321.8, t1: 347.6, vol: .18, duck: .2, fin: .5, fout: 1 },
-  { name: 'el:a_night', t0: 347.4, t1: 402.6, vol: .3, duck: .2, fin: 1, fout: 1 },
-  { name: 'el:a_underwater', t0: 402.4, t1: 422.6, vol: .12, duck: .2, fin: 1, fout: 3 },
-];
