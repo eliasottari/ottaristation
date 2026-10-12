@@ -15,6 +15,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 | `cerveau/` | Et si on mettait ton cerveau dans un ordinateur ? (20 plans, 9:16, **style FLOW / option A**, 3D Three.js) | 70,4 s | ✅ V1 livrée (2 parties) |
 | `bacteries/` | Il a avalé un milliard de bactéries (Barry Marshall) (37 plans, 9:16, **FLOW v2 : toon.js + décors en perspective + gut3d**) | 98,4 s | ✅ V1 livrée (3 parties) |
+| `petit/` | Pourquoi c'est horrible d'être petit ? (19 plans, 9:16, **style CERVEAU** stick + titre, inserts 3D ADN/avion) | 60,4 s | ✅ V1 livrée (2 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
@@ -80,6 +81,9 @@ engine/            moteur commun à tous les épisodes
                    cuisses/genoux/coudes, `gait(t,{run,f})` marche/course réalistes, squash `sq`/`hsq`, `shiver`, `belly`, `sick`,
                    expressions EXAGÉRÉES (fear, terrorX, joyX, proudX, tired, exhausted, sick, gagX, burp, gulp, cryX, shockX, determined…).
                    Décors en vraie perspective : `room3` (sol/murs/plafond), `box3` (meubles), `onBack/onSide`, `toon3(c,X,Z,o,t)`.
+                   ⚠️ Retour utilisateur (épisode petit) : il N'AIME PAS le corps « bulle style Mii » de toon() ni les décors 3D
+                   avec persos option B → revenir au style CERVEAU (stick + décors illustrés en couches), persos à ~la moitié de
+                   l'écran (SC ≈ 1.6, pieds vers y 1600-1700), toute la scène visible, titre au 1er plan, pinceau à pression.
                    RÈGLES (retours utilisateur) : persos à ~1,7 m de la caméra (≈45 % de la hauteur), on voit TOUTE la scène
                    (pas de recadrage serré permanent → garder de la marge pour les zooms), focale courte (f 760–900) pour pousser la perspective.
   gut3d.js         3D intérieur du corps : estomac (plis humides, acide, inflammation, bactéries H. pylori cartoon, antibiotiques),
