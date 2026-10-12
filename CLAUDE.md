@@ -15,6 +15,12 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `dents/` | Pourquoi c'est horrible d'avoir un appareil dentaire ? (33 blocs → 35 plans, 9:16, style V2, SFX synthés ; blocs tirés de la transcription) | 53,5 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
+## Skill / kit vendable
+- Skill `.claude/skills/video-pourquoi/SKILL.md` = méthode complète audio → MP4 (à suivre pour tout nouvel épisode).
+- `tools/` : setup.sh, new_episode.sh, prep.py (voix → words.js + blocks.txt + timing.js), deliver.sh, build_kit.sh.
+- `template/` : squelette d'épisode (TOTAL/BT dans timing.js). `kitfiles/` : CLAUDE.md + README du kit.
+- `tools/build_kit.sh` → `dist/video-pourquoi-kit.zip` (sans clé API ni voix client). Le refaire après chaque amélioration du moteur.
+
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
 2. Le texte de narration.
