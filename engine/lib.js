@@ -184,6 +184,10 @@ const EXPR = {
   dead: { eyes: 'x', mouth: 'tongue' },
   effort: { eyes: 'squint', mouth: 'teeth', brows: 'angry', sweat: 1 },
   smugger: { eyes: 'half', mouth: 'smirk', brows: 'skeptic', blush: 1 },
+  metal: { eyes: 'happy', mouth: 'metal', brows: 'up' },
+  metalPain: { eyes: 'x', mouth: 'metalGrit', brows: 'sad', sweat: 1 },
+  metalShock: { eyes: 'pop', mouth: 'metalOpen', brows: 'up' },
+  perfect: { eyes: 'star', mouth: 'perfect', brows: 'up' },
 };
 
 function eyesSvg(type, r, t, lx, ly, seed) {
@@ -259,6 +263,21 @@ function mouthSvg(type, r, t, lx, ly) {
       return rect(x - r * .2, y - r * .04, r * .4, r * .1 + g, '#6b1f24', 6, 5) + rect(x - r * .2, y - r * .06, r * .4, r * .07, '#fff', 4, 4) + rect(x - r * .2, y + r * .04 + g, r * .4, r * .07, '#fff', 4, 4) + line(x - r * .07, y - r * .06, x - r * .07, y + r * .01, 3) + line(x + r * .07, y - r * .06, x + r * .07, y + r * .01, 3); }
     case 'bliss': return path(`M${x - r * .22} ${y - r * .02}Q${x} ${y + r * .22} ${x + r * .22} ${y - r * .02}`, 'none', 7) + ell(x + r * .08, y + r * .12, r * .05, r * .04, '#ff8a9a', 0);
     case 'tongue': return path(`M${x - r * .14} ${y}Q${x} ${y + r * .06} ${x + r * .14} ${y}`, 'none', 6) + path(`M${x - r * .02} ${y + r * .03}q${-r * .01} ${r * .16} ${r * .08} ${r * .16}q${r * .08} ${-r * .02} ${r * .04} ${-r * .17}Z`, '#ff8a9a', 5);
+    // appareil dentaire : sourire « métal » (bagues + fil), variantes salade / dents serrées / élastiques / dents parfaites
+    case 'metal': case 'metalSalad': case 'perfect': case 'metalOpen': {
+      const w = r * .3, h = r * (type === 'metalOpen' ? .34 : .22), top = y - r * .05;
+      let s = path(`M${x - w} ${top}Q${x} ${top + r * .02} ${x + w} ${top}Q${x + w * .85} ${top + h} ${x} ${top + h}Q${x - w * .85} ${top + h} ${x - w} ${top}Z`, '#7a2b2b', 6);
+      s += path(`M${x - w * .93} ${top + r * .01}Q${x} ${top + r * .03} ${x + w * .93} ${top + r * .01}L${x + w * .8} ${top + r * .11}Q${x} ${top + r * .13} ${x - w * .8} ${top + r * .11}Z`, '#fff', 0);
+      for (let i = -2; i <= 2; i++) s += line(x + i * w * .32, top + r * .02, x + i * w * .3, top + r * .11, 2.5, 'rgba(120,120,140,.5)');
+      if (type === 'metalOpen') s += path(`M${x - w * .75} ${top + h - r * .02}Q${x} ${top + h - r * .12} ${x + w * .75} ${top + h - r * .02}`, '#fff', 0) + ell(x, top + h * .62, r * .1, r * .04, '#ff8a9a', 0);
+      if (type !== 'perfect') { s += path(`M${x - w * .88} ${top + r * .065}Q${x} ${top + r * .085} ${x + w * .88} ${top + r * .065}`, 'none', 4, '#7d8794');
+        for (let i = -2; i <= 2; i++) s += rect(x + i * w * .32 - r * .03, top + r * .045 + Math.abs(i) * -r * .004, r * .06, r * .045, '#c9d1db', 2, 2.5, '#59616c');
+        if (type === 'metalOpen') for (const sd of [-1, 1]) s += line(x + sd * w * .62, top + r * .07, x + sd * w * .55, top + h - r * .05, 3.5, '#ff5d8f'); }
+      else s += path(`M${x + w * .45} ${top - r * .02}l${r * .02} ${r * .05}l${r * .05} ${r * .01}l${-r * .05} ${r * .02}l${-r * .02} ${r * .05}l${-r * .02} ${-r * .05}l${-r * .05} ${-r * .02}l${r * .05} ${-r * .01}Z`, '#fff', 2, '#ffd23f');
+      if (type === 'metalSalad') s += path(`M${x - w * .25} ${top + r * .03}q${r * .05} ${-r * .05} ${r * .12} ${-r * .01}q${r * .02} ${r * .08} ${-r * .03} ${r * .14}q${-r * .08} ${-r * .02} ${-r * .09} ${-r * .13}Z`, '#6fcf4f', 3, '#2f7a2a') + line(x - w * .2, top + r * .05, x - w * .02, top + r * .09, 2, '#2f7a2a');
+      return s; }
+    case 'metalGrit': { let s = rect(x - r * .22, y - r * .03, r * .44, r * .16, '#fff', 8, 5) + line(x - r * .22, y + r * .05, x + r * .22, y + r * .05, 3);
+      s += line(x - r * .2, y + r * .015, x + r * .2, y + r * .015, 4, '#7d8794'); for (let i = -2; i <= 2; i++) s += rect(x + i * r * .085 - r * .025, y - r * .003, r * .05, r * .04, '#c9d1db', 2, 2.5, '#59616c'); return s; }
     case 'talk': { const o = Math.abs(Math.sin(t * 15)) * .9 + Math.abs(Math.sin(t * 7.3)) * .3; return o < .25 ? path(`M${x - r * .1} ${y}Q${x} ${y + r * .08} ${x + r * .1} ${y}`, 'none', 6) : ell(x, y + r * .05, r * .1, r * .05 + r * .07 * Math.min(o, 1), '#7a2b2b', 5); }
   }
   return '';

@@ -12,6 +12,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `mante/` | Pourquoi c'est horrible de naître mante religieuse ? (35 plans) | 64,6 s | ✅ livré |
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
+| `dents/` | Pourquoi c'est horrible d'avoir un appareil dentaire ? (33 blocs → 35 plans, 9:16, style V2, SFX synthés ; blocs tirés de la transcription) | 53,5 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
@@ -65,6 +66,9 @@ engine/            moteur commun à tous les épisodes
   cine.js          fausse 3D : depth(cam, layers) (parallaxe + flou + brume), camMove, handheld, letterbox, povEyes (POV tortue),
                    povEagle (viseur), streaks, shockRing, premiers plans (fgGrass/fgRock/fgShell/fgBubbles/fgKelp/bokeh), eagleFront
   check.mjs        vérifie tous les plans (erreurs JS / NaN) : `node ../engine/check.mjs` depuis l'épisode
+  teeth.js         dents : bigMouth (gros plan bouche, bagues/salade/élastiques/brillance), toothChar, dentalChair, orthoKey, pliers,
+                   baguette, pureeBowl, caramel, popcorn, apple, bomb, palm, plane, elasticRing, flatBox, allenKey, retainerBox/retainer,
+                   prisonBars, ankleMonitor ; bouches 'metal*'/'perfect' et EXPR metal/metalPain/metalShock/perfect dans lib.js
   hair.js          cheveux qui tombent : mane({loss, comb, wind, shaved}) pour person/head (hairFn), hairPile, wig,
                    follicle, dhtMonster, bottleProd, rosemaryOil, clippers, searchBar
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs
