@@ -14,6 +14,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 | `cerveau/` | Et si on mettait ton cerveau dans un ordinateur ? (20 plans, 9:16, **style FLOW / option A**, 3D Three.js) | 70,4 s | ✅ V1 livrée (2 parties) |
+| `bacteries/` | Il a avalé un milliard de bactéries (Barry Marshall) (37 plans, 9:16, **FLOW v2 : toon.js + décors en perspective + gut3d**) | 98,4 s | ✅ V1 livrée (3 parties) |
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
@@ -75,6 +76,14 @@ engine/            moteur commun à tous les épisodes
                    → transitions dans player.js : sc.tin = {type:'portal'|'portalOut'|'dissolve'|'glitch'|'wipe', d} ;
                    'portal' = zoom DANS l'écran défini par SCENES[i-1].portal(t) ; 'portalOut' = on ressort de sc.portal(t).
                    Règle du style : quasi AUCUNE coupe sèche, chaque plan s'enchaîne (travelling, fondu raccord, zoom dans un écran/photo).
+  toon.js          PERSO v2 (à utiliser désormais) : `toon()` membres ANCRÉS dans le corps (racine cachée, pinceau 'limb'),
+                   cuisses/genoux/coudes, `gait(t,{run,f})` marche/course réalistes, squash `sq`/`hsq`, `shiver`, `belly`, `sick`,
+                   expressions EXAGÉRÉES (fear, terrorX, joyX, proudX, tired, exhausted, sick, gagX, burp, gulp, cryX, shockX, determined…).
+                   Décors en vraie perspective : `room3` (sol/murs/plafond), `box3` (meubles), `onBack/onSide`, `toon3(c,X,Z,o,t)`.
+                   RÈGLES (retours utilisateur) : persos à ~1,7 m de la caméra (≈45 % de la hauteur), on voit TOUTE la scène
+                   (pas de recadrage serré permanent → garder de la marge pour les zooms), focale courte (f 760–900) pour pousser la perspective.
+  gut3d.js         3D intérieur du corps : estomac (plis humides, acide, inflammation, bactéries H. pylori cartoon, antibiotiques),
+                   œsophage (chute), champ de microscope : g3StomachFrame / g3TubeFrame / g3MicroFrame.
   fly3d.js         VRAIE 3D Three.js (engine/vendor/three.min.js r149, WebGL logiciel) : mouche low-poly, monde « jeu vidéo »
                    (t3WorldFrame), scan fil de fer qui se construit (t3ScanFrame) → data-URL posée avec img3() dans le SVG.
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs
