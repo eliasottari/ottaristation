@@ -12,12 +12,12 @@ window.INK = true;
 // ---------- PINCEAU À PRESSION (façon brosse Illustrator) ----------
 // le contour d'un tracé devient une forme pleine : fin aux extrémités, épais au milieu, légères variations.
 const _inkP = document.createElementNS('http://www.w3.org/2000/svg', 'path'), _inkC = new Map();
-function inkStroke(d, w, col) {
-  const key = w + '|' + d; let g = _inkC.get(key);
-  if (g === undefined) { g = inkGeom(d, w); if (_inkC.size > 30000) _inkC.clear(); _inkC.set(key, g); }
+function inkStroke(d, w, col, mode = '') {
+  const key = w + '|' + mode + '|' + d; let g = _inkC.get(key);
+  if (g === undefined) { g = inkGeom(d, w, mode); if (_inkC.size > 30000) _inkC.clear(); _inkC.set(key, g); }
   return g ? `<path d="${g}" fill="${col}"/>` : '';
 }
-function inkGeom(d, w) {
+function inkGeom(d, w, mode = '') {
   let out = '';
   d.trim().split(/(?=M)/).forEach((sd, si) => {
     _inkP.setAttribute('d', sd);
@@ -29,7 +29,8 @@ function inkGeom(d, w) {
     const ph = si * 1.7 + w * .37 + n * .013, short = L < w * 6;
     const hw = u => {
       let k = 1 + .22 * Math.sin(u * 6.283 * 1.3 + ph) + .1 * Math.sin(u * 6.283 * 3.7 + ph * 2.1);
-      if (!closed) { const tp = Math.min(1, u / .2, (1 - u) / .2); k *= (short ? .55 : .14) + (short ? .45 : .86) * Math.sin(tp * Math.PI / 2); }
+      if (mode === 'limb') k = (1 + .08 * Math.sin(u * 6.283 + ph)) * (1.08 - .3 * Math.pow(u, 2));
+      else if (!closed) { const tp = Math.min(1, u / .2, (1 - u) / .2); k *= (short ? .55 : .14) + (short ? .45 : .86) * Math.sin(tp * Math.PI / 2); }
       else { const tp = Math.min(1, u / .12, (1 - u) / .12); k *= .95 * (.5 + .5 * Math.sin(tp * Math.PI / 2)); }
       return w * .56 * k;
     };
@@ -235,24 +236,31 @@ function drect(cam, x, y, w, h) { const [a, b] = dpt(cam, x, y), z = cam.zoom ??
 // ---------- caméra 3D-lite : décors en vraie perspective ----------
 // c = {x, y, z (position, m), pitch (° vers le bas), yaw (°), f (focale px)}
 function cam3(o) { const p = R(o.pitch || 0), yw = R(o.yaw || 0); return Object.assign({ f: 1500, x: 0, y: 1.6, z: 0 }, o, { cp: Math.cos(p), sp: Math.sin(p), cyw: Math.cos(yw), syw: Math.sin(yw) }); }
-function P3(c, X, Y, Z) {
+function C3(c, X, Y, Z) { // coordonnées caméra
   const dx = X - c.x, dy = Y - c.y, dz0 = Z - c.z;
   const dx2 = dx * c.cyw - dz0 * c.syw, dz = dx * c.syw + dz0 * c.cyw;
-  const y2 = dy * c.cp + dz * c.sp, z2 = dz * c.cp - dy * c.sp;
-  return [W / 2 + c.f * dx2 / z2, H / 2 - c.f * y2 / z2, z2];
+  return [dx2, dy * c.cp + dz * c.sp, dz * c.cp - dy * c.sp];
 }
-// polygone 3D (liste de [X,Y,Z])
+const PRJ = (c, p) => [W / 2 + c.f * p[0] / p[2], H / 2 - c.f * p[1] / p[2], p[2]];
+function P3(c, X, Y, Z) { return PRJ(c, C3(c, X, Y, Z)); }
+// polygone 3D (liste de [X,Y,Z]) — découpé au plan proche, contour au pinceau si sw
 function poly3(c, pts, fill, sw = 0, stroke = OL, extra = '') {
-  const P = pts.map(p => P3(c, ...p));
-  if (P.some(p => p[2] < .05)) return '';
-  return `<path d="M${P.map(p => f1(p[0]) + ' ' + f1(p[1])).join('L')}Z" fill="${fill}" stroke="${sw ? stroke : 'none'}" stroke-width="${sw}" stroke-linejoin="round" ${extra}/>`;
+  const NEAR = .08; let P = pts.map(p => C3(c, ...p)), out = [];
+  for (let i = 0; i < P.length; i++) {
+    const a = P[i], b = P[(i + 1) % P.length], ia = a[2] >= NEAR, ib = b[2] >= NEAR;
+    if (ia) out.push(a);
+    if (ia !== ib) { const k = (NEAR - a[2]) / (b[2] - a[2]); out.push([a[0] + (b[0] - a[0]) * k, a[1] + (b[1] - a[1]) * k, NEAR]); }
+  }
+  if (out.length < 3) return '';
+  const Q = out.map(p => PRJ(c, p));
+  return path(`M${Q.map(p => f1(p[0]) + ' ' + f1(p[1])).join('L')}Z`, fill, sw, stroke, extra);
 }
 // sol carrelé (plan Y=0) de x0..x1, z0..z1
 function floor3(c, x0, x1, z0, z1, step, c1, c2, joint = 'rgba(40,50,70,.35)') {
   let s = '';
   for (let x = x0; x < x1; x += step) for (let z = z0; z < z1; z += step) {
     const odd = (Math.round((x - x0) / step) + Math.round((z - z0) / step)) % 2;
-    s += poly3(c, [[x, 0, z], [x + step, 0, z], [x + step, 0, z + step], [x, 0, z + step]], odd ? c1 : c2, 2.5, joint);
+    s += poly3(c, [[x, 0, z], [x + step, 0, z], [x + step, 0, z + step], [x, 0, z + step]], odd ? c1 : c2, 2, joint);
   }
   return s;
 }

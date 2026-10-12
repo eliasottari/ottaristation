@@ -493,6 +493,92 @@ def typing(d=1.6, rate=11):
     return norm(out, .5)
 
 
+def burp(d=1.1):
+    """rot sonore : voix grave rauque modulée"""
+    t = T(d)
+    f = 95 + 25 * np.sin(2 * np.pi * 3 * t) - 30 * t
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    tone = np.sign(np.sin(ph)) * .5 + np.sin(ph * 2) * .3
+    rough = 1 + .8 * np.sin(2 * np.pi * 31 * t) * lp(noise(d), 60, 2) * 20
+    x = lp(tone * rough, 700, 2) * env(d, .03) * np.clip((d - t) / .25, 0, 1)
+    return norm(x, .85)
+
+
+def tiny_scream(d=1.6, n=5):
+    """chœur de petits cris suraigus (asticots)"""
+    out = np.zeros(int(SR * d)); r = np.random.default_rng(3)
+    for i in range(n):
+        dd = .35 + r.random() * .5; t = T(dd)
+        f = (1700 + r.random() * 900) * (1 + .12 * np.sin(2 * np.pi * (14 + r.random() * 8) * t)) * (1 - .25 * t / dd)
+        ph = 2 * np.pi * np.cumsum(f) / SR
+        v = (np.sin(ph) + .4 * np.sin(2 * ph) + .2 * np.sin(3 * ph)) * env(dd, .02) * np.clip((dd - t) / .08, 0, 1)
+        i0 = int((r.random() * (d - dd)) * SR); out[i0:i0 + len(v)] += v * (.6 + .4 * r.random())
+    return norm(out, .6)
+
+
+def vomit(d=1.3):
+    """haut-le-cœur + éclaboussure liquide"""
+    t = T(d)
+    gag = lp(noise(d), 400, 2) * (1 + np.sin(2 * np.pi * 9 * t)) * env(d, .02) * np.clip((.45 - t) / .1, 0, 1) * 4
+    splash = hp(noise(d), 600) * np.clip((t - .35) / .03, 0, 1) * np.exp(-np.clip(t - .35, 0, None) / .35) * (1 + .5 * np.sin(2 * np.pi * 23 * t))
+    gl = np.sin(sweep(260, 90, d)) * env(d, .05, .3) * .4
+    return norm(gag + splash + gl, .8)
+
+
+def gag(d=.6):
+    t = T(d)
+    x = lp(noise(d), 500, 2) * (1 + np.sin(2 * np.pi * 11 * t)) * env(d, .01, .2) * 4 + np.sin(sweep(220, 140, d)) * env(d, .01, .15) * .5
+    return norm(x, .7)
+
+
+def oink(d=.45):
+    t = T(d)
+    f = 280 + 120 * np.sin(np.pi * t / d)
+    ph = 2 * np.pi * np.cumsum(f) / SR
+    x = lp(np.sign(np.sin(ph)) * (1 + .6 * lp(noise(d), 80, 2) * 30), 1500, 2) * env(d, .02, .15)
+    return norm(cat(x, np.zeros(int(SR * .05)), x[:int(SR * .25)] * .8), .7)
+
+
+def stamp():
+    return norm(at(.35, [(0, lp(noise(.12), 900, 2) * env(.12, .001, .03) * 3), (0, np.sin(sweep(160, 60, .15)) * env(.15, .001, .05))]), .9)
+
+
+def applause(d=2.5):
+    out = np.zeros(int(SR * d)); r = np.random.default_rng(8)
+    for k in range(int(d * 140)):
+        i = int(r.random() * (len(out) - 900)); c = hp(noise(.02), 1200) * env(.02, .001, decay=.006)
+        out[i:i + len(c)] += c * (.4 + .6 * r.random())
+    return norm(out * np.clip(T(d) / .2, 0, 1) * np.clip((d - T(d)) / .5, 0, 1), .6)
+
+
+def fanfare():
+    notes = [(0, 523), (.18, 659), (.36, 784), (.6, 1047)]
+    out = np.zeros(int(SR * 1.6))
+    for t0, f in notes:
+        dd = 1.0 if f == 1047 else .3
+        v = (saw(f, dd) * .5 + saw(f * 1.005, dd) * .5) * env(dd, .02, .4 if f == 1047 else .15)
+        i = int(t0 * SR); out[i:i + len(v)] += lp(v, 2500, 2)[:len(out) - i]
+    return norm(out, .7)
+
+
+def crumple(d=.7):
+    out = np.zeros(int(SR * d)); r = np.random.default_rng(12)
+    for k in range(70):
+        i = int(r.random() * (len(out) - 600)); c = hp(noise(.01), 2500) * env(.01, .001, decay=.004)
+        out[i:i + len(c)] += c * r.random()
+    return norm(out, .55)
+
+
+def stink(d=1.2):
+    t = T(d)
+    x = np.sin(sweep(180, 90, d)) * (1 + .5 * np.sin(2 * np.pi * 6 * t)) * env(d, .05, .5) + lp(noise(d), 300, 2) * 2 * env(d, .1, .4)
+    return norm(x, .6)
+
+
+def ding_ding():
+    return norm(cat(bell(1568, .5), bell(1568, .9)), .6)
+
+
 LIB = {k: v for k, v in globals().items() if callable(v) and k not in (
     'T', 'env', 'sweep', 'noise', 'onepole_lp', 'lp', 'hp', 'norm', 'cat', 'at', 'bell', 'saw', 'read_wav', 'write_wav', 'main', 'mix', 'step')}
 
