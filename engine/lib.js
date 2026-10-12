@@ -313,6 +313,12 @@ function shade(hex, k) {
 // tête complète (centrée sur 0,0)
 function head(o, t = 0) {
   const r = o.hr || 100;
+  if (o.back) { // vue de dos : crâne + cheveux + oreilles (la nuque !)
+    const hc = o.hairColor || '#4a3428';
+    return ell(-r * .98, r * .05, r * .14, r * .2, o.skin || SKIN, 6) + ell(r * .98, r * .05, r * .14, r * .2, o.skin || SKIN, 6) + circ(0, 0, r, o.skin || SKIN, SW) +
+      path(`M${-r * .99} ${r * .1}C${-r * 1.05} ${-r * 1.1} ${r * 1.05} ${-r * 1.1} ${r * .99} ${r * .1}Q${r * .6} ${r * .42} 0 ${r * .36}Q${-r * .6} ${r * .42} ${-r * .99} ${r * .1}Z`, hc, 6) +
+      (o.mole ? circ(r * .25, r * .62, r * .06, '#7a4a2a', 0) + path(`M${r * .25} ${r * .58}l${r * .04} ${-r * .1}M${r * .27} ${r * .6}l${r * .09} ${-r * .06}`, 'none', 3) : '');
+  }
   const ex = Object.assign({}, EXPR[o.expr || 'neutral'] || EXPR.neutral, o.face || {});
   const [lx, ly] = (o.look || [0, 0]).map(v => v * r * .12);
   const [hb, hf] = o.hairFn ? o.hairFn(r, t, o) : hairSvg(o.hair || 'short', o.hairColor || '#4a3428', r, t);
@@ -346,15 +352,19 @@ function limb(x, y, a1, l1, a2, l2, color, w, cap = 'round') {
   const x1 = x + Math.cos(R(a1)) * l1, y1 = y + Math.sin(R(a1)) * l1;
   const x2 = x1 + Math.cos(R(a2)) * l2, y2 = y1 + Math.sin(R(a2)) * l2;
   const d = `M${f1(x)} ${f1(y)}L${f1(x1)} ${f1(y1)}L${f1(x2)} ${f1(y2)}`;
+  if (window.INK && typeof inkStroke === 'function') { // pinceau à pression (style flow) : membre plein à la racine, léger effilement
+    const dq = `M${f1(x)} ${f1(y)}Q${f1(x1 + (x1 - (x + x2) / 2) * .2)} ${f1(y1 + (y1 - (y + y2) / 2) * .2)} ${f1(x2)} ${f1(y2)}`;
+    return { svg: inkStroke(dq, w + SW * 2 - 2, OL, 'limb') + inkStroke(dq, w - 2, color, 'limb'), x: x2, y: y2 };
+  }
   return { svg: `<path d="${d}" fill="none" stroke="${OL}" stroke-width="${w + SW * 2 - 2}" stroke-linecap="${cap}" stroke-linejoin="round"/><path d="${d}" fill="none" stroke="${color}" stroke-width="${w}" stroke-linecap="${cap}" stroke-linejoin="round"/>`, x: x2, y: y2 };
 }
 
 // personnage complet. origine = au sol, entre les pieds.
 function person(o, t = 0) {
-  const A = AGE[o.age || 'kid'];
+  const A = o.A ? Object.assign({}, AGE[o.age || 'kid'], o.A) : AGE[o.age || 'kid'];
   const skin = o.skin || SKIN;
   const shirt = o.shirt || '#eaa93a', pants = o.pants || '#3b3f4a';
-  const bob = (o.bob ?? 1) * wave(t, .8, 4, o.seed || 0);
+  const bob = (o.bob ?? 1) * wave(t, .8, 4, o.seed || 0) + (o.bobY || 0);
   if (o.age === 'baby') {
     const r = A.hr; let s = '';
     s += path(`M${-r * .95} ${-r * .2}C${-r * 1.2} ${-r * 1.6} ${-r * .5} ${-r * 1.4} 0 ${-r * 1.4}C${r * .5} ${-r * 1.4} ${r * 1.2} ${-r * 1.6} ${r * .95} ${-r * .2}L${r * .8} ${-r * .02}Q0 ${r * .12} ${-r * .8} ${-r * .02}Z`, o.shirt || '#9dbcec', SW);
