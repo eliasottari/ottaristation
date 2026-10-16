@@ -16,7 +16,8 @@ const SX = {
   fun: 0,                // 1 = SIZEX « fun » : police Komika, contours cartoon épais, formes rebondies (activer avec sxFun())
 };
 // SIZEX fun (validé) : police comics Komika Axis partout, contours #2b2420, formes molles/rebondies
-function sxFun(acc) { SX.fun = 1; SX.display = SX.thin = SX.marker = "Komika, Fredoka, sans-serif"; if (acc) SX.acc = acc; }
+// police par défaut = Fredoka (validé après « front ») ; sxFun(acc, 'komika') pour l'ancienne police comics
+function sxFun(acc, font = 'fredoka') { SX.fun = 1; SX.display = SX.thin = SX.marker = font === 'komika' ? "Komika, Fredoka, sans-serif" : "Fredoka, sans-serif"; SX.weight = font === 'komika' ? 400 : 700; if (acc) SX.acc = acc; }
 const _sxid = p => p + (_gid++);
 
 // texte « libre » (police au choix, sans contour cartoon)
@@ -25,7 +26,7 @@ function ftext(x, y, str, o = {}) {
   if (SX.fun && o.stroke === undefined && o.font !== 'Fredoka') o = Object.assign({}, o, { stroke: OL, sw: sz * .13 });
   const st = o.stroke ? ` stroke="${o.stroke}" stroke-width="${o.sw || sz * .08}" paint-order="stroke" stroke-linejoin="round"` : '';
   const ls = o.ls != null ? ` letter-spacing="${f1(o.ls)}"` : '';
-  return `<text x="${f1(x)}" y="${f1(y)}" font-family="${o.font || SX.display}" font-weight="${o.weight || 400}" font-size="${f1(sz)}" text-anchor="${anchor}" fill="${o.fill || '#fff'}"${st}${ls}${o.extra || ''}>${str}</text>`;
+  return `<text x="${f1(x)}" y="${f1(y)}" font-family="${o.font || SX.display}" font-weight="${SX.fun ? (SX.weight || 700) : (o.weight || 400)}" font-size="${f1(sz)}" text-anchor="${anchor}" fill="${o.fill || '#fff'}"${st}${ls}${o.extra || ''}>${str}</text>`;
 }
 // dégradé vertical 2 couleurs (renvoie [defs, url])
 function vgrad(c1, c2) { const id = _sxid('vg'); return [`<defs><linearGradient id="${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${c1}"/><stop offset="1" stop-color="${c2}"/></linearGradient></defs>`, `url(#${id})`]; }
@@ -201,3 +202,14 @@ function funBox(x, y, w, h, t, t0, o = {}) { const k = seg(t, t0, t0 + .3); if (
   if (k >= 1) [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([a, b], i) => g += circ(a * w / 2, b * h / 2, 16 + 3 * Math.sin(t * 8 + i), [SX.acc2, '#fff', SX.cool, SX.acc][i], 6));
   if (o.label) g += funTag(-w / 2 + o.label.length * 14 + 30, -h / 2 - 46, o.label, t, t0 + .25, { size: 34, bg: col, r: -3 });
   return G(tr(x, y), g); }
+
+// usage : unlock(x,y,t,t0,{part:'back'}) AVANT le perso (rayons) + unlock(x,y,t,t0,{part:'front'}) APRÈS (flash + étoiles)
+// « DÉBLOQUÉ ! » : explosion d'étoiles (remplace les anneaux de l'intro) — grosse étoile qui pop, éclats d'étoiles en gerbe, rayons brillants
+function unlock(x, y, t, t0, o = {}) { const k = seg(t, t0, t0 + 1.1); if (t < t0) return ''; const cols = o.cols || [SX.acc2, '#fff', SX.acc, SX.cool], r = o.r || 420; let s = '';
+  const back = o.part !== 'front', front = o.part !== 'back';
+  const fl = 1 - seg(t, t0, t0 + .25); if (fl > 0 && front) s += op(fl * .8, circ(x, y, r * .9 * eOutCubic(seg(t, t0, t0 + .25)), '#fff', 0));
+  if (back) for (let i = 0; i < 12; i++) { const a = i / 12 * 6.283 + t * .4, L = r * (.8 + .4 * (i % 2)); s += op(.35 * (1 - seg(t, t0 + .2, t0 + 1.4)), path(`M${f1(x)} ${f1(y)}L${f1(x + Math.cos(a - .05) * L)} ${f1(y + Math.sin(a - .05) * L)}L${f1(x + Math.cos(a + .05) * L)} ${f1(y + Math.sin(a + .05) * L)}Z`, cols[i % 2 ? 0 : 1], 0)); }
+  const n = o.n || 14; for (let i = 0; i < n; i++) { const a = i / n * 6.283 + (i % 3) * .2, dist = r * (.25 + (.75 + .55 * ((i * 37) % 10) / 10) * eOutCubic(k)), sz = (1.1 + .7 * (i % 3) / 2) * (1 - k * .45) * (o.ss || 1);
+    if (k < 1 && front) s += G(tr(x + Math.cos(a) * dist, y + Math.sin(a) * dist * .85 + k * k * 120, sz, k * 360 * (i % 2 ? 1 : -1)), path('M0 -50L14 -16L50 -14L22 8L32 46L0 24L-32 46L-22 8L-50 -14L-14 -16Z', cols[i % cols.length], 6)); }
+  if (o.big) { const kb = popEl(t, t0, .6); s += G(tr(x + (o.bx || 0), y + (o.by || 0), kb * (o.bs || 1.6) * (1 + .04 * Math.sin(t * 8)), Math.sin(t * 3) * 6), path('M0 -50L14 -16L50 -14L22 8L32 46L0 24L-32 46L-22 8L-50 -14L-14 -16Z', SX.acc2, 7) + ell(-12, -14, 10, 6, 'rgba(255,255,255,.7)', 0)); }
+  return s; }

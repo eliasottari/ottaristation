@@ -151,7 +151,8 @@ Référence : `dents_sizex/scenes.js`.
 **Retours client sur SIZEX (prioritaires, épisode `front/`)**
 - L'**intro** (1–3 premiers plans) se fait en motion pur sur fond graphique : c'est la signature.
 - **Ensuite, de VRAIS DÉCORS vivants** : salon, école, rue sous la pluie, plateau télé, parc… avec nuages qui bougent, figurants, pluie, parallaxe `depth()`. La couche motion vient PAR-DESSUS. Pas que des fonds de couleur, sinon on tombe dans du « 100 % motion design ».
-- **Police Komika Axis** (`engine/fonts/komika.ttf`) : appeler `sxFun('#accent')` en haut de scenes.js. Tous les textes motion passent alors en Komika avec contour cartoon.
+- **Police : Fredoka** (retour client après « front » ; Komika abandonnée, encore dispo via `sxFun(acc, 'komika')`). Appeler `sxFun('#accent')` en haut de scenes.js : tous les textes motion passent alors en Fredoka gras avec contour cartoon.
+- **Pas de cercles concentriques (`rings`) en intro** : on utilise l'effet « débloqué » en étoiles. `unlock(x,y,t,t0,{part:'back'})` se place avant le perso (rayons), `unlock(...,{part:'front'})` après (flash + gerbe d'étoiles). On le ressort sur 2–3 moments de prise de conscience.
 - **Formes motion fun, jamais sérieuses** : `funTag` (étiquette molle), `funBox` (cadre tremblé, poignées rondes colorées), `burst` (explosion BD), `blob`, `squiggle`, `popStars`. Tout est rebondi (`popEl`) et cerné de `#2b2420`. On évite `selBox`/`pill`, trop « corporate ».
 - Perso réutilisable « grand front » : `bigForehead({bang, split, cap, mush, wet, h})` dans hair.js, à passer en `hairFn`.
 
