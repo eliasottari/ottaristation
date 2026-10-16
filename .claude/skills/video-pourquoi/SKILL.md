@@ -156,6 +156,14 @@ Référence : `dents_sizex/scenes.js`.
 - **Formes motion fun, jamais sérieuses** : `funTag` (étiquette molle), `funBox` (cadre tremblé, poignées rondes colorées), `burst` (explosion BD), `blob`, `squiggle`, `popStars`. Tout est rebondi (`popEl`) et cerné de `#2b2420`. On évite `selBox`/`pill`, trop « corporate ».
 - Perso réutilisable « grand front » : `bigForehead({bang, split, cap, mush, wet, h})` dans hair.js, à passer en `hairFn`.
 
+- **DÉCORS RICHES (retour client)** : chaque décor doit contenir un MAX d'éléments, entre 15 et 30, avec du détail. Pas juste 2 ou 3 éléments.
+  - Intérieur : murs texturés, plinthe, prises, cadres, posters, étagères garnies, plantes, lampe, horloge, rideaux, fenêtre avec vue.
+  - Sol : parquet ou tapis, avec des objets posés.
+  - Meubles détaillés.
+  - Extérieur : plusieurs plans d'immeubles avec balcons et enseignes, lampadaires, voitures, vélos, arbres variés, passants, oiseaux.
+  - 3 couches de profondeur et 2 ou 3 éléments animés par décor.
+  - Factoriser les accessoires en petites fonctions.
+
 **Règles SIZEX**
 1. **Palette** : encre `SX.ink` / papier `SX.paper` en alternance d'un plan à l'autre, et **un seul accent** `SX.acc` (à choisir par épisode, par exemple `SX.acc = '#ff3d6e'`). Le jaune marqueur `SX.acc2` sert aux annotations.
 2. **Fonds graphiques plutôt que décors réalistes** : `gridBg(SX.ink)` + `halftoneFade(...)`, `paper()` + `gobo(T)` (ombre de feuillage), `halftone()`. On garde un décor cartoon seulement quand le lieu compte.
