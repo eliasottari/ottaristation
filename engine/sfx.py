@@ -563,6 +563,7 @@ def mix(cues_fn, voice_fn, out_fn, dur=None):
     dur = float(dur) if dur else len(voice) / SR + .8
     n = int(dur * SR) + SR
     out = np.zeros(n)
+    voice = voice[:n]  # voix plus longue que la vidéo (démo / extrait) : on coupe
     out[:len(voice)] += voice * VOICE_GAIN
     # nappes : musique (ducking sous la voix) + ambiances
     if beds:

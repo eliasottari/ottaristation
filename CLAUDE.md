@@ -13,6 +13,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `dents/` | Pourquoi c'est horrible d'avoir un appareil dentaire ? (33 blocs → 35 plans, 9:16, style V2, SFX synthés ; blocs tirés de la transcription) | 53,5 s | ✅ livré |
+| `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
 ## Skill / kit vendable
@@ -75,6 +76,9 @@ engine/            moteur commun à tous les épisodes
   teeth.js         dents : bigMouth (gros plan bouche, bagues/salade/élastiques/brillance), toothChar, dentalChair, orthoKey, pliers,
                    baguette, pureeBowl, caramel, popcorn, apple, bomb, palm, plane, elasticRing, flatBox, allenKey, retainerBox/retainer,
                    prisonBars, ankleMonitor ; bouches 'metal*'/'perfect' et EXPR metal/metalPain/metalShock/perfect dans lib.js
+  motion.js        style SIZEX (motion design) : SX (palette), kword/kthin/kline/scramble/counter/extrude (typo cinétique),
+                   selBox, pill, card/cardArc (2.5D), rings, sticker, marker*, grain, halftone(Fade), paper, gridBg, gobo, lightLeak,
+                   tornWindow, glitch, tunnel, filmBW, echo, bar, cutout ; transitions sc.trans dans player.js ; polices engine/fonts/
   hair.js          cheveux qui tombent : mane({loss, comb, wind, shaved}) pour person/head (hairFn), hairPile, wig,
                    follicle, dhtMonster, bottleProd, rosemaryOil, clippers, searchBar
   eleven.py        génère assets/sfx/<clef>.mp3 depuis assets/sfx/spec.json via l'API ElevenLabs

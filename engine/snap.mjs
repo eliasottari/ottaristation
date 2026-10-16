@@ -17,7 +17,7 @@ const TW = SW_ > SH_ ? 640 : 360, TH = Math.round(TW * SH_ / SW_);
 const p = await b.newPage({ viewport: { width: SW_, height: SH_ } });
 const errs=[]; p.on('pageerror', e => errs.push(e.message)); p.on('console', m => { if (m.type()==='error') errs.push(m.text()); });
 await p.goto('file://' + path.resolve('index.html'));
-await p.evaluate(() => document.fonts.ready);
+await p.evaluate(() => (window.fontsReady || Promise.resolve()).then(() => document.fonts.ready));
 if (process.env.GUIDE) await p.evaluate(() => { window.GUIDE = true; });
 // arguments : temps en secondes, ou « B12 » (tous les sous-plans du bloc 12 à 60 %) / « B12:.3 » (à 30 %)
 const times = [];

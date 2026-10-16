@@ -139,3 +139,36 @@ Si l'utilisateur ne réagit qu'à l'audio (niveau des bruitages) : `AUDIO_ONLY=1
 `engine/eleven.py` génère des musiques, ambiances et bruitages depuis `assets/sfx/spec.json`.
 - La clé va dans `engine/.env` (`ELEVENLABS_API_KEY=…`, gitignoré). **Ne jamais la committer ni l'écrire ailleurs.**
 - Cues `'el:clef'` et nappes `BEDS = [{name:'el:m_xxx', t0, t1, vol, duck, fin, fout}]`. Voir `tortue/` si présent.
+
+## Style SIZEX (variante « motion design ») — quand l'utilisateur dit « SIZEX »
+Même ADN que le style principal : persos cartoon, expressions extrêmes, gags littéraux, calage au mot, cadrage sous-titres, bruitages.
+On y ajoute une couche de **motion design** :
+- `engine/motion.js` (à charger dans `index.html` après `teeth.js`) ;
+- `<script>var SIZEX = { grain: .1 };</script>` (grain film automatique) ;
+- polices `engine/fonts/` (Anton, Outfit fine et Permanent Marker, licence OFL).
+Référence : `dents_sizex/scenes.js`.
+
+**Règles SIZEX**
+1. **Palette** : encre `SX.ink` / papier `SX.paper` en alternance d'un plan à l'autre, et **un seul accent** `SX.acc` (à choisir par épisode, par exemple `SX.acc = '#ff3d6e'`). Le jaune marqueur `SX.acc2` sert aux annotations.
+2. **Fonds graphiques plutôt que décors réalistes** : `gridBg(SX.ink)` + `halftoneFade(...)`, `paper()` + `gobo(T)` (ombre de feuillage), `halftone()`. On garde un décor cartoon seulement quand le lieu compte.
+3. **Les persos et les objets deviennent des « cut-outs »** : `cutout(svg, 12)` ajoute un bord blanc d'autocollant et une ombre portée.
+4. **Typo cinétique** :
+   - les mots de liaison sont fins (`kthin`, blur-in) ;
+   - le **mot-clé** est en slam : `kword` (Anton, écho couleur, ombre décalée, bouffée), ou `extrude` (3D) ;
+   - un seul mot-clé par moment, posé sur `at()`.
+   - Le titre du plan 1 suit ce schéma : 2 lignes `kthin` + `kword` pour la question.
+5. **Éléments motion** :
+   - `selBox` : cadre de sélection d'outil de design, avec étiquette « fichier.png » ;
+   - `pill` : bouton qui pousse sur le mot ;
+   - `card` / `cardArc` : cartes 2.5D qui pivotent ;
+   - `rings` : anneaux concentriques sur les révélations ;
+   - `markerCircle` / `markerArrow` / `markerText` : annotations au marqueur ;
+   - `scramble` : texte qui se décode ;
+   - `counter` + `bar` : chiffres et jauges ;
+   - `tornWindow` : fenêtre en papier déchiré ;
+   - `tunnel`, `glitch`, `filmBW`, `lightLeak` : moments forts, à doser.
+6. **Transitions** (`trans` sur le plan entrant, `transD` ≈ .2–.3 s) : 'wipe' (diagonale avec trait accent), 'zoom' (traversée), 'circle' (iris, centre `tx`/`ty`), 'push', 'up', 'glitch', 'black'.
+   - Alterne-les avec les entrées cartoon (crash/whip/drop).
+   - Environ une transition « design » tous les 2–3 plans.
+7. **Dosage** : 2D cartoon en base, motion poussé sur les pics. Un effet doit servir l'attention, l'emphase ou la transition, jamais décorer pour rien. La lisibilité et le cadrage des visages restent prioritaires.
+8. **Bruitages motion** : `pop_hi` / `tick` sur les éléments UI, `boom` ou `flash_hit` sur le slam d'un mot-clé, `scratch` sur le marqueur, `typing` sur un décodage, `whoosh` sur les transitions.

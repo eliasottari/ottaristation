@@ -1,10 +1,11 @@
 // Lecteur commun : rend une frame au temps T (secondes) dans le <svg id="stage">
 (function () {
   const st = document.createElement('style');
-  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
+  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}@font-face{font-family:Anton;src:url(../engine/fonts/anton.woff2) format('woff2')}@font-face{font-family:Outfit;src:url(../engine/fonts/outfit200.woff2) format('woff2');font-weight:200}@font-face{font-family:'Permanent Marker';src:url(../engine/fonts/marker.woff2) format('woff2')}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
   document.head.appendChild(st);
 })();
 const stage = document.getElementById('stage');
+window.fontsReady = Promise.all(['700 40px Fredoka', '40px Anton', '200 40px Outfit', "40px 'Permanent Marker'"].map(f => document.fonts.load(f).catch(() => 0)));
 window.GUIDE = false;
 function sceneAt(T) {
   for (let i = SCENES.length - 1; i >= 0; i--) if (T >= SCENES[i].s) return [SCENES[i], i];
@@ -33,9 +34,22 @@ function renderFrame(T) {
     if (enter === 'whip' && t < .22) out = blur(40 * (1 - t / .22), out, 'h');
     if (enter === 'crash' && t < .15) out = blur(10 * (1 - t / .15), out);
   }
+  // transitions SIZEX (sc.trans) : mélange avec la fin du plan précédent pendant TD secondes
+  if (sc.trans && i > 0 && t < (sc.transD || .3)) {
+    const pv = SCENES[i - 1], pd = sc.s - pv.s, k = t / (sc.transD || .3), e = eInOut(k);
+    const prev = `<g>${pv.draw(pd, pd, T)}</g>`;
+    if (sc.trans === 'zoom') out = G(`translate(${W / 2} ${H / 2}) scale(${1 + e * 3}) translate(${-W / 2} ${-H / 2})`, op(1 - e, prev)) + op(e, G(`translate(${W / 2} ${H / 2}) scale(${.6 + .4 * e}) translate(${-W / 2} ${-H / 2})`, out));
+    else if (sc.trans === 'circle') { const id = 'tc' + (_gid++); out = prev + `<defs><clipPath id="${id}"><circle cx="${sc.tx ?? W / 2}" cy="${sc.ty ?? H / 2}" r="${e * H * 1.2}"/></clipPath></defs><g clip-path="url(#${id})">${out}</g>`; }
+    else if (sc.trans === 'push') out = G(`translate(${-e * W} 0)`, prev) + G(`translate(${(1 - e) * W} 0)`, out);
+    else if (sc.trans === 'up') out = G(`translate(0 ${-e * H})`, prev) + G(`translate(0 ${(1 - e) * H})`, out);
+    else if (sc.trans === 'glitch' && typeof glitch === 'function') out = glitch(k < .5 ? prev : out, T, 1 - Math.abs(k - .5) * 2);
+    else if (sc.trans === 'black') out = k < .4 ? `<rect width="${W}" height="${H}" fill="#000"/>` : out;
+    else if (sc.trans === 'wipe') { const id = 'tw' + (_gid++); out = prev + `<defs><clipPath id="${id}"><path d="M-200 -200L${-200 + e * (W + 900)} -200L${-600 + e * (W + 900)} ${H + 200}L-200 ${H + 200}Z"/></clipPath></defs><g clip-path="url(#${id})">${out}</g>` + line(-200 + e * (W + 900), -200, -600 + e * (W + 900), H + 200, 40, typeof SX !== 'undefined' ? SX.acc : '#ff3d2e'); }
+  }
   if (sc.overlay) out += sc.overlay(t, d, T);
   if (sc.dust !== false) out += dust(T, 7, 18, 'rgba(255,255,255,.35)');
   out += vignette(.28);
+  if (typeof SIZEX !== 'undefined' && SIZEX && typeof grain === 'function' && sc.grain !== false) out += grain(T, SIZEX.grain ?? .09);
   if (c.bars && typeof letterbox === 'function') out += letterbox(c.bars);
   if (sc.flash) out += op(1 - seg(t, 0, .18), `<rect width="${W}" height="${H}" fill="#fff"/>`);
   if (T > TOTAL - .5) out += op(seg(T, TOTAL - .5, TOTAL), `<rect width="${W}" height="${H}" fill="#000"/>`);
