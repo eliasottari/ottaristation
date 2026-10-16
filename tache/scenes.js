@@ -230,7 +230,7 @@ B(15, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Gr = at(15, 'grandissant'), F = at(15, 'filtres') - .05, g = eOutBack(seg(t, Gr, Gr + .4)), fl = 1 + .04 * Math.sin(t * 4);
     const scr = rect(-150, -295, 300, 590, '#ffe1ee', 24, 0) + G(tr(0, -60), head({ hr: 95, hairFn: markHair, seed: 2, expr: 'happy', mark: 1 }, t)) + ftext(0, 140, 'FILTRES', { size: 46, fill: SX.acc }) + sparkle(-90, -200, .5, '#ffd23f') + sparkle(100, 60, .4, '#ffd23f');
     return bedroomN(t) + (t > F ? glow(780, 640, 420, '#fff6c8', .5) : '') + unlock(780, 640, t, F, { part: 'back', r: 460 }) + (g < .5 ? leo({ x: 380, y: 1520, s: 1.3, expr: 'neutral' }, t) : leoA({ x: 380, y: 1560, s: 1.2 * lerp(.85, 1, g), expr: t > F ? 'wow' : 'shock', armR: [-40, -10] }, t)) +
-      (t > F - .3 ? G(tr(780, 640 + Math.sin(t * 3) * 10, .78 * fl * pop(t, F - .3, .4)), phoneBig(0, 0, 1, 0, scr)) : '') + unlock(780, 640, t, F, { part: 'front', r: 460 }) + funTag(CX, 380, 'EN GRANDISSANT', t, Gr - .05, { size: 46, bg: SX.cool }) + kword('LES FILTRES', 780, 1040, t, F, { size: 74, fill: SX.acc2 }); },
+      (t > F - .3 ? G(tr(780, 640 + Math.sin(t * 3) * 10, .78 * fl * pop(t, F - .3, .4)), phoneBig(0, 0, 1, 0, scr)) : '') + unlock(780, 640, t, F, { part: 'front', r: 460 }) + (t < F ? funTag(CX, 380, 'EN GRANDISSANT', t, Gr - .05, { size: 46, bg: SX.cool }) : '') + kword('LES FILTRES', CX, 390, t, F, { size: 84, fill: SX.acc2 }); },
   sfx: [[at(15, 'grandissant'), 'whoosh_up', .7], [at(15, 'grandissant') + .3, 'boing', .5], [at(15, 'filtres') - .05, 'angel', .6], [at(15, 'filtres'), 'sparkle', .7], [at(15, 'filtres') + .1, 'flash_hit', .4]] });
 // B016 — en un clic, ta tache disparaît : gros plan écran, doigt qui tape, la tache s'efface en paillettes
 B(16, { enter: 'none', trans: 'zoom', transD: .25, cam: zin(1.02, 1.08),
@@ -302,8 +302,8 @@ B(24, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.12, t / d) }),
   sfx: [[0, 'whoosh', .4], [.1, 'heartbeat', .7], [at(24, 'approche') - .1, 'pop', .5], [at(24, 'approche'), 'steps', .4]] });
 // B025 — tu prépares déjà ta réponse habituelle : fiches de révision en éventail, « reponses.pdf »
 B(25, { enter: 'punch', cam: camHand(1.05, .4),
-  draw: (t, d, T) => { const Rp = at(25, 'reponse'), lbl = ['OUI', 'NÉ AVEC', 'NON', 'PAS MAL']; return blur(8, partyT(t)) + leoHead(CX, 1000, 185, { expr: 'effort' }, t) + sweatSpray(CX, 980, t, 4) + cardArc(CX, 1000, 4, 420, t, at(25, 'prepares') - .1, i => ftext(0, 14, lbl[i], { size: 34, fill: SX.ink, stroke: 'none' }), { w: 200, h: 120 }) +
-    funBox(CX, 760, 760, 220, t, Rp, { label: 'reponses.pdf', col: SX.acc }) + funTag(CX, 400, 'HABITUELLE', t, at(25, 'habituelle') - .1, { size: 52, bg: SX.cool }); },
+  draw: (t, d, T) => { const Rp = at(25, 'reponse'), lbl = ['OUI', 'NÉ AVEC', 'NON', 'PAS MAL']; return blur(8, partyT(t)) + leoHead(CX, 1000, 185, { expr: 'effort' }, t) + sweatSpray(CX, 980, t, 4) + cardArc(CX, 1000, 4, 360, t, at(25, 'prepares') - .1, i => ftext(0, 14, lbl[i], { size: 34, fill: SX.ink, stroke: 'none' }), { w: 200, h: 120 }) +
+    funBox(CX, 815, 900, 280, t, Rp, { label: 'reponses.pdf', col: SX.acc }) + funTag(CX, 400, 'HABITUELLE', t, at(25, 'habituelle') - .1, { size: 52, bg: SX.cool }); },
   sfx: [[at(25, 'prepares') - .1, 'pop', .5], [at(25, 'prepares') + .14, 'pop', .4], [at(25, 'reponse'), 'tick', .6], [at(25, 'habituelle') - .1, 'typing', .5]] });
 // B026 — « Oui, je suis né avec » : bulle de pensée, bébé Léo avec la même tache
 B(26, { enter: 'none', trans: 'up', transD: .22, cam: zin(1.02, 1.08),
@@ -342,8 +342,8 @@ B(32, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .2 }),
   sfx: [[0, 'whoosh', .4], [at(32, 'regarde') - .05, 'pop', .5], [at(32, 'regarde') + .1, 'sparkle', .5], [at(32, 'visage'), 'glint', .5]] });
 // B032b — FIN : …sans oublier qu'il y avait UNE PERSONNE DERRIÈRE — débloqué, badge « LÉO » enfin rempli
 B(32, { enter: 'none', trans: 'zoom', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d) }),
-  draw: (t, d, T) => { const o = at(32, 'sans') - .15, P = at(32, 'personne') - o, Dr = at(32, 'derriere') - o, [hx, hy, hr] = headOf(CX, 1560, 1.2, 'adult');
-    return partyT(t) + glow(CX, 950, 560, '#ffd9a0', .4) + unlock(hx, hy, t, P, { part: 'back', r: 520 }) + leoA({ x: CX, y: 1560, s: 1.2, expr: t > P ? 'joy' : 'happy' }, t) + nameBadge(CX, 1300, .6, 'Léo', t, P + .1, -6) + unlock(hx, hy, t, P, { part: 'front', r: 520 }) + funBox(hx, hy - 10, 300, 300, t, P + .3, { label: 'léo.png', col: SX.cool }) +
+  draw: (t, d, T) => { const o = at(32, 'sans') - .15, P = at(32, 'personne') - o, Dr = at(32, 'derriere') - o, [hx, hy, hr] = headOf(CX, 1460, 1.2, 'adult');
+    return partyT(t) + glow(CX, 950, 560, '#ffd9a0', .4) + unlock(hx, hy, t, P, { part: 'back', r: 520 }) + leoA({ x: CX, y: 1460, s: 1.2, expr: t > P ? 'joy' : 'happy' }, t) + nameBadge(CX, 1190, .5, 'Léo', t, P + .1, -6) + unlock(hx, hy, t, P, { part: 'front', r: 520 }) + funBox(hx, hy - 10, 300, 300, t, P + .3, { label: 'léo.png', col: SX.cool }) +
       kthin("sans oublier qu'il y avait", CX, 330, t, 0, { size: 46 }) + kword('UNE PERSONNE', CX, 450, t, P - .05, { size: 96, fill: SX.acc2 }) + kword('DERRIÈRE.', CX, 570, t, Dr - .05, { size: 80, fill: '#fff' }) + (t > Dr ? confetti(t, Dr, 40) : ''); },
   sfx: [[0, 'whoosh', .4], [at(32, 'oublier') - (at(32, 'sans') - .15), 'hmm', .3], [at(32, 'personne') - (at(32, 'sans') - .15), 'boom', .5], [at(32, 'personne') - (at(32, 'sans') - .15) + .1, 'sparkle', .6], [at(32, 'derriere') - (at(32, 'sans') - .15), 'tada', .7]] }, at(32, 'sans') - .15);
 

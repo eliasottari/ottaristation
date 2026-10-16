@@ -83,7 +83,7 @@ const crush = (o, t) => person(Object.assign({ age: 'adult', hair: 'long', hairC
 const crushHead = (x, y, r, o, t) => G(tr(x, y, 1, o.tilt || 0), head(Object.assign({ hr: r, hair: 'long', hairColor: '#2b2420', skin: '#c98a5e', seed: 5 }, o), t));
 
 // ---------- décors vivants ----------
-const SKY = (t, a = '#8fd3ff', b = '#e6f6ff') => grad(a, b, -M, -M, W + 2 * M, 1900) + cloud(((t * 30) % 1600) - 300, 220, 1.3, '#fff') + cloud(((t * 18 + 700) % 1700) - 300, 420, .9, '#fff');
+const SKY = (t, a = '#8fd3ff', b = '#e6f6ff') => grad(a, b, -M, -M, W + 2 * M, H + 2 * M) + cloud(((t * 30) % 1600) - 300, 220, 1.3, '#fff') + cloud(((t * 18 + 700) % 1700) - 300, 420, .9, '#fff');
 function drip(x, y, t) { const k = (t * 1.3) % 1; return circ(x, y + k * 160, 9, '#8fd0ff', 4); }
 function bathroom2(t, c1 = '#cfeaf0', c2 = '#b2d6de') { return tiles(c1, c2) + rect(-M, 1250, W + 2 * M, 1400, '#e8eef0', 0, 0) + mirror(190, 300, 700, 820) + sink(CX, 1300) + drip(CX - 110, 1250, t) + towel(990, 760, 120, 300, '#ff8fb1', '#ffb3cb'); }
 // macro du menton (le menton devient un paysage) : nez en haut, bouche, joues, cou
@@ -146,9 +146,9 @@ function thumbBuff(t) { return rect(-130, -250, 260, 200, '#ffb36b', 10, 0) + G(
 // ============================================================
 // B001 — SIGNATURE SIZEX : grille encre, tête en cut-out (3 poils), étoiles « débloqué », titre cinétique
 B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
-  draw: (t, d, T) => { const U = at(1, 'barbe') - .05; return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + unlock(CX, 960, t, U, { part: 'back', r: 480 }) +
-    G(tr(CX, 960, 1 + .03 * Math.sin(t * 6)), cutout(heroHead(0, 0, 175, { expr: t > at(1, 'pousse') ? 'jawdrop' : 'worried', pk: 1.3 }, t), 14)) + unlock(CX, 960, t, U, { part: 'front', r: 480 }) +
-    funBox(CX, 1090, 330, 120, t, at(1, 'pas'), { label: 'barbe.png' }) +
+  draw: (t, d, T) => { const U = at(1, 'barbe') - .05; return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + unlock(CX, 920, t, U, { part: 'back', r: 480 }) +
+    G(tr(CX, 920, 1 + .03 * Math.sin(t * 6)), cutout(heroHead(0, 0, 175, { expr: t > at(1, 'pousse') ? 'jawdrop' : 'worried', pk: 1.3 }, t), 14)) + unlock(CX, 920, t, U, { part: 'front', r: 480 }) +
+    funBox(CX, 1050, 330, 120, t, at(1, 'pas'), { label: 'barbe.png' }) +
     kthin("POURQUOI C'EST", CX, 330, t, .05, { size: 62 }) + kthin('HORRIBLE QUAND TA BARBE', CX, 415, t, .3, { size: 52 }) + kword('NE POUSSE PAS ?', CX, 540, t, at(1, 'ne') - .05, { size: 76, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .6], [.05, 'pop_hi', .4], [.3, 'pop_hi', .4], [at(1, 'barbe') - .05, 'sparkle', .6], [at(1, 'ne') - .05, 'boom', .6], [at(1, 'pas'), 'tick', .5]] });
 // B002 — Kevin à 16 ans : papier + gobo, tête de Kevin en cut-out, la barbe JAILLIT
