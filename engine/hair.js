@@ -66,3 +66,24 @@ function bottleProd(x, y, s, col = '#5ec4f0', label = '', r = 0) { return G(tr(x
 function rosemaryOil(x, y, s, r = 0) { return G(tr(x, y, s, r), rect(-45, -110, 90, 170, '#7a9a3a', 22) + rect(-22, -170, 44, 64, '#2b2b2b', 10) + ell(0, -186, 26, 18, '#2b2b2b', 5) + path('M-20 -40Q0 -90 20 -40M-10 -60L-26 -74M8 -64L24 -78M-4 -48L-20 -58M4 -52L20 -62', 'none', 5, '#cfe8a0')); }
 function clippers(x, y, s, r = 0, t = 0) { const v = Math.sin(t * 60) * 3; return G(tr(x + v, y, s, r), rect(-50, -160, 100, 300, '#33373d', 40) + rect(-60, -200, 120, 50, '#c9ced6', 8) + Array.from({ length: 6 }, (_, i) => line(-50 + i * 20, -200, -50 + i * 20, -222, 5)).join('') + circ(0, 0, 18, '#5fd068', 4)); }
 function searchBar(x, y, w, str, t, t0 = 0) { const n = Math.floor(clamp((t - t0) * 18, 0, str.length)); return G(tr(x, y), rect(-w / 2, -50, w, 100, '#fff', 50) + circ(-w / 2 + 50, 0, 18, 'none', 6, '#7a8a99') + line(-w / 2 + 62, 12, -w / 2 + 76, 26, 6, '#7a8a99') + `<text x="${-w / 2 + 100}" y="14" font-family="Fredoka, sans-serif" font-weight="700" font-size="38" fill="${OL}">${str.slice(0, n)}${(t * 2) % 1 < .5 ? '|' : ''}</text>`); }
+
+// ---------- GRAND FRONT : tête en œuf (front très haut) + cheveux qui commencent « très loin » ----------
+// hairFn pour head()/person() : bigForehead({ color, bang: 0..1 (frange), split: 0..1 (frange séparée par la pluie),
+//   cap: couleur (casquette), mush: 1 (coupe champignon), wet: 1 (gouttes), shine: 1 (reflet sur le front), h: hauteur du front 1.4..1.8 })
+function bigForehead(o = {}) {
+  return (r, t, ho) => {
+    const col = o.color || '#5a3a26', dk = shade(col, -.2), skin = ho.skin || SKIN, H_ = (o.h || 1.55) * r;
+    const egg = `M${-r} ${r * .05}C${-r * 1.02} ${-r * .9} ${-r * .72} ${-H_} 0 ${-H_}C${r * .72} ${-H_} ${r * 1.02} ${-r * .9} ${r} ${r * .05}A${r} ${r} 0 0 1 ${-r} ${r * .05}Z`;
+    let front = path(egg, skin, SW);
+    if (ho.cheeks !== false) front += ell(-r * .55, r * .26, r * .14, r * .08, CHEEK, 0) + ell(r * .55, r * .26, r * .14, r * .08, CHEEK, 0);
+    if (o.shine !== 0) front += ell(-r * .34, -H_ * .62, r * .2, r * .09, 'rgba(255,255,255,.55)', 0, OL).replace('<ellipse', `<ellipse transform="rotate(-20 ${f1(-r * .34)} ${f1(-H_ * .62)})"`);
+    // touffe de cheveux tout en haut (la « ligne de départ » très loin)
+    if (!o.mush) front += path(`M${-r * .62} ${-H_ * .86}Q${-r * .3} ${-H_ * 1.08} 0 ${-H_ * 1.04}Q${r * .3} ${-H_ * 1.08} ${r * .62} ${-H_ * .86}Q${r * .42} ${-H_ * .97} ${r * .2} ${-H_ * .93}L${r * .05} ${-H_ * .99}L${-r * .12} ${-H_ * .92}L${-r * .3} ${-H_ * .97}Q${-r * .45} ${-H_ * .94} ${-r * .62} ${-H_ * .86}Z`, col, 6);
+    if (o.bang) { const b = o.bang, sp = (o.split || 0) * r * .55, by = lerp(-H_ * .86, -r * .28, b);
+      for (const sd of [-1, 1]) front += path(`M${sd * sp * .2} ${-H_ * .98}Q${sd * (r * .7 + sp)} ${-H_ * .95} ${sd * (r * .96)} ${-r * .55}L${sd * (r * .7)} ${by + r * .08}L${sd * (r * .45 + sp * .6)} ${by - r * .05}L${sd * (r * .2 + sp)} ${by + r * .05}L${sd * (sp * .9 + r * .02)} ${by - (o.split ? r * .35 * o.split : 0)}Z`, col, 6) + path(`M${sd * (r * .3 + sp)} ${-H_ * .85}Q${sd * (r * .35 + sp)} ${-r * .9} ${sd * (r * .3 + sp)} ${by - r * .1}`, 'none', 4, dk); }
+    if (o.mush) front += path(`M${-r * 1.15} ${-r * .15}C${-r * 1.3} ${-H_ * 1.2} ${r * 1.3} ${-H_ * 1.2} ${r * 1.15} ${-r * .15}Q0 ${-r * .45} ${-r * 1.15} ${-r * .15}Z`, col, 6) + path(`M${-r * .7} ${-H_ * .7}Q${-r * .2} ${-H_ * .95} ${r * .3} ${-H_ * .8}`, 'none', 5, shade(col, .25));
+    if (o.cap) front += path(`M${-r * .95} ${-H_ * .55}C${-r * .9} ${-H_ * 1.12} ${r * .9} ${-H_ * 1.12} ${r * .95} ${-H_ * .55}Z`, o.cap, 6) + path(`M${r * .2} ${-H_ * .58}Q${r * 1.0} ${-H_ * .66} ${r * 1.55} ${-H_ * .5}Q${r * 1.0} ${-H_ * .42} ${r * .2} ${-H_ * .5}Z`, shade(o.cap, -.15), 6) + circ(0, -H_ * 1.0, r * .08, shade(o.cap, -.2), 4);
+    if (o.wet) for (let i = 0; i < 5; i++) { const k = (t * 1.5 + i / 5) % 1; front += op(1 - k, sweat(-r * .6 + i * r * .3, -H_ * .7 + k * r * 1.2, r / 220)); }
+    return ['', front];
+  };
+}

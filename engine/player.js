@@ -1,11 +1,11 @@
 // Lecteur commun : rend une frame au temps T (secondes) dans le <svg id="stage">
 (function () {
   const st = document.createElement('style');
-  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}@font-face{font-family:Anton;src:url(../engine/fonts/anton.woff2) format('woff2')}@font-face{font-family:Outfit;src:url(../engine/fonts/outfit200.woff2) format('woff2');font-weight:200}@font-face{font-family:'Permanent Marker';src:url(../engine/fonts/marker.woff2) format('woff2')}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
+  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}@font-face{font-family:Anton;src:url(../engine/fonts/anton.woff2) format('woff2')}@font-face{font-family:Outfit;src:url(../engine/fonts/outfit200.woff2) format('woff2');font-weight:200}@font-face{font-family:Komika;src:url(../engine/fonts/komika.ttf) format('truetype')}@font-face{font-family:'Permanent Marker';src:url(../engine/fonts/marker.woff2) format('woff2')}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
   document.head.appendChild(st);
 })();
 const stage = document.getElementById('stage');
-window.fontsReady = Promise.all(['700 40px Fredoka', '40px Anton', '200 40px Outfit', "40px 'Permanent Marker'"].map(f => document.fonts.load(f).catch(() => 0)));
+window.fontsReady = Promise.all(['700 40px Fredoka', '40px Anton', '200 40px Outfit', "40px 'Permanent Marker'", '40px Komika'].map(f => document.fonts.load(f).catch(() => 0)));
 window.GUIDE = false;
 function sceneAt(T) {
   for (let i = SCENES.length - 1; i >= 0; i--) if (T >= SCENES[i].s) return [SCENES[i], i];

@@ -5,7 +5,10 @@
 set -e
 F="$1"; SZ=$(stat -c %s "$F")
 if [ "$SZ" -gt 30000000 ]; then
-  ffmpeg -v error -y -i "$F" -c copy -map 0 -f segment -segment_time 50 -reset_timestamps 1 -segment_start_number 1 "$(dirname "$F")/partie_%d.mp4"
+  DUR=$(ffprobe -v error -show_entries format=duration -of csv=p=0 "$F")
+  ST=$(python3 -c "print(max(10, int($DUR * 26e6 / $SZ)))")   # parties de ~26 Mo (marge sous 30 Mo)
+  rm -f "$(dirname "$F")"/partie_*.mp4
+  ffmpeg -v error -y -i "$F" -c copy -map 0 -f segment -segment_time "$ST" -reset_timestamps 1 -segment_start_number 1 "$(dirname "$F")/partie_%d.mp4"
   ls -la "$(dirname "$F")"/partie_*.mp4
 else echo "$F fait $((SZ/1000000)) Mo : envoi direct"; fi
 if [ "$SZ" -gt 95000000 ]; then

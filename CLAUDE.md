@@ -13,6 +13,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `dents/` | Pourquoi c'est horrible d'avoir un appareil dentaire ? (33 blocs → 35 plans, 9:16, style V2, SFX synthés ; blocs tirés de la transcription) | 53,5 s | ✅ livré |
+| `front/` | Pourquoi c'est horrible d'avoir un grand front ? (33 blocs → 34 plans, **SIZEX fun** : intro motion, puis vrais décors + motion rebondi, police Komika) | 62,6 s | ✅ livré (2 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 

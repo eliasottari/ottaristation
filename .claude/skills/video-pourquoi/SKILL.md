@@ -148,6 +148,13 @@ On y ajoute une couche de **motion design** :
 - polices `engine/fonts/` (Anton, Outfit fine et Permanent Marker, licence OFL).
 Référence : `dents_sizex/scenes.js`.
 
+**Retours client sur SIZEX (prioritaires, épisode `front/`)**
+- L'**intro** (1–3 premiers plans) se fait en motion pur sur fond graphique : c'est la signature.
+- **Ensuite, de VRAIS DÉCORS vivants** : salon, école, rue sous la pluie, plateau télé, parc… avec nuages qui bougent, figurants, pluie, parallaxe `depth()`. La couche motion vient PAR-DESSUS. Pas que des fonds de couleur, sinon on tombe dans du « 100 % motion design ».
+- **Police Komika Axis** (`engine/fonts/komika.ttf`) : appeler `sxFun('#accent')` en haut de scenes.js. Tous les textes motion passent alors en Komika avec contour cartoon.
+- **Formes motion fun, jamais sérieuses** : `funTag` (étiquette molle), `funBox` (cadre tremblé, poignées rondes colorées), `burst` (explosion BD), `blob`, `squiggle`, `popStars`. Tout est rebondi (`popEl`) et cerné de `#2b2420`. On évite `selBox`/`pill`, trop « corporate ».
+- Perso réutilisable « grand front » : `bigForehead({bang, split, cap, mush, wet, h})` dans hair.js, à passer en `hairFn`.
+
 **Règles SIZEX**
 1. **Palette** : encre `SX.ink` / papier `SX.paper` en alternance d'un plan à l'autre, et **un seul accent** `SX.acc` (à choisir par épisode, par exemple `SX.acc = '#ff3d6e'`). Le jaune marqueur `SX.acc2` sert aux annotations.
 2. **Fonds graphiques plutôt que décors réalistes** : `gridBg(SX.ink)` + `halftoneFade(...)`, `paper()` + `gobo(T)` (ombre de feuillage), `halftone()`. On garde un décor cartoon seulement quand le lieu compte.

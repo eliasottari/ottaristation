@@ -13,12 +13,16 @@ const SX = {
   acc2: '#ffd23f',       // jaune marqueur (annotations)
   cool: '#2fa3a0',       // secondaire
   display: "Anton, Impact, sans-serif", thin: "Outfit, Fredoka, sans-serif", marker: "'Permanent Marker', Fredoka, sans-serif",
+  fun: 0,                // 1 = SIZEX « fun » : police Komika, contours cartoon épais, formes rebondies (activer avec sxFun())
 };
+// SIZEX fun (validé) : police comics Komika Axis partout, contours #2b2420, formes molles/rebondies
+function sxFun(acc) { SX.fun = 1; SX.display = SX.thin = SX.marker = "Komika, Fredoka, sans-serif"; if (acc) SX.acc = acc; }
 const _sxid = p => p + (_gid++);
 
 // texte « libre » (police au choix, sans contour cartoon)
 function ftext(x, y, str, o = {}) {
   const sz = o.size || 100, anchor = o.anchor || 'middle';
+  if (SX.fun && o.stroke === undefined && o.font !== 'Fredoka') o = Object.assign({}, o, { stroke: OL, sw: sz * .13 });
   const st = o.stroke ? ` stroke="${o.stroke}" stroke-width="${o.sw || sz * .08}" paint-order="stroke" stroke-linejoin="round"` : '';
   const ls = o.ls != null ? ` letter-spacing="${f1(o.ls)}"` : '';
   return `<text x="${f1(x)}" y="${f1(y)}" font-family="${o.font || SX.display}" font-weight="${o.weight || 400}" font-size="${f1(sz)}" text-anchor="${anchor}" fill="${o.fill || '#fff'}"${st}${ls}${o.extra || ''}>${str}</text>`;
@@ -38,11 +42,12 @@ function kword(str, x, y, t, t0, o = {}) {
   let g = '';
   if (k < 1) for (let i = 4; i >= 1; i--) g += op(.22 * (1 - k) * (5 - i) / 4, G(`translate(${f1(-i * 26 * (o.dir || 1))} ${f1(i * 18)})`, T_.replace('GRAD', acc)));
   g += G(`translate(${f1(sz * .045)} ${f1(sz * .055)})`, T_.replace('GRAD', SX.ink).replace(/fill="[^"]*"/, `fill="${o.shadow || SX.ink}"`));
-  g += T_.replace('GRAD', fill).replace('<text', `<text stroke="${acc}" stroke-width="${f1(sz * .05)}" paint-order="stroke"`);
+  g += SX.fun ? T_.replace('GRAD', fill) : T_.replace('GRAD', fill).replace('<text', `<text stroke="${acc}" stroke-width="${f1(sz * .05)}" paint-order="stroke"`);
   if (o.grad) { const [d, u] = vgrad(o.grad[0], o.grad[1]); g += d + T_.replace('GRAD', u); }
   if (land > 0 && land < 1 && o.puff !== false) for (let i = 0; i < 8; i++) { const a = i / 8 * 6.28; g += op(1 - land, circ(Math.cos(a) * sz * (1.2 + land * 1.2), Math.sin(a) * sz * .5 * (1 + land), sz * .12 * (1 - land), '#fff', 0)); }
   const glow = o.glow ? blurPx(sz * .16, ftext(0, sz * .36, str, { size: sz, fill: o.glow, font: o.font || SX.display, ls: o.ls })) : '';
-  return G(`translate(${f1(x)} ${f1(y)}) rotate(${f1(o.r || 0)}) scale(${f1(s * sq)} ${f1(s / sq)})`, op(o.op ?? 1, glow + g));
+  const wob = SX.fun ? Math.sin((t - t0) * 5) * 2.5 * seg(t, t0 + .3, t0 + .5) : 0;
+  return G(`translate(${f1(x)} ${f1(y)}) rotate(${f1((o.r || 0) + wob)}) scale(${f1(s * sq)} ${f1(s / sq)})`, op(o.op ?? 1, glow + g));
 }
 // mot fin : blur-in (flou 12 → 0, monte de 20 px), sortie en dissolution
 function kthin(str, x, y, t, t0, o = {}) {
@@ -169,3 +174,30 @@ function echo(svgFn, n, dx, dy, col) { let s = ''; for (let i = n; i >= 1; i--) 
 function bar(x, y, w, k, o = {}) { return G(tr(x, y), rect(-w / 2, -18, w, 36, o.bg || 'rgba(255,255,255,.15)', 18, 0) + rect(-w / 2, -18, w * clamp(k), 36, o.col || SX.acc, 18, 0) + (o.label ? ftext(-w / 2, -40, o.label, { size: 40, font: SX.thin, weight: 200, anchor: 'start', fill: o.fg || '#fff' }) : '')); }
 // découpe : silhouette blanche (pour poser un perso cartoon comme un « cut-out » sur fond graphique)
 function cutout(svg, o = 12) { const id = _sxid('co'); return `<defs><filter id="${id}" x="-20%" y="-20%" width="140%" height="140%"><feMorphology in="SourceAlpha" operator="dilate" radius="${o}" result="d"/><feFlood flood-color="#fff"/><feComposite in2="d" operator="in" result="w"/><feOffset in="w" dx="8" dy="12" result="sh"/><feFlood flood-color="rgba(0,0,0,.3)"/><feComposite in2="sh" operator="in" result="shc"/><feMerge><feMergeNode in="shc"/><feMergeNode in="w"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs><g filter="url(#${id})">${svg}</g>`; }
+
+// ---------- FORMES FUN (SIZEX fun : rebondies, contour cartoon, jamais sérieuses) ----------
+// explosion de BD à pointes (« POW »), pop + rotation lente
+function burst(x, y, r, t, t0, col = SX.acc2, n = 14, o = {}) { const k = popEl(t, t0, .5); if (k <= 0) return ''; let d = '';
+  for (let i = 0; i < n * 2; i++) { const a = i / (n * 2) * 6.283, rr = i % 2 ? r * .62 : r * (1 + .08 * Math.sin(i * 2.3)); d += (i ? 'L' : 'M') + f1(Math.cos(a) * rr) + ' ' + f1(Math.sin(a) * rr); }
+  return G(tr(x, y, k * (1 + .03 * Math.sin(t * 9)), (o.r || 0) + t * 12), path(d + 'Z', col, 8) + (o.inner ? path(d + 'Z', 'none', 5, 'rgba(255,255,255,.5)').replace('<path', `<path transform="scale(.8)"`) : '')); }
+// blob mou qui ondule (fond de mot, tache de couleur)
+function blob(x, y, r, t, col = SX.acc, seed = 1, o = {}) { const k = o.t0 != null ? popEl(t, o.t0, .5) : 1; if (k <= 0) return ''; let d = ''; const n = 10;
+  const P = i => { const a = i / n * 6.283, rr = r * (1 + .12 * Math.sin(t * 2.5 + i * 1.7 + seed)); return [Math.cos(a) * rr * (o.sx || 1), Math.sin(a) * rr]; };
+  for (let i = 0; i < n; i++) { const [x1, y1] = P(i), [x2, y2] = P(i + 1); d += (i ? '' : `M${f1((x1 + x2) / 2)} ${f1((y1 + y2) / 2)}`) + `Q${f1(x2)} ${f1(y2)} ${f1((x2 + P(i + 2)[0]) / 2)} ${f1((y2 + P(i + 2)[1]) / 2)}`; }
+  return G(tr(x, y, k, o.r || 0), path(d + 'Z', col, o.sw ?? 8)); }
+// tortillon / ressort décoratif
+function squiggle(x, y, w, t, col = SX.acc2, o = {}) { let d = `M${-w / 2} 0`; for (let i = 0; i < 8; i++) d += `q${w / 16} ${(i % 2 ? 1 : -1) * 40} ${w / 8} 0`; const k = seg(t, o.t0 || 0, (o.t0 || 0) + .35);
+  return k <= 0 ? '' : G(tr(x, y, 1, o.r || 0), `<path d="${d}" fill="none" stroke="${OL}" stroke-width="26" stroke-linecap="round" stroke-dasharray="${f1(w * 2.2 * k)} ${f1(w * 3)}"/><path d="${d}" fill="none" stroke="${col}" stroke-width="12" stroke-linecap="round" stroke-dasharray="${f1(w * 2.2 * k)} ${f1(w * 3)}"/>`); }
+// petites étoiles/croix qui pétillent autour d'un point
+function popStars(x, y, t, t0, n = 6, rr = 200, cols = [SX.acc2, '#fff', SX.acc]) { const k = seg(t, t0, t0 + .6); if (k <= 0 || k >= 1) return ''; let s = '';
+  for (let i = 0; i < n; i++) { const a = i / n * 6.283 + .3; s += sparkle(x + Math.cos(a) * rr * eOutCubic(k), y + Math.sin(a) * rr * eOutCubic(k), .7 * (1 - k) + .2, cols[i % cols.length], k * 90); } return s; }
+// étiquette molle (bulle arrondie, contour épais, légère rotation) — remplace tag/pill en mode fun
+function funTag(x, y, str, t, t0, o = {}) { const k = popEl(t, t0, .5); if (k <= 0) return ''; const sz = o.size || 60, w = str.length * sz * .62 + sz * 1.2, h = sz * 1.6;
+  return G(tr(x, y, k, (o.r ?? -4) + Math.sin(t * 3) * 1.5), rect(-w / 2 + 10, -h / 2 + 12, w, h, OL, h / 2, 0) + rect(-w / 2, -h / 2, w, h, o.bg || SX.acc2, h / 2, 7) + ell(-w / 2 + h * .5, -h * .22, h * .22, h * .1, 'rgba(255,255,255,.55)', 0) + ftext(0, sz * .36, str, { size: sz, fill: o.fg || '#fff' })); }
+// cadre « fun » : rectangle tremblé dessiné à la main + poignées rondes colorées + étiquette molle
+function funBox(x, y, w, h, t, t0, o = {}) { const k = seg(t, t0, t0 + .3); if (k <= 0) return ''; const col = o.col || SX.acc, r = rng(o.seed || 3); let d = '';
+  const pts = [[-w / 2, -h / 2], [w / 2, -h / 2], [w / 2, h / 2], [-w / 2, h / 2], [-w / 2, -h / 2]]; pts.forEach((p, i) => d += (i ? 'L' : 'M') + f1(p[0] + (r() - .5) * 14 + Math.sin(t * 6 + i) * 3) + ' ' + f1(p[1] + (r() - .5) * 14));
+  const per = 2 * (w + h); let g = `<path d="${d}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round" stroke-dasharray="26 16" stroke-dashoffset="${f1(-t * 80)}" opacity="${eOutCubic(k)}"/>`;
+  if (k >= 1) [[-1, -1], [1, -1], [1, 1], [-1, 1]].forEach(([a, b], i) => g += circ(a * w / 2, b * h / 2, 16 + 3 * Math.sin(t * 8 + i), [SX.acc2, '#fff', SX.cool, SX.acc][i], 6));
+  if (o.label) g += funTag(-w / 2 + o.label.length * 14 + 30, -h / 2 - 46, o.label, t, t0 + .25, { size: 34, bg: col, r: -3 });
+  return G(tr(x, y), g); }
