@@ -189,7 +189,7 @@ function nightRoom(t, light = 0) { return grad('#141a3a', '#222a58', -M, -M, W +
 B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
   draw: (t, d, T) => { const J = at(1, 'jaunes'), Mm = at(1, 'meme');
     return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + unlock(CX, 1010, t, J, { part: 'back', r: 480 }) + burst(CX, 1010, 300, t, .45, SX.acc, 16) +
-      G(tr(CX, 1010, 1 + .03 * Math.sin(t * 6)), cutout(adoHead(0, 0, 170, { expr: t > J ? 'yJoy' : 'pressed' }, t), 14)) + (t > Mm ? brushing(CX + 120, 1080, .8, t, 34, 26) : '') +
+      G(tr(CX, 1010, 1 + .03 * Math.sin(t * 6)), cutout(adoHead(0, 0, 170, { expr: t > J ? 'yJoy' : 'pressed' }, t), 14)) + (t > Mm ? brushing(CX + 135, 1082, .7, t, 34, 14) : '') +
       unlock(CX, 1010, t, J, { part: 'front', r: 480 }) +
       kthin("POURQUOI C'EST", CX, 330, t, .05, { size: 62 }) + kthin("HORRIBLE D'AVOIR LES", CX, 415, t, .3, { size: 58 }) + kword('DENTS JAUNES ?', CX, 540, t, at(1, 'dents') - .05, { size: 80, fill: SX.acc2 }) +
       funBox(CX, 1075, 300, 130, t, J + .25, { label: 'dents.png', col: SX.acc2 }); },
@@ -200,7 +200,7 @@ B(2, { enter: 'none', trans: 'wipe', cam: zin(1.02, 1.08, .3),
     return paper(SX.paper) + gobo(T, .12) + blob(CX, 1000, 300, t, '#ffe1b8', 2) + G(tr(CX, 1000), cutout(adoHead(0, 0, 190, { expr: 'yEffort' }, t), 12)) + brushing(CX + 130, 1078, .85, t, 40, 34) +
       (t > Ma ? G(tr(250, 640, pop(t, Ma, .4)), sun(0, 0, .45, t, 'happy')) + funTag(250, 820, 'MATIN', t, Ma, { size: 46, bg: SX.acc2, fg: SX.ink }) : '') +
       (t > So ? G(tr(830, 640, pop(t, So, .4), -10), path('M40 -110A120 120 0 1 0 40 110A90 90 0 1 1 40 -110Z', '#fff3a0') + sparkle(-120, -90, .4, '#fff')) + funTag(830, 820, 'SOIR', t, So, { size: 46, bg: SX.acc }) : '') +
-      kthin('tu te brosses les dents', CX, 400, t, 0, { size: 54, fill: SX.ink }); },
+      kthin('tu te brosses les dents', CX, 400, t, 0, { size: 54 }); },
   sfx: [[0, 'whoosh', .5], [at(2, 'brosses'), 'scratch', .6], [at(2, 'matin'), 'chirp', .6], [at(2, 'soir'), 'crickets', .5], [at(2, 'soir') + .1, 'pop', .5]] });
 // B003 — fil dentaire : grille, fil tendu qui vibre comme une corde de guitare, mains de chaque côté
 B(3, { enter: 'none', trans: 'up', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
@@ -214,7 +214,7 @@ B(4, { enter: 'whip', cam: zin(1.02, 1.08, .4),
   draw: (t, d, T) => { const To = at(4, 'tout'), C = at(4, 'correctement'); const items = ['BROSSE', 'FIL', 'BAIN DE BOUCHE'];
     return bathroom2(t) + ado({ x: 330, y: 1500, s: 1.35, expr: t > C ? 'pressedHappy' : 'smugger', armR: [-40, -70] }, t) +
       G(tr(760, 780, 1, 4), rect(-220, -260, 440, 520, '#fff', 24) + items.map((w, i) => ftext(-150, -130 + i * 150, w, { size: 40, fill: SX.ink, anchor: 'start', stroke: 'none' }) + rect(-200, -168 + i * 150, 40, 40, 'none', 6, 5) + (t > To + i * .15 ? path(`M-196 ${-150 + i * 150}l14 18l30 -40`, 'none', 10, '#36a85a') : '')).join('')) +
-      stamp(760, 1000, 'PARFAIT', t, C, '#36a85a', -10) + (t > C ? popStars(330, 900, t, C) : ''); },
+      stamp(760, 1110, 'PARFAIT', t, C, '#36a85a', -10) + (t > C ? popStars(330, 900, t, C) : ''); },
   sfx: [[0, 'whoosh', .5], [at(4, 'tout'), 'tick', .6], [at(4, 'tout') + .15, 'tick', .6], [at(4, 'tout') + .3, 'tick', .6], [at(4, 'correctement'), 'thud', .7], [at(4, 'correctement') + .1, 'ding', .5]] });
 // B005a — Kevin dans la cour : il te pointe du doigt en rigolant
 B(5, { enter: 'whip', cam: zin(1.02, 1.08, .4),
@@ -255,7 +255,7 @@ B(9, { enter: 'whip', cam: zin(1.02, 1.07, .4),
 // B009b — tu caches ta bouche quand tu ris : un menu GÉANT devant la bouche, les HA HA dépassent
 B(9, { enter: 'punch', cam: camHand(1.06, .6),
   draw: (t, d, T) => { const C = at(9, 'caches') - at(9, 'caches') + .15, Ri = at(9, 'ris') - at(9, 'caches') + .15; const up = eOutBack(seg(t, C - .1, C + .3));
-    return restaurant(t) + adoHead(CX, 880, 230, { expr: 'yLaugh' }, t) + G(tr(CX, lerp(1600, 1150, up), 1, Math.sin(t * 20) * 2), menuCard(0, 0, 1)) + restoTable(1330) +
+    return restaurant(t) + adoHead(CX, 880, 230, { expr: 'yLaugh' }, t) + G(tr(CX, lerp(1600, 1250, up), 1, Math.sin(t * 20) * 2), menuCard(0, 0, 1)) + restoTable(1330) +
       funTag(260, 560, 'HA', t, Ri - .2, { size: 60, bg: '#fff', fg: SX.ink, r: -12 }) + funTag(820, 520, 'HA HA', t, Ri - .05, { size: 54, bg: '#fff', fg: SX.ink, r: 10 }) + sweatDrops(CX, 760, t); },
   sfx: [[.15, 'whoosh_up', .6], [.4, 'thud', .5], [at(9, 'ris') - at(9, 'caches') - .05, 'pop', .5], [at(9, 'ris') - at(9, 'caches') + .1, 'pop_hi', .5]] }, at(9, 'caches') - .15);
 // B010a — ton crush : « montre tes dents ! » (cœurs), toi en sueur
@@ -281,7 +281,7 @@ B(11, { enter: 'none', trans: 'push', transD: .25, cam: (t, d) => ({ z: lerp(1.0
   draw: (t, d, T) => { const Bl = at(11, 'blanches') - at(11, 'naturellement') + .15, Pa = at(11, 'papier') - at(11, 'naturellement') + .15;
     return paper('#fff6e0') + gobo(T, .1) + G(tr(270, 900, pop(t, .05, .4), -6 + Math.sin(t * 3) * 3), rect(-160, -220, 320, 440, '#ffffff', 8) + path('M90 -220L160 -150L90 -150Z', '#e6eef5', 6) + G(tr(0, -40), head({ hr: 70, hair: 'none', skin: 'none', cheeks: false, expr: 'smug', seed: 12 }, t).replace(/<circle cx="0" cy="0" r="70"[^>]*\/>/, ''))) +
       G(tr(810, 900, pop(t, .25, .4)), toothChar(0, 0, 1.25, t, { col: YEL, expr: 'happy' })) + G(tr(CX, 900, pop(t, Bl, .3)), text(0, 40, OL, '≠', '#fff', 170)) +
-      funTag(270, 1180, 'PAPIER', t, Pa, { size: 40, bg: '#fff', fg: SX.ink }) + funTag(810, 1180, 'DENT', t, Pa + .1, { size: 40, bg: YEL, fg: SX.ink }) + kthin('pas naturellement', CX, 380, t, 0, { size: 54, fill: SX.ink }) + kword('BLANCHES', CX, 500, t, Bl - .05, { size: 100, fill: '#fff' }); },
+      funTag(270, 1180, 'PAPIER', t, Pa, { size: 40, bg: '#fff', fg: SX.ink }) + funTag(810, 1180, 'DENT', t, Pa + .1, { size: 40, bg: YEL, fg: SX.ink }) + kthin('pas naturellement', CX, 380, t, 0, { size: 54 }) + kword('BLANCHES', CX, 500, t, Bl - .05, { size: 100, fill: '#fff' }); },
   sfx: [[.05, 'pop', .5], [.25, 'pop', .5], [at(11, 'blanches') - at(11, 'naturellement') + .1, 'boom', .5], [at(11, 'papier') - at(11, 'naturellement') + .15, 'printer', .4]] }, at(11, 'naturellement') - .15);
 // B012a — les teintes varient : chez le dentiste, nuancier géant qui se déploie
 B(12, { enter: 'whip', cam: zin(1.02, 1.08, .3),
@@ -337,12 +337,12 @@ B(17, { enter: 'none', trans: 'glitch', transD: .25, cam: zin(1.02, 1.08, .3),
     return nightRoom(t) + op(.9, adoHead(330, 920, 190, { expr: t > Br ? 'yJoy' : 'neutral', look: [1, 0] }, t)) + rect(-M, -M, W + 2 * M, H + 2 * M, 'rgba(10,12,40,.35)', 0, 0) +
       G(tr(780, 620), bubble(0, 0, 360, 280, influHead(0, 10, 90, {}, t) + glow(0, 50, 160, '#ffffff', .8), pop(t, at(17, 'croire'), .4))) +
       G(tr(330, 1180), rect(-170, -26, 340, 52, '#2b2040', 26, 5) + rect(-164, -20, 8 + 4 * Math.sin(t * 30), 40, '#ff4d4d', 20, 0)) + funTag(330, 1110, 'LUMIÈRE : 0%', t, N, { size: 36, bg: '#ff4d4d' }) +
-      kthin('si tes dents ne brillent pas', CX, 330, t, at(17, 'si') - .05, { size: 46 }) + kword('DANS LE NOIR', CX, 440, t, N - .3, { size: 84, fill: SX.acc2 }); },
+      kthin('si tes dents ne brillent pas', CX, 330, t, at(17, 'si') - .05, { size: 46 }) + kword('DANS LE NOIR', CX, 440, t, N - .3, { size: 68, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(17, 'croire'), 'magic', .4], [at(17, 'brillent'), 'glint', .5], [at(17, 'noir'), 'error_beep', .6]] });
 // B017b — « c'est que tu es sale » : sous la douche, tu te récures en pleurant, tampon SALE, mouches
 B(17, { enter: 'crash', flash: 1, cam: camHand(1.06, .7),
   draw: (t, d, T) => { const o = at(17, 'noir') + .3, S = at(17, 'sale') - o; let flies = ''; for (let i = 0; i < 3; i++) { const a = t * (4 + i) + i * 2; flies += G(tr(CX + Math.cos(a) * 320, 760 + Math.sin(a * 1.3) * 120), circ(0, 0, 14, OL, 0) + ell(-10, -14, 10, 6, 'rgba(255,255,255,.8)', 3) + ell(10, -14, 10, 6, 'rgba(255,255,255,.8)', 3)); }
-    return showerBg(t) + steamClouds(t, 4) + ado({ x: CX, y: 1520, s: 1.4, expr: 'sob', armR: [-60, -150], holdR: tbrush(0, 0, .6, 90 + Math.sin(t * 30) * 20) }, t) + foam(CX, 1250, t, 10, 260, 7) + flies + stamp(CX, 450, 'SALE ?!', t, S, '#7a5a20', -8); },
+    return showerBg(t) + steamClouds(t, 4) + ado({ x: CX, y: 1520, s: 1.4, expr: 'sob', armR: [-20, 20], holdR: tbrush(0, 0, .55, 60 + Math.sin(t * 30) * 20) }, t) + foam(CX, 1250, t, 10, 260, 7) + flies + stamp(CX, 450, 'SALE ?!', t, S, '#7a5a20', -8); },
   sfx: [[0, 'spray', .6], [.1, 'buzz', .4], [at(17, 'sale') - at(17, 'noir') - .3, 'thud', .8], [at(17, 'sale') - at(17, 'noir') - .1, 'gasp', .4]] }, at(17, 'noir') + .3);
 // B018 — un jour, tu racontes une blague à table : dîner de famille, Kevin est là
 B(18, { enter: 'whip', cam: zin(1.02, 1.08, .4),
@@ -369,7 +369,7 @@ B(21, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), sh
   sfx: [[0, 'flash_hit', .5], [.1, 'boom', .5], [.4, 'boing', .5], [at(21, 'incontrolable') - at(21, 'immense') + .1, 'boom', .6]] }, at(21, 'immense') - .15);
 // B022a — puis tu remarques… le téléphone de Kevin : le rire se fige (scratch)
 B(22, { enter: 'none', trans: 'push', transD: .25, cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d) }),
-  draw: (t, d, T) => { const Re = at(22, 'remarques'), Te = at(22, 'telephone'); return dining(t) + ado({ x: 350, y: 1440, s: 1.3, expr: t > Re ? 'yTerror' : 'yLaugh', look: [1, 0] }, t) + kevin({ x: 820, y: 1440, s: 1.15, expr: 'smug', flip: 1, armL: [200, 200], holdL: phone(0, 0, .55, -90, rect(-66, -128, 132, 250, '#ff3b30', 12, 0)) }, t) + diningTable(t) +
+  draw: (t, d, T) => { const Re = at(22, 'remarques'), Te = at(22, 'telephone'); return dining(t) + ado({ x: 350, y: 1440, s: 1.3, expr: t > Re ? 'yTerror' : 'yLaugh', look: [1, 0] }, t) + kevin({ x: 820, y: 1440, s: 1.15, expr: 'smug', flip: 1, armL: [200, 200], }, t) + phone(650, 1010, .7, -12, circ(0, -90, 16, Math.sin(t * 6) > 0 ? '#ff3b30' : '#ffb0a8', 0) + ftext(0, 10, 'REC', { size: 36, fill: '#ff3b30', stroke: 'none' })) + diningTable(t) +
     (t > Te ? markerCircle(640, 1020, 120, 120, t, Te, { col: SX.acc2 }) : '') + funTag(820, 560, 'KEVIN', t, at(22, 'kevin'), { size: 48, bg: '#5fb85f' }); },
   sfx: [[at(22, 'puis'), 'hmm', .3], [at(22, 'remarques'), 'scratch', .8], [at(22, 'telephone'), 'scratch', .4], [at(22, 'kevin'), 'pop', .5]] });
 // B022b — pointé vers toi : POV de l'écran de Kevin, viseur REC, tu es filmé en plein fou rire
@@ -382,7 +382,7 @@ B(23, { enter: 'punch', cam: (t, d) => ({ z: 1.08, shake: t > at(23, 'refermes')
   sfx: [[at(23, 'immediatement'), 'whoosh', .5], [at(23, 'refermes') - .1, 'whoosh_up', .4], [at(23, 'refermes') + .1, 'thud', 1], [at(23, 'bouche'), 'crack', .5]] });
 // B024a — « Pourquoi tu fais ça ? » : Kevin sincèrement perplexe
 B(24, { enter: 'whip', cam: zin(1.04, 1.1),
-  draw: (t, d, T) => blur(6, dining(t)) + kevinHead(CX, 900, 250, { expr: 'confused' }, t) + burst(CX, 440, 230, t, at(24, 'pourquoi') - .1, '#fff', 14) + (t > at(24, 'pourquoi') ? ftext(CX, 460, 'POURQUOI ?!', { size: 64, fill: SX.ink, stroke: 'none' }) : '') + qmark(CX + 300, 700, .9, SX.acc2, 15),
+  draw: (t, d, T) => blur(6, dining(t)) + kevinHead(CX, 900, 250, { expr: 'confused' }, t) + burst(CX, 440, 230, t, at(24, 'pourquoi') - .1, '#fff', 14) + (t > at(24, 'pourquoi') ? ftext(CX, 458, 'POURQUOI ?!', { size: 50, fill: SX.ink, stroke: 'none' }) : '') + qmark(CX + 300, 700, .9, SX.acc2, 15),
   sfx: [[0, 'whoosh', .4], [at(24, 'pourquoi') - .1, 'pop', .7], [at(24, 'ca'), 'hmm', .5]] });
 // B024b — « La photo était super » : l'écran du téléphone, ton fou rire jaune magnifique, likes qui explosent
 B(24, { enter: 'none', trans: 'zoom', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d) }),
