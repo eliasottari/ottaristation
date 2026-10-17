@@ -262,7 +262,7 @@ function bedroomDay(t, sky = ['#bfe0ff', '#e3f2ff']) {
 // chambre de nuit : étoiles phosphorescentes qui scintillent, rideaux, ville allumée, réveil rouge
 function nightRoom(t) {
   let s = dWall('#4a55a0', '#39428a', 'dots', 'rgba(255,255,255,.1)') + rect(-M, 150, W + 2 * M, 16, '#cfd6ff', 0, DSW) +
-    dPoster(240, 470, 230, 300, '#6a4fc0', circ(0, -20, 60, '#fff6d6', 0) + circ(24, -36, 50, '#6a4fc0', 0) + ftext(0, 100, 'DODO', { size: 40, fill: '#fff' }), -3) + dFrameP(470, 360, 110, 140, 0) +
+    dFrameP(470, 360, 110, 140, 0) + dFrameP(90, 640, 90, 110, 2, '#b994ec', -4) + G(tr(380, 230), circ(0, 0, 50, '#e6dcff', DSW) + circ(22, -14, 42, '#4a55a0', 0)) +
     dShelf(70, 780, 340, dBooks(90, 780, 7, 5) + dJar(320, 780, .5, '#b994ec') + ell(385, 750, 34, 30, '#c9a07a', DSW) + circ(372, 728, 12, '#c9a07a', DSW) + circ(398, 728, 12, '#c9a07a', DSW)) +
     rect(-40, 1090, 200, 24, '#8a6a4a', 6, DSW) + rect(-30, 1114, 180, 140, '#6e5236', 6, DSW) + dLamp(60, 1090, .6, 0, '#9aa3ad') + rect(110, 1040, 80, 50, '#2b2b33', 10, DSW) +
     rect(860, 1090, 300, 24, '#8a6a4a', 6, DSW) + rect(880, 1114, 260, 140, '#6e5236', 6, DSW) + dBooks(900, 1090, 4, 8, 70) +
@@ -296,10 +296,10 @@ function rueMatin(t) {
   const BL = [[-230, 300, 620, '#e7c9a0'], [70, 300, 780, '#cfd8e2', '#e2463a', 'BOULANGERIE'], [370, 290, 560, '#f0b8a8'], [660, 300, 820, '#bcd7c4', '#36a85a', 'PHARMACIE'], [960, 320, 660, '#f3d9a4', '#7aa6d8', 'CAFÉ']];
   BL.forEach((b, i) => s += dBld(b[0], FL, b[1], b[2], b[3], 11 + i, t, b[4] ? { shop: b[4], sign: b[5] } : {}));
   const on = Math.sin(t * 9) > -.4; s += G(tr(930, FL - 300), (on ? circ(0, 0, 50, 'rgba(80,220,120,.35)', 0) : '') + rect(-12, -36, 24, 72, on ? '#3ee07a' : '#2a7a4a', 3, DSW) + rect(-36, -12, 72, 24, on ? '#3ee07a' : '#2a7a4a', 3, DSW));
-  s += rect(-M, FL, W + 2 * M, 180, '#d8cfc0', 0, 0) + Array.from({ length: 22 }, (_, i) => line(-300 + i * 90, FL, -340 + i * 90, FL + 180, 3, 'rgba(0,0,0,.08)')).join('') + rect(-M, FL + 180, W + 2 * M, 20, '#b0a898', 0, DSW) + rect(-M, FL + 200, W + 2 * M, 600, '#8a9099', 0, 0) +
-    Array.from({ length: 10 }, (_, i) => rect(-200 + i * 200, FL + 420, 100, 14, '#f4f4f4', 4, 0)).join('');
+  s += rect(-M, FL, W + 2 * M, 340, '#d8cfc0', 0, 0) + Array.from({ length: 22 }, (_, i) => line(-300 + i * 90, FL, -380 + i * 90, FL + 340, 3, 'rgba(0,0,0,.08)')).join('') + [100, 200].map(y => line(-M, FL + y, W + M, FL + y, 3, 'rgba(0,0,0,.08)')).join('') + rect(-M, FL + 340, W + 2 * M, 20, '#b0a898', 0, DSW) + rect(-M, FL + 360, W + 2 * M, 600, '#8a9099', 0, 0) +
+    Array.from({ length: 10 }, (_, i) => rect(-200 + i * 200, FL + 600, 100, 14, '#f4f4f4', 4, 0)).join('');
   s += dTreeV(560, FL + 30, .6, t, 2) + rect(510, FL - 6, 100, 40, '#b47a45', 6, DSW) + dLampPost(220, FL + 40, .9) + dLampPost(880, FL + 40, .9) + dSignP(410, FL + 50, .65, 'P') + dBike(120, FL + 70, .8, '#36c5b4') + dBin(1000, FL + 60, .7) + dFlowers(470, 650, FL + 10, t, 5);
-  return s + kidsBg(t, 1290, 3, .5) + dCarP(760, FL + 380, 1.1, '#ff8a3d');
+  return s + kidsBg(t, 1290, 3, .5) + dCarP(760, FL + 580, 1.1, '#ff8a3d');
 }
 // parc : collines brumeuses + sapins lointains / arbres, banc, étang, clôture / fleurs ; cerf-volant, oiseaux, papillons, canard
 function park(t) { const dk = wave(t, .15, 60);
@@ -562,7 +562,7 @@ B(18, { enter: 'whip', cam: camHand(1.04, .5),
   sfx: [[0, 'steps', .5], [.5, 'steps', .5], [at(18, 'visage') - .1, 'tick', .6], [at(18, 'fatigue') - .15, 'error_beep', .5], [at(18, 'simplement'), 'whoosh', .3]] });
 // B019 — « alors que tu ne l'es pas » : haltère soulevé d'une main, jauge à 100 %
 B(19, { enter: 'none', trans: 'zoom', transD: .25, cam: () => ({ z: 1.05, shake: 2 }),
-  draw: (t, d, T) => { const up = eOutBack(seg(t, .05, .45)); return gymBg(t) + op(.28, rays(t, CX, 950, '#ffe9a6', '#ffd76b', 22)) + ado({ x: CX, y: 1500, s: 1.45, expr: 'ecstatic', armR: [-20, -20 - 70 * up], holdR: dumbbellC(0), armL: [160, 200] }, t) +
+  draw: (t, d, T) => { const up = eOutBack(seg(t, .05, .45)); return gymBg(t) + op(.28, rays(t, CX, 950, '#ffe9a6', '#ffd76b', 22)) + ado({ x: CX, y: 1500, s: 1.45, expr: 'ecstatic', armR: [-20, -20 - 70 * up], holdR: G(tr(20, 0), dumbbellC(90)), armL: [160, 200] }, t) +
     bar(CX, 470, 600, seg(t, .1, .6), { label: 'énergie', col: '#36a85a', fg: SX.ink, bg: 'rgba(0,0,0,.15)' }) + funTag(CX + 220, 600, '100 %', t, .5, { size: 60, bg: '#36a85a' }) + popStars(CX + 150, 800, t, .4) + fgB('weights', CX, 1900, 1); },
   sfx: [[.05, 'whoosh_up', .6], [.45, 'thud', .6], [.5, 'ding', .6], [at(19, 'pas'), 'tada', .4]] });
 // B020 — « personne ne te croit » : foule de têtes sceptiques

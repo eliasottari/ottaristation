@@ -345,7 +345,7 @@ function cafeWin(x, y, w, h, t, seed) {
   const id = 'cw' + (_gid++); let v = grad('#ffe9c2', '#ffd9a0', x, y, w, h) + rect(x, y + h * .2, w, 14, '#b07a4a', 0, 4);
   for (let i = 0; i < 6; i++) v += rect(x + 20 + i * w / 6, y + h * .2 - 40, 30, 40, PAL[(i + seed) % 9], 6, 3);
   v += dPendant(x + w * .3, y + 60, t, '#ff8a3d', 0) + dPendant(x + w * .75, y + 40, t + 1, '#36c5b4', 0);
-  const r = rng(seed); for (let i = 0; i < 2; i++) { const px = x + w * (.25 + i * .5), py = y + h * .7; v += circ(px, py - 60, 46, ['#c98a5e', '#f2c9a0'][i], 4) + rect(px - 60, py - 14, 120, 140, ['#7aa6d8', '#b56cff'][i], 40, 4) + G(tr(px + 40, py + 10 + Math.sin(t * 3 + i) * 6), dMug(0, 0, '#fff')); }
+  const r = rng(seed); for (let i = 0; i < 2; i++) { const px = x + w * (.25 + i * .5), py = y + h * .7; v += op(.55, circ(px, py - 40, 32, ['#c98a5e', '#f2c9a0'][i], 4) + rect(px - 44, py - 10, 88, 110, ['#7aa6d8', '#b56cff'][i], 30, 4) + G(tr(px + 34, py + 20 + Math.sin(t * 3 + i) * 6), dMug(0, 0, '#fff'))); }
   v += rect(x, y + h * .78, w, 30, '#8a5a3a', 0, 4);
   return `<defs><clipPath id="${id}"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath></defs><g clip-path="url(#${id})">${v}</g>` + rect(x, y, w, h, 'none', 6, 22, '#fffdf6') + rect(x - 11, y - 11, w + 22, h + 22, 'none', 8, 5) + line(x + w / 2, y, x + w / 2, y + h, 12, '#fffdf6') + line(x + 30, y + 40, x + 90, y + 10, 10, 'rgba(255,255,255,.6)');
 }
@@ -358,6 +358,7 @@ function cafe(t) {
   let sl = 'M-40 400'; for (let i = 0; i < 6; i++) sl += `Q${-40 + i * 200 + 100} 440 ${-40 + (i + 1) * 200} 400`; s += path(sl, 'none', 3);
   for (let i = 0; i < 24; i++) { const x = -30 + i * 50, y = 400 + 30 * Math.sin(((i * 50) % 200) / 200 * Math.PI); s += circ(x, y + 8, 8, Math.sin(t * 4 + i * 1.9) > -.3 ? '#fff6a6' : '#b8a070', 3); }
   s += G(tr(420, 882), ell(0, 0, 50, 26, '#59616c', 4) + circ(36, -30, 22, '#59616c', 4) + path('M24 -46l4 -16l10 12ZM42 -48l8 -14l6 14Z', '#59616c', 3) + path(`M-46 0q-30 ${-20 + 20 * Math.sin(t * 3)} -20 -60`, 'none', 8, '#59616c'));
+  s += wash(.14, '#fff4e6');
   s += dFloor(1250, '#d8c8b0') + plant(60, 1250, 1.1) + G(tr(1010, 1300), path('M-70 0L-40 -220H40L70 0', 'none', 8, '#8a5a3a') + rect(-56, -200, 112, 150, '#3c3c44', 6, 5) + dtx(0, -150, 'CROISSANT', 16, '#fff') + dtx(0, -110, '1 €', 30, '#ffd23f'));
   s += G(tr(540, 1290), ell(0, -120, 90, 18, '#fffdf6', 5) + line(0, -110, 0, 0, 8) + ell(0, 0, 40, 8, OL, 0) + dMug(-30, -126, '#ff4f8b', t) + dMug(34, -126, '#5ec4f0'));
   return s + dFg(dPlantBig(1080, 2000, 1.4, t));
@@ -477,7 +478,7 @@ B(9, { enter: 'drop', cam: camHand(1.05, .5),
 // B009b — RECHERCHE INTERNATIONALE : congrès mondial, drapeaux, ton sourire projeté sur écran géant
 B(9, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
   draw: (t, d, T) => { const I = at(9, 'internationale') - at(9, 'recherche'); let s = auditorium(t);
-    for (let i = 0; i < 3; i++) s += adultX(i, { x: 200 + i * 340, y: 1700, s: 1.0, expr: i === 1 ? 'wow' : 'shock', coat: 1, shirt: '#fff', glasses: true, armR: [-60, -80] }, t);
+    for (let i = 0; i < 3; i++) s += adultX(i, { x: 200 + i * 340, y: 1530, s: 1.0, expr: i === 1 ? 'wow' : 'shock', coat: 1, shirt: '#fff', glasses: true, armR: [-60, -80] }, t);
     return s + markerCircle(CX, 830, 80, 110, t, .25, { col: SX.acc2 }) + kword('RECHERCHE', CX, 330, t, .02, { size: 96, fill: '#fff' }) + kword('INTERNATIONALE', CX, 440, t, I - .05, { size: 76, fill: SX.acc2 }); },
   sfx: [[0, 'flash_hit', .5], [.02, 'boom', .5], [.25, 'scratch', .5], [at(9, 'internationale') - at(9, 'recherche'), 'tada', .6], [.8, 'shutter', .5]] }, at(9, 'recherche') - .15);
 // B010a — cantine : un camarade, fourchette de spaghettis en l'air, pose LA question
