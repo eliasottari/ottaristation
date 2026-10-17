@@ -82,53 +82,228 @@ const M = 700;
 const SKY = (t, a = '#8fd3ff', b = '#e6f6ff') => grad(a, b, -M, -M, W + 2 * M, 1900) + cloud(((t * 30) % 1600) - 300, 220, 1.3, '#fff') + cloud(((t * 18 + 700) % 1700) - 300, 420, .9, '#fff');
 function tiles(c1, c2, size = 120, x0 = -M, y0 = -M, w = W + 2 * M, h = H + 2 * M) { let s = rect(x0, y0, w, h, c1, 0, 0); for (let x = x0; x < x0 + w; x += size) s += line(x, y0, x, y0 + h, 4, c2); for (let y = y0; y < y0 + h; y += size) s += line(x0, y, x0 + w, y, 4, c2); return s; }
 function kidsBg(t, y = 1150, n = 4, sc = .45) { let s = ''; for (let i = 0; i < n; i++) { const x = ((i * 380 + t * (60 + i * 25) * (i % 2 ? 1 : -1)) % 1600 + 1600) % 1600 - 260; s += person({ age: 'kid', x, y, s: sc, hair: ['curly', 'bun', 'short', 'ponytail'][i % 4], hairColor: ['#2b2420', '#8a5a3a', '#c4521b', '#e0a040'][i % 4], shirt: ['#ff8fb1', '#7aa6d8', '#ffd23f', '#7be07b'][i % 4], expr: 'happy', walk: 3, flip: i % 2, seed: 20 + i }, t); } return s; }
-function bedroom(t, night = 0) { let s = night ? grad('#1d2350', '#2e3570', -M, -M, W + 2 * M, H + 2 * M) : grad('#d7e6ff', '#c3d6f7', -M, -M, W + 2 * M, H + 2 * M);
-  for (let i = -6; i < 16; i++) s += rect(i * 120, -M, 50, H + 2 * M, night ? 'rgba(255,255,255,.04)' : 'rgba(255,255,255,.3)', 0, 0);
-  s += night ? rect(620, 260, 360, 420, '#0f163a', 12) + circ(820, 400, 60, '#fff6d6', 0) + rect(620, 260, 360, 420, 'none', 12) + line(800, 260, 800, 680, 8) + Array.from({ length: 6 }, (_, i) => sparkle(660 + i * 55, 320 + (i * 71) % 300, .15 + .1 * Math.sin(t * 4 + i), '#fff6d6')).join('')
-    : windowFrame(620, 260, 360, 420) + cloud(680 + (t * 40) % 220, 380, .45) + cloud(860 - (t * 25) % 180, 560, .35);
-  s += rect(100, 300, 240, 330, night ? '#3a3f7a' : '#ff8fb1', 14) + ftext(220, 470, 'SKATE', { size: 50, fill: '#fff' }) + ftext(220, 540, '4 LIFE', { size: 36, fill: SX.acc2 });
-  return s + rect(-M, 1250, W + 2 * M, 1400, night ? '#3a3040' : '#c49a6c', 0, 0) + line(-M, 1250, W + M, 1250, 6) + rect(-120, 1150, 460, 180, night ? '#5b5fa8' : '#ff9a3c', 30) + rect(-120, 1120, 200, 70, '#fff', 30) + plant(980, 1250, 1.1); }
+// ---------- accessoires de décor (passe « DÉCORS RICHES », factorisés, préfixe d pour ne pas écraser le moteur) ----------
+const WASH = (c = 'rgba(255,255,255,.14)') => rect(-M, -M, W + 2 * M, H + 2 * M, c, 0, 0); // voile léger : décor moins saturé derrière les persos
+function dStripes(y1, c1, c2, step = 120, bw = 50) { let s = rect(-M, -M, W + 2 * M, y1 + M, c1, 0, 0); for (let x = -M; x < W + M; x += step) s += rect(x, -M, bw, y1 + M, c2, 0, 0); return s; }
+function dDots(y1, c, step = 90, r = 7) { let s = ''; for (let y = -40, j = 0; y < y1 - 30; y += step, j++) for (let x = -M + (j % 2) * step / 2; x < W + M; x += step) s += circ(x, y, r, c, 0); return s; }
+function dParquet(y, c1 = '#c49a6c', c2 = '#a97f55', lh = 46) { let s = rect(-M, y, W + 2 * M, H + 2 * M - y, c1, 0, 0);
+  for (let j = 0; y + j * lh < H + M; j++) { const yy = y + j * lh; s += line(-M, yy, W + M, yy, 3, c2); for (let x = -M + ((j * 137) % 230); x < W + M; x += 230) s += line(x, yy, x, yy + lh, 3, c2); }
+  return s; }
+function dChecker(y, c1, c2, size = 110, y1 = H + M) { let s = rect(-M, y, W + 2 * M, y1 - y, c1, 0, 0); for (let yy = y, j = 0; yy < y1; yy += size, j++) for (let x = -M + (j % 2) * size; x < W + M; x += size * 2) s += rect(x, yy, size, size, c2, 0, 0); return s; }
+function dTiles(x0, y0, x1, y1, c1, c2, size = 100) { let s = rect(x0, y0, x1 - x0, y1 - y0, c1, 0, 0); for (let x = x0; x <= x1; x += size) s += line(x, y0, x, y1, 4, c2); for (let y = y0; y <= y1; y += size) s += line(x0, y, x1, y, 4, c2); return s; }
+const dBase = (y, c = '#fff') => rect(-M, y - 28, W + 2 * M, 30, c, 0, 5) + line(-M, y, W + M, y, 6);
+const dOutlet = (x, y) => rect(x - 26, y - 26, 52, 52, '#fbfbf4', 10, 5) + circ(x, y, 15, '#ecece4', 3) + circ(x - 6, y, 3.5, OL, 0) + circ(x + 6, y, 3.5, OL, 0);
+const dSwitch = (x, y) => rect(x - 24, y - 32, 48, 64, '#fbfbf4', 10, 5) + rect(x - 11, y - 16, 22, 32, '#e6e6dc', 5, 3);
+// cadre photo : k 0 paysage, 1 portrait, 2 cœur
+function dPic(x, y, w, h, k = 0, fr = '#c38a52', bg = '#bfe6ff', r = 0) { let s = rect(-w / 2, -h / 2, w, h, fr, 6, 5) + rect(-w / 2 + 10, -h / 2 + 10, w - 20, h - 20, bg, 0, 3);
+  if (k === 0) s += path(`M${-w / 2 + 12} ${h / 2 - 12}L${-w * .15} ${-h * .1}L${w * .05} ${h * .15}L${w * .2} ${-h * .05}L${w / 2 - 12} ${h / 2 - 12}Z`, '#7cc46a', 3) + circ(w * .22, -h * .22, Math.min(w, h) * .09, '#ffd23f', 0);
+  else if (k === 1) s += circ(0, -h * .08, Math.min(w, h) * .18, '#f2c9a0', 3) + path(`M${-w * .28} ${h / 2 - 12}Q0 ${h * .05} ${w * .28} ${h / 2 - 12}Z`, '#ff8fb1', 3);
+  else s += heart(0, 0, Math.min(w, h) / 220, '#ff5d73');
+  return G(tr(x, y, 1, r), s + circ(0, -h / 2 - 22, 5, OL, 0) + path(`M${-w * .3} ${-h / 2}L0 ${-h / 2 - 22}L${w * .3} ${-h / 2}`, 'none', 3)); }
+function dPoster(x, y, w, h, bg, l1, l2, fg = '#fff', r = 0, c2 = SX.acc2) { return G(tr(x, y, 1, r), rect(-w / 2, -h / 2, w, h, bg, 10, 5) + ftext(0, -h * .04, l1, { size: Math.min(w / (l1.length * .62), h * .3), fill: fg, stroke: 'none' }) + (l2 ? ftext(0, h * .28, l2, { size: Math.min(w / (l2.length * .62), h * .2), fill: c2, stroke: 'none' }) : '') +
+  rect(-w / 2 - 8, -h / 2 - 8, 34, 16, 'rgba(255,255,255,.7)', 3, 0) + rect(w / 2 - 26, -h / 2 - 8, 34, 16, 'rgba(255,255,255,.7)', 3, 0)); }
+// rangée de livres posée sur y (de x vers la droite)
+function dBooks(x, y, n, seed = 1, hmax = 90) { const r = rng(seed), cols = ['#ff6b6b', '#4d7cf0', '#ffd23f', '#7be07b', '#b56cff', '#ff9a3c', '#36c5b4', '#ff8fb1']; let s = '', xx = x;
+  for (let i = 0; i < n; i++) { const w = 18 + r() * 14, h = hmax * (.65 + r() * .35), c = cols[Math.floor(r() * cols.length)], lean = i === n - 1 && r() > .5;
+    s += lean ? G(tr(xx + w / 2, y, 1, 18), rect(-w / 2, -h, w, h, c, 3, 4) + line(-w / 2 + 4, -h * .7, w / 2 - 4, -h * .7, 3, 'rgba(255,255,255,.6)')) : rect(xx, y - h, w, h, c, 3, 4) + line(xx + 4, y - h * .75, xx + w - 4, y - h * .75, 3, 'rgba(255,255,255,.6)'); xx += w + 2; }
+  return s; }
+const dShelf = (x, y, w, items = '', c = '#b98552') => items + rect(x, y, w, 18, c, 4, 5) + path(`M${x + 24} ${y + 18}l0 26l26 -26`, '#8a5a3a', 4) + path(`M${x + w - 24} ${y + 18}l0 26l-26 -26`, '#8a5a3a', 4);
+const dTrophy = (x, y, s = 1) => G(tr(x, y, s), rect(-30, -14, 60, 14, '#8a5a3a', 3, 4) + rect(-8, -40, 16, 26, '#f2b632', 0, 4) + path('M-34 -96L34 -96Q30 -40 0 -40Q-30 -40 -34 -96Z', '#ffd23f', 5) + path('M-34 -86Q-56 -80 -40 -62M34 -86Q56 -80 40 -62', 'none', 5) + circ(0, -74, 8, '#fff6c0', 0));
+const dJar = (x, y, c = '#ff6b6b', s = 1) => G(tr(x, y, s), rect(-24, -60, 48, 60, 'rgba(220,240,255,.7)', 10, 4) + rect(-20, -40, 40, 36, c, 6, 0) + rect(-26, -72, 52, 16, '#59616c', 5, 4));
+const dBottle = (x, y, c = '#5ec4f0', s = 1) => G(tr(x, y, s), rect(-16, -64, 32, 64, c, 10, 4) + rect(-7, -80, 14, 18, '#fff', 3, 3) + rect(-10, -44, 20, 22, 'rgba(255,255,255,.7)', 3, 0));
+const dCactus = (x, y, s = 1) => G(tr(x, y, s), path('M-8 -40Q-10 -110 0 -120Q10 -110 8 -40Z', '#6dbb7a', 4) + path('M-6 -70Q-30 -72 -28 -96', 'none', 10, OL) + path('M-6 -70Q-30 -72 -28 -96', 'none', 5, '#6dbb7a') + path('M-26 -42L-20 0L20 0L26 -42Z', '#e98a5a', 4) + circ(0, -122, 6, '#ff8fb1', 3));
+const dMug = (x, y, t, c = '#ff6b6b') => G(tr(x, y), rect(-26, -50, 52, 50, c, 8, 4) + path('M26 -40Q46 -34 26 -16', 'none', 6)) + steam(x, y - 60, t, .35);
+const dPens = (x, y) => G(tr(x, y), line(-10, -40, -18, -80, 6, '#ff6b6b') + line(0, -40, 4, -86, 6, '#4d7cf0') + line(10, -40, 20, -76, 6, '#ffd23f') + rect(-22, -44, 44, 44, '#7a8a99', 6, 4));
+function dLamp(x, y, s, on = 0) { return G(tr(x, y, s), (on ? glow(0, -150, 200, '#fff3b0', .55) : '') + ell(0, 0, 50, 12, '#59616c', 4) + path('M0 0L-30 -110L20 -170', 'none', 8) + path('M0 -190L70 -150L40 -110L-20 -150Z', SX.acc, 5) + (on ? circ(30, -125, 10, '#fff6c0', 0) : '')); }
+function dFloorLamp(x, y, s, on = 0, t = 0) { const fl = on ? .55 + .08 * Math.sin(t * 23) * Math.sin(t * 7) : 0; return G(tr(x, y, s), (on ? glow(0, -520, 260, '#ffd88a', fl) : '') + ell(0, 0, 60, 14, '#59616c', 4) + line(0, 0, 0, -480, 9) + path('M-70 -480L70 -480L45 -590L-45 -590Z', on ? '#ffe9a8' : '#ffd0a8', 5)); }
+const dRug = (cx, cy, rx, ry, c1, c2) => ell(cx, cy, rx, ry, c1, 6) + ell(cx, cy, rx * .78, ry * .74, 'none', 6, c2) + ell(cx, cy, rx * .5, ry * .46, c2, 0) + Array.from({ length: 12 }, (_, i) => { const a = R(i * 30); return line(cx + Math.cos(a) * rx, cy + Math.sin(a) * ry, cx + Math.cos(a) * (rx + 18), cy + Math.sin(a) * (ry + 8), 4); }).join('');
+function dCurtain(x, y, w, h, col, t, side = 1) { const sw = Math.sin(t * 1.6 + side) * 14; let d = `M${x} ${y}L${x + w} ${y}`; d += `Q${x + w + sw} ${y + h * .5} ${x + w * .55 + sw * 1.4} ${y + h}`;
+  for (let i = 0; i < 3; i++) d += `q${-w * .09} 16 ${-w * .18} 0`; d += `Q${x - 6} ${y + h * .5} ${x} ${y}Z`;
+  return path(d, col, 6) + [.3, .6].map(k => path(`M${x + w * k} ${y + 10}Q${x + w * k + sw * .6} ${y + h * .5} ${x + w * k * .9 + sw} ${y + h - 10}`, 'none', 4, 'rgba(0,0,0,.15)')).join(''); }
+const dRail = (x0, x1, y) => line(x0, y, x1, y, 10) + circ(x0, y, 12, '#c38a52', 4) + circ(x1, y, 12, '#c38a52', 4);
+// vue par une fenêtre (ciel, immeubles, arbre, nuages / nuit : lune, étoiles, fenêtres allumées)
+function dView(x, y, w, h, t, night = 0) { let s = night ? grad('#0f163a', '#26306a', x, y, w, h) : grad('#8fd3ff', '#e6f6ff', x, y, w, h);
+  if (night) { s += circ(x + w * .72, y + h * .22, 34, '#fff6d6', 0) + glow(x + w * .72, y + h * .22, 120, '#fff6d6', .35); for (let i = 0; i < 9; i++) s += sparkle(x + 20 + (i * 97) % (w - 40), y + 20 + (i * 53) % (h * .45), .1 + .07 * Math.sin(t * 4 + i), '#fff6d6'); }
+  else s += cloud(x + ((t * 35) % (w + 200)) - 100, y + h * .2, .35, '#fff') + cloud(x + w - ((t * 22 + 80) % (w + 200)) + 60, y + h * .38, .25, '#fff');
+  const r = rng(9); for (let i = 0; i < 5; i++) { const bw = 50 + r() * 50, bh = h * (.3 + r() * .4), bx = x - 10 + i * w / 4.5, c = night ? '#2a2f55' : ['#b9c6d8', '#c9d3e0', '#a9b8cc'][i % 3];
+    s += rect(bx, y + h - bh, bw, bh + 4, c, 3, 3); for (let j = 0; j < Math.floor(bh / 34); j++) for (let k = 0; k < 2; k++) s += rect(bx + 10 + k * bw * .45, y + h - bh + 12 + j * 34, bw * .28, 16, night ? (r() > .45 ? '#ffd86b' : '#3a4070') : 'rgba(255,255,255,.7)', 2, 0); }
+  s += circ(x + w * .18, y + h - 40, 70, night ? '#1d3a2a' : '#7cc46a', 4) + circ(x + w * .3, y + h - 70, 55, night ? '#24452f' : '#8fd47a', 4) + rect(x + w * .22, y + h - 20, 16, 30, '#8a5a3a', 0, 0);
+  return clipR(x, y, w, h, s, 6); }
+function dWindow(x, y, w, h, t, night = 0, cur = '#ffd0e0') { return dView(x, y, w, h, t, night) + rect(x, y, w, h, 'none', 6, 9) + line(x + w / 2, y, x + w / 2, y + h, 7) + line(x, y + h * .45, x + w, y + h * .45, 7) + line(x + 20, y + 18, x + 40, y + 48, 5, 'rgba(255,255,255,.7)') +
+  rect(x - 26, y + h, w + 52, 22, '#fff', 6, 5) + dRail(x - 60, x + w + 60, y - 22) + dCurtain(x - 60, y - 22, w * .3, h + 70, cur, t, 1) + dCurtain(x + w + 60 - w * .3, y - 22, w * .3, h + 70, cur, t, -1); }
+function dBed(x, y, s = 1, night = 0) { const duv = night ? '#5b5fa8' : '#ff9a3c'; let d = rect(-260, -260, 50, 300, '#b98552', 14) + rect(-240, -60, 520, 120, '#b98552', 12) + rect(-230, -100, 500, 70, '#fff', 20) +
+  rect(-215, -165, 150, 80, '#fff', 30) + rect(-80, -150, 130, 66, '#bfe6ff', 28) + path('M-120 -110Q100 -150 290 -100L290 30L-120 30Z', duv, 6);
+  for (let i = 0; i < 5; i++) d += circ(-60 + i * 70, -40 + (i % 2) * 30, 12, 'rgba(255,255,255,.5)', 0);
+  d += G(tr(150, -128), circ(-24, -36, 16, '#c88a52', 4) + circ(24, -36, 16, '#c88a52', 4) + circ(0, -16, 32, '#c88a52', 5) + circ(-10, -20, 4, OL, 0) + circ(10, -20, 4, OL, 0) + ell(0, -8, 8, 5, OL, 0) + ell(0, 18, 28, 22, '#c88a52', 5));
+  return G(tr(x, y, s), d); }
+function dDesk(x, y, s, t, night = 0) { return G(tr(x, y, s), rect(-200, -20, 400, 26, '#b98552', 6, 5) + rect(-185, 6, 26, 220, '#a2703f', 4, 4) + rect(159, 6, 26, 220, '#a2703f', 4, 4) + rect(40, 6, 130, 120, '#c99a63', 6, 4) + circ(105, 66, 7, OL, 0) +
+  rect(-130, -130, 170, 110, '#2b2b33', 10, 5) + rect(-120, -122, 150, 92, night ? '#7fd0ff' : '#cfe8ff', 5, 0) + rect(-150, -24, 210, 12, '#59616c', 5, 4) + (night ? glow(-45, -80, 160, '#7fd0ff', .3) : '') +
+  rect(60, -60, 60, 40, '#fff', 3, 3) + line(66, -48, 110, -48, 3, '#9aa3ad') + line(66, -36, 104, -36, 3, '#9aa3ad')) + dLamp(x + 150 * s, y - 20 * s, .8 * s, night) + dMug(x - 170 * s, y - 20 * s, t) + dPens(x + 95 * s, y - 20 * s); }
+const dSneakers = (x, y, c = '#fff', s = 1) => G(tr(x, y, s), path('M-70 0L-70 -30Q-60 -50 -30 -46L10 -30L40 -26Q60 -20 60 0Z', c, 5) + line(-66, -8, 56, -8, 5, '#ff4f87') + path('M20 0L20 -30Q30 -50 60 -46L100 -30L130 -26Q150 -20 150 0Z', c, 5) + line(24, -8, 146, -8, 5, '#ff4f87'));
+const dBag = (x, y, c = '#4d7cf0', s = 1) => G(tr(x, y, s), path('M-60 0L-70 -120Q-60 -160 0 -160Q60 -160 70 -120L60 0Z', c, 6) + rect(-40, -80, 80, 50, shade(c, -.15), 10, 5) + path('M-30 -160Q-30 -200 0 -200Q30 -200 30 -160', 'none', 8) + circ(0, -120, 6, '#ffd23f', 3));
+const dBox = (x, y, w = 160, h = 110, c = '#d8a96a') => rect(x - w / 2, y - h, w, h, c, 4, 5) + line(x - w / 2, y - h + 24, x + w / 2, y - h + 24, 4) + rect(x - 20, y - h, 40, 30, 'rgba(255,255,255,.35)', 0, 0);
+const dBin = (x, y, c = '#7a8a99', s = 1) => G(tr(x, y, s), path('M-50 0L-60 -130L60 -130L50 0Z', c, 5) + rect(-66, -144, 132, 20, shade(c, -.15), 6, 5) + line(-20, -110, -16, -20, 4, 'rgba(0,0,0,.2)') + line(20, -110, 16, -20, 4, 'rgba(0,0,0,.2)') + G(tr(0, -150, 1, 20), rect(-16, -20, 32, 26, '#fff', 4, 3)));
+const dBall = (x, y, r, c1 = '#ff6b6b', c2 = '#fff', a = 0) => G(tr(x, y, 1, a), circ(0, 0, r, c2) + path(`M${-r} 0A${r} ${r} 0 0 1 ${r} 0Z`, c1, 0) + path(`M0 ${-r}Q${r * .5} 0 0 ${r}`, 'none', 4, '#ffd23f') + circ(0, 0, r, 'none'));
+const dCalendar = (x, y) => rect(x - 50, y - 60, 100, 120, '#fff', 6, 5) + rect(x - 50, y - 60, 100, 30, SX.acc, 6, 5) + [0, 1, 2, 3].map(j => [0, 1, 2, 3].map(i => rect(x - 38 + i * 21, y - 18 + j * 18, 12, 10, j === 2 && i === 1 ? '#ff6b6b' : '#d9dee6', 2, 0)).join('')).join('');
+function dBunting(x0, x1, y, t, cols = ['#ff6b6b', '#ffd23f', '#5ec4f0', '#7be07b']) { let s = path(`M${x0} ${y}Q${(x0 + x1) / 2} ${y + 100} ${x1} ${y}`, 'none', 4); const n = Math.floor((x1 - x0) / 70);
+  for (let i = 0; i < n; i++) { const k = (i + .5) / n, fx = lerp(x0, x1, k), fy = y + 200 * k * (1 - k) - 2, sw = Math.sin(t * 3 + i) * 6; s += path(`M${fx - 26} ${fy}L${fx + 26} ${fy}L${fx + sw} ${fy + 52}Z`, cols[i % cols.length], 4); } return s; }
+const dCone = (x, y, s = 1) => G(tr(x, y, s), rect(-50, -10, 100, 14, '#ffd23f', 4, 4) + path('M-34 -10L0 -150L34 -10Z', '#ffd23f', 5) + path('M-24 -50L24 -50', 'none', 12, OL) + ftext(0, -64, '!', { size: 40, fill: OL, stroke: 'none' }));
+const dVent = (x, y, w = 120, h = 60) => rect(x - w / 2, y - h / 2, w, h, '#e6e9ee', 6, 4) + [0, 1, 2].map(i => line(x - w / 2 + 12, y - h / 2 + 15 + i * 15, x + w / 2 - 12, y - h / 2 + 15 + i * 15, 4, '#9aa3ad')).join('');
+const dNeon = (x0, x1, y, on = 1) => (on ? glow((x0 + x1) / 2, y, (x1 - x0) * .7, '#f4fbff', .5) : '') + rect(x0, y - 10, x1 - x0, 20, on ? '#fbfeff' : '#c9d1db', 10, 5) + line(x0 + 20, y - 26, x0 + 20, y - 10, 4) + line(x1 - 20, y - 26, x1 - 20, y - 10, 4);
+const fgBlur = (svg, px = 9) => blur(px, svg);
+// ------------------------------------------------------------
+
+// chambre (jour / nuit) : papier peint rayé à pois, fenêtre + rideaux + vue, poster, étagère, cadres, lit, bureau, tapis, objets au sol
+function bedroom(t, night = 0) { let s = dStripes(1250, night ? '#262c5e' : '#d7e6ff', night ? '#2b3266' : '#e3eeff') + dDots(1250, night ? 'rgba(255,255,255,.05)' : 'rgba(255,255,255,.55)');
+  s += wallClock(470, 180, 52, t, 6) + dCalendar(1010, 780) + dSwitch(1010, 960) + dOutlet(580, 1180);
+  s += dWindow(620, 260, 360, 420, t, night) + dCactus(700, 702, .7) + dJar(910, 702, '#7be07b', .6);
+  s += dPoster(220, 465, 240, 330, night ? '#3a3f7a' : '#ff8fb1', 'SKATE', '4 LIFE', '#fff', -2) + dPic(470, 360, 120, 96, 0, '#c38a52', '#bfe6ff', 3) + dPic(450, 500, 90, 110, 1, '#7a5a3a', '#fff1d6', -4);
+  s += dShelf(60, 790, 330, dBooks(80, 790, 7, 3) + dTrophy(300, 790, .8) + dBall(360, 772, 18, '#4d7cf0'));
+  s += (night ? WASH('rgba(20,24,60,.18)') : WASH()) + dBase(1250, night ? '#3d4378' : '#fff');
+  s += dParquet(1250, night ? '#3a3040' : '#c49a6c', night ? '#2c2432' : '#a97f55') + dRug(560, 1470, 380, 90, night ? '#6a4c8a' : '#ff8fb1', night ? '#8a6aa8' : '#ffd23f');
+  s += dBed(40, 1330, .95, night) + dDesk(880, 1130, .8, t, night) + dFloorLamp(1050, 1250, .8, night, t) + plant(985, 1255, .75);
+  s += dSneakers(180, 1600, '#fff', .8) + dBag(930, 1560, '#4d7cf0', .8) + dBox(80, 1720, 170, 110) + dBall(760, 1640, 34, '#ffd23f', '#fff', t * 40);
+  if (night) s += op(.35 + .1 * Math.sin(t * 3), rect(-M, -M, W + 2 * M, H + 2 * M, '#0b1030', 0, 0));
+  return s + fgBlur(G(tr(1010, 1870, 1.4, -15), dBall(0, 0, 90, '#ff6b6b'))); }
+
 function mirrorV(x, y, w, h) { return rect(x - 22, y - 22, w + 44, h + 44, '#f1c27d', 30) + grad('#e6f6ff', '#b9dcef', x, y, w, h).replace('<rect', '<rect rx="18"') + rect(x, y, w, h, 'none', 18); }
 const mirrorShine = (x, y) => line(x + 60, y + 80, x + 160, y + 20, 14, 'rgba(255,255,255,.7)') + line(x + 90, y + 140, x + 240, y + 40, 8, 'rgba(255,255,255,.5)');
 function sink(x, y) { return path(`M${x - 260} ${y}L${x + 260} ${y}Q${x + 240} ${y + 160} ${x} ${y + 170}Q${x - 240} ${y + 160} ${x - 260} ${y}Z`, '#fff') + rect(x - 30, y - 110, 60, 110, '#c9ced6', 10) + path(`M${x - 30} ${y - 100}Q${x - 100} ${y - 110} ${x - 110} ${y - 60}`, 'none', 22, '#c9ced6'); }
-function bathroom(t) { return tiles('#cfeaf0', '#b2d6de') + rect(-M, 1250, W + 2 * M, 1400, '#e8eef0', 0, 0) + Array.from({ length: 4 }, (_, i) => op(.35, cloud(150 + i * 260 + wave(t, .1, 40, i / 4), 260 + (i % 2) * 120 - (t * 25 % 60), 1 + (i % 2) * .4, '#fff'))).join(''); }
-function lockerRoom(t) { let s = grad('#e3ebf2', '#c9d6e0', -M, -M, W + 2 * M, H + 2 * M);
-  for (let i = -2; i < 8; i++) { const x = -60 + i * 160; s += rect(x, 230, 150, 1030, i % 2 ? '#5b8fd8' : '#4a7cc4', 10) + [0, 1, 2].map(j => line(x + 35, 290 + j * 22, x + 115, 290 + j * 22, 6, 'rgba(0,0,0,.25)')).join('') + circ(x + 120, 720, 12, '#c9d1db', 4) + ftext(x + 75, 420, String(12 + i), { size: 36, fill: '#fff', stroke: 'none' }); }
+// salle de bain : carrelage 2 tons + frise, rampe lumineuse, rideau de douche, pommeau qui goutte, porte-serviettes, étagère de flacons, sol damier, tapis, panier, pèse-personne, canard
+function bathroom(t) { let s = dTiles(-M, -M, W + M, 900, '#cfeaf0', '#b2d6de', 100) + dTiles(-M, 900, W + M, 1250, '#9fd3de', '#86c0cc', 70) + rect(-M, 884, W + 2 * M, 22, '#ff8fb1', 0, 5);
+  s += rect(160, 150, 760, 40, '#e6e9ee', 20, 5) + [300, 540, 780].map(x => circ(x, 170, 16, '#fff6c0', 4)).join('') + glow(540, 170, 420, '#fffbe0', .35) + dVent(1010, 120);
+  s += line(-80, 60, 140, 60, 10) + G(tr(70, 60), path('M0 0L0 60', 'none', 8) + path('M-40 60L40 60L30 90L-30 90Z', '#c9ced6', 5));
+  for (let i = 0; i < 4; i++) { const k = (t * 1.3 + i / 4) % 1; s += path(`M${50 + i * 14} ${100 + k * 700}q-6 12 0 18q6 -6 0 -18Z`, '#7fd0ff', 3); }
+  s += dCurtain(-120, 60, 250, 1180, '#ffd23f', t, 2) + [0, 1, 2, 3, 4, 5].map(i => circ(-60 + (i % 2) * 90, 220 + i * 170, 18, '#ff8fb1', 0)).join('');
+  s += line(970, 600, 1080, 600, 10) + towel(1030, 740, 110, 260, '#ff8fb1', '#ffd0e0') + dShelf(965, 420, 120, dBottle(990, 420, '#5ec4f0', .8) + dBottle(1030, 420, '#ff9a3c', .7) + dBottle(1065, 420, '#b56cff', .6), '#e6e9ee');
+  s += G(tr(1010, 1010), rect(-50, -30, 100, 60, '#fff', 8, 4) + rect(-12, -30, 24, 12, '#c9ced6', 3, 3)) + dOutlet(1010, 1120);
+  s += WASH('rgba(255,255,255,.12)') + dChecker(1250, '#f2f4f6', '#d6dde3', 90) + line(-M, 1250, W + M, 1250, 6);
+  s += G(tr(80, 1330), path('M-70 0L-60 -140L60 -140L70 0Z', '#e8c38a', 5) + [0, 1, 2, 3].map(i => line(-60 + i * 40, -130, -60 + i * 40, -10, 4, '#c49a6c')).join('') + tshirtShape(-10, -150, .5, 20, '#7be07b'));
+  s += rect(380, 1560, 320, 120, '#7be0c8', 50, 5) + [0, 1, 2, 3, 4].map(i => circ(420 + i * 60, 1620, 10, '#fff', 0)).join('') + G(tr(900, 1500), rect(-80, -20, 160, 40, '#fff', 14, 5) + rect(-40, -14, 80, 22, '#cfe8ff', 4, 3) + line(0, -10, 10, -2, 3));
+  s += G(tr(980, 1260), path('M-40 0L-36 -80L36 -80L40 0Z', '#e98a5a', 5) + path('M0 -80C-60 -110 -70 -170 -30 -200M0 -80C50 -120 80 -150 50 -210M0 -80C0 -130 10 -170 0 -220', 'none', 10, '#5aa76a'));
+  s += G(tr(240, 1700, 1, Math.sin(t * 3) * 6), ell(0, 0, 50, 34, '#ffd23f') + circ(30, -34, 24, '#ffd23f') + path('M50 -34l22 6l-22 6Z', '#ff9a3c', 4) + circ(36, -40, 4, OL, 0));
+  for (let i = 0; i < 4; i++) s += op(.35, cloud(150 + i * 260 + wave(t, .1, 40, i / 4), 260 + (i % 2) * 120 - (t * 25 % 60), 1 + (i % 2) * .4, '#fff'));
+  return s; }
+
+// vestiaire : néons, horloge, panneau PISCINE, casiers (cadenas, autocollants, un ouvert), objets dessus, banc, sac, baskets, plot « sol glissant », vapeur
+function lockerRoom(t) { let s = grad('#e3ebf2', '#c9d6e0', -M, -M, W + 2 * M, H + 2 * M) + dTiles(-M, -M, W + M, 230, '#e8eef3', '#d3dde6', 80);
+  s += dNeon(80, 460, 60, Math.sin(t * 17) > -.85) + dNeon(620, 1000, 60) + wallClock(880, 160, 44, t, 6) + G(tr(250, 160), rect(-150, -38, 300, 76, '#2f6f8f', 12, 5) + ftext(-20, 16, 'PISCINE', { size: 40, fill: '#fff', stroke: 'none' }) + path('M100 -14L130 0L100 14Z', '#fff', 0));
+  for (let i = -2; i < 8; i++) { const x = -60 + i * 160, open = i === 5; s += rect(x, 230, 150, 1030, i % 2 ? '#5b8fd8' : '#4a7cc4', 10) + [0, 1, 2].map(j => line(x + 35, 290 + j * 22, x + 115, 290 + j * 22, 6, 'rgba(0,0,0,.25)')).join('') + ftext(x + 75, 420, String(12 + i), { size: 36, fill: '#fff', stroke: 'none' });
+    if (open) s += rect(x + 10, 250, 130, 990, '#2a3550', 6, 4) + rect(x + 20, 520, 110, 10, '#9aa3ad', 0, 0) + tshirtShape(x + 75, 640, .7, 0, '#ff9a3c') + dBag(x + 75, 1000, '#ffd23f', .7) + G(tr(x + 150, 240, 1, -8), rect(0, 0, 40, 1020, i % 2 ? '#5b8fd8' : '#4a7cc4', 8, 5));
+    else s += circ(x + 120, 720, 12, '#c9d1db', 4) + (i % 3 === 0 ? G(tr(x + 120, 760), path('M-10 0Q-10 -20 0 -20Q10 -20 10 0', 'none', 4) + rect(-14, 0, 28, 24, '#e8b830', 4, 3)) : '') + (i % 4 === 1 ? G(tr(x + 60, 560, 1, -8), circ(0, 0, 26, ['#ffd23f', '#ff8fb1', '#7be07b'][(i + 4) % 3], 4) + ftext(0, 10, '★', { size: 30, fill: '#fff', stroke: 'none' })) : '');
+    s += line(x + 4, 1120, x + 146, 1120, 4, 'rgba(0,0,0,.18)'); }
+  s += dBall(40, 202, 28, '#ff6b6b') + dBox(380, 230, 120, 70, '#d8a96a') + G(tr(700, 230), rect(-60, -40, 120, 40, '#ff8fb1', 10, 4)) + dCactus(950, 230, .6);
   s += path(`M${290 + Math.sin(t * 2) * 20} 640Q300 820 ${300 + Math.sin(t * 2) * 30} 900L380 900Q370 820 ${370 + Math.sin(t * 2) * 20} 640Z`, '#ff8fb1', 6);
-  s += rect(-M, 1260, W + 2 * M, 1400, '#9aa6b0', 0, 0) + line(-M, 1260, W + M, 1260, 6) + rect(-M, 1290, W + 2 * M, 46, '#c49a6c', 10);
+  s += WASH('rgba(255,255,255,.1)') + dChecker(1260, '#9aa6b0', '#8b97a2', 90) + line(-M, 1260, W + M, 1260, 6) + rect(-M, 1290, W + 2 * M, 46, '#c49a6c', 10) + [-60, 380, 820].map(x => rect(x, 1336, 26, 90, '#7a8a99', 4, 4)).join('');
+  s += towel(160, 1272, 200, 40, '#5ec4f0', '#bfe6ff') + dBottle(560, 1290, '#7be07b', .9) + dSneakers(400, 1470, '#fff', .75) + dBag(860, 1520, '#e2463a', .8) + dCone(1000, 1420, .7) + ell(860, 1650, 140, 22, 'rgba(120,200,255,.45)', 0) + circ(560, 1600, 22, '#7a8a99', 4) + line(548, 1600, 572, 1600, 3);
   for (let i = 0; i < 3; i++) s += op(.3, cloud(((t * 40 + i * 420) % 1400) - 200, 300 + i * 160, 1.2, '#fff'));
   return s; }
-function pool(t) { let s = tiles('#e9f6fb', '#cfe8f2', 110, -M, -M, W + 2 * M, M + 1000) + windowFrame(80, 200, 400, 300) + windowFrame(600, 200, 400, 300) + cloud(140 + (t * 30) % 280, 300, .4) + cloud(660 + (t * 20) % 300, 330, .45);
-  s += grad('#5fd0ee', '#2fa3c9', -M, 990, W + 2 * M, 330);
+
+// piscine couverte : fanions, horloge, fenêtres, panneau, bouée, plantes, échelle, lignes d'eau, nageurs, ballon, planche, chaise d'arbitre, transat, serviettes, plot
+function pool(t) { let s = tiles('#e9f6fb', '#cfe8f2', 110, -M, -M, W + 2 * M, M + 1000) + dWindow(80, 210, 400, 300, t, 0, '#bfe6ff') + dWindow(600, 210, 400, 300, t, 0, '#bfe6ff');
+  s += dBunting(-40, 1120, 90, t) + wallClock(540, 330, 46, t, 6) + G(tr(220, 620, 1, -2), rect(-160, -40, 320, 80, '#fff', 12, 5) + circ(-112, 0, 26, '#e2463a', 4) + line(-128, 16, -96, -16, 6, '#fff') + ftext(30, 14, 'PAS DE COURSE', { size: 30, fill: '#e2463a', stroke: 'none' }));
+  s += G(tr(880, 650), circ(0, 0, 64, '#ff4d4d', 6) + circ(0, 0, 30, '#e9f6fb', 5) + [0, 90, 180, 270].map(a => G(tr(0, 0, 1, a + 45), rect(-12, -66, 24, 30, '#fff', 0, 0))).join('') + circ(0, 0, 64, 'none', 6)) + rect(-M, 940, W + 2 * M, 50, '#f1e6d2', 0, 5);
+  s += G(tr(60, 990), plant(0, 0, .8)) + G(tr(1030, 990), plant(0, 0, .6)) + dBottle(420, 980, '#5ec4f0', .7) + towel(560, 965, 120, 30, '#ffd23f', '#fff');
+  s += WASH('rgba(255,255,255,.1)') + grad('#5fd0ee', '#2fa3c9', -M, 990, W + 2 * M, 330);
   for (let i = 0; i < 6; i++) { const y = 1010 + i * 50, off = (t * (30 + i * 10)) % 200; s += path(`M${-200 - off} ${y}` + Array.from({ length: 10 }, () => 'q50 -10 100 0t100 0').join(''), 'none', 4, 'rgba(255,255,255,.4)'); }
   for (const y of [1080, 1200]) for (let x = -40; x < W + 40; x += 44) s += circ(x, y, 12, (x / 44) % 2 ? '#fff' : '#ff4d4d', 3);
+  s += G(tr(240, 990), path('M-30 0L-30 -90Q-30 -120 0 -120M30 0L30 -90Q30 -120 60 -120', 'none', 12, '#c9ced6') + line(-30, 20, 30, 20, 8, '#c9ced6') + line(-30, 60, 30, 60, 8, '#c9ced6'));
   for (let i = 0; i < 3; i++) { const x = ((i * 390 + t * 70 * (i % 2 ? 1 : -1)) % 1300 + 1300) % 1300 - 110; s += G(tr(x, 1130 + (i % 2) * 70 + Math.sin(t * 3 + i) * 6), head({ hr: 34, hair: 'none', cap: ['#ff8fb1', '#ffd23f', '#7be07b'][i], expr: 'happy', seed: 30 + i }, t)); }
-  s += rect(-M, 1300, W + 2 * M, 1400, '#f1e6d2', 0, 0) + line(-M, 1300, W + M, 1300, 6);
-  return s + G(tr(980, 1300), rect(-14, -560, 28, 560, '#fff', 8) + rect(-110, -440, 220, 24, '#fff', 8) + rect(-110, -570, 220, 40, '#e2463a', 10)); }
-function classroom(t) { return grad('#fff1d6', '#ffe2b0', -M, -M, W + 2 * M, H + 2 * M) + rect(60, 280, 960, 560, '#3c5a48', 18) + rect(80, 300, 920, 520, '#456b55', 10, 0) + wallClock(940, 200, 60, t, 6) + rect(-M, 1250, W + 2 * M, 900, '#c49a6c', 0, 0) + line(-M, 1250, W + M, 1250, 6); }
+  s += dBall(((t * 50) % 1300) - 100, 1255 + Math.sin(t * 4) * 6, 26, '#ffd23f', '#fff', t * 60) + G(tr(700, 1150 + Math.sin(t * 2.4) * 5, 1, 6), rect(-70, -18, 140, 36, '#ff8fb1', 14, 5));
+  s += dTiles(-M, 1300, W + M, H + M, '#f1e6d2', '#e2d2b6', 90) + line(-M, 1300, W + M, 1300, 6);
+  s += G(tr(980, 1300), rect(-14, -560, 28, 560, '#fff', 8) + rect(-110, -440, 220, 24, '#fff', 8) + rect(-110, -570, 220, 40, '#e2463a', 10) + [-460, -360, -260, -160].map(y => line(-14, y, 14, y, 5)).join(''));
+  s += G(tr(130, 1640), path('M-120 0L-80 -90L120 -60L140 0', 'none', 10, '#c9ced6') + path('M-110 -80L130 -50L110 -30L-100 -60Z', '#5ec4f0', 5)) + towel(560, 1700, 260, 60, '#ff4f87', '#ffd0e0', 4) + dCone(860, 1640, .8) + dSneakers(380, 1810, '#ff8fb1', .7) + ell(700, 1500, 120, 18, 'rgba(120,200,255,.5)', 0);
+  return s; }
+
+// salle de classe : fanions, horloge, posters, tableau (craie, éponge), poussière de craie, radiateur, étagère + globe, cartables, parquet, pupitres flous au premier plan, avion en papier
+function classroom(t) { let s = grad('#fff1d6', '#ffe2b0', -M, -M, W + 2 * M, H + 2 * M) + dDots(1250, 'rgba(255,200,120,.35)', 110, 8) + dBunting(-30, 1110, 40, t, ['#ff6b6b', '#4d7cf0', '#ffd23f', '#7be07b', '#b56cff']);
+  s += dPoster(160, 190, 190, 120, '#7be07b', 'SVT', 'la peau', '#fff', -3, '#fff') + dPoster(700, 190, 210, 120, '#4d7cf0', 'CORPS', 'humain', '#fff', 2, SX.acc2) + wallClock(940, 200, 60, t, 6) + dPic(420, 190, 110, 90, 0);
+  s += rect(60, 280, 960, 560, '#3c5a48', 18) + rect(80, 300, 920, 520, '#456b55', 10, 0) + ftext(140, 360, 'E=mc²', { size: 34, fill: 'rgba(255,255,255,.55)', stroke: 'none', anchor: 'start' }) + ftext(940, 790, '16 > 15', { size: 30, fill: 'rgba(255,255,255,.5)', stroke: 'none', anchor: 'end' }) +
+    path('M120 790q30 -40 60 0t60 0', 'none', 4, 'rgba(255,255,255,.5)') + path('M880 340l60 0l-30 40Z', 'none', 4, 'rgba(255,255,255,.45)');
+  s += rect(60, 840, 960, 24, '#8a5a3a', 6, 5) + rect(160, 822, 70, 22, '#ffd23f', 4, 4) + rect(260, 830, 30, 12, '#fff', 4, 3) + rect(300, 830, 24, 12, '#ff8fb1', 4, 3);
+  for (let i = 0; i < 6; i++) { const k = (t * .6 + i / 6) % 1; s += circ(200 + i * 14, 850 + k * 300, 4, 'rgba(255,255,255,.7)', 0); }
+  s += G(tr(540, 1060), rect(-120, -80, 240, 150, '#fff', 14, 5) + [-80, -40, 0, 40, 80].map(x => line(x, -66, x, 56, 6, '#d6dde3')).join('')) + dOutlet(380, 1180) + dSwitch(700, 940);
+  s += dShelf(780, 1000, 280, dBooks(800, 1000, 8, 5, 80) + G(tr(1010, 1000), rect(-10, -20, 20, 20, '#8a5a3a', 0, 4) + circ(0, -62, 42, '#5ec4f0', 5) + path('M-30 -80q20 -10 30 10t30 -6M-36 -50q24 10 40 -6', 'none', 6, '#7be07b')));
+  s += [80, 200].map((x, i) => G(tr(x, 960), line(0, -30, 0, 0, 5) + dBag(0, 160, ['#ff6b6b', '#7be07b'][i], .7))).join('');
+  s += WASH('rgba(255,255,255,.1)') + dBase(1250, '#e8c38a') + dParquet(1250) + dBin(1000, 1420, '#4d7cf0', .8) + dBall(130, 1440, 30, '#ff9a3c') + dBox(560, 1440, 150, 70, '#fff');
+  const pf = (t * .35) % 1; s += G(tr(lerp(-150, 1250, pf), 260 + Math.sin(pf * 9) * 60, 1, Math.cos(pf * 9) * 14), path('M-60 0L60 -16L-30 22Z', '#fff', 4) + line(-60, 0, 60, -16, 3));
+  s += fgBlur(G(tr(CX, 1830), rect(-700, -70, 600, 60, '#c99a63', 10, 6) + rect(100, -70, 600, 60, '#c99a63', 10, 6) + rect(-640, -150, 140, 80, '#fff', 6, 5) + dMug(400, -70, t, '#ffd23f') + dPens(-250, -70)), 10);
+  return s; }
+
+// pizzeria : carrelage, guirlande italienne, néon PIZZA qui grésille, ardoise menu, étagères à bocaux, ail et piments suspendus, four à bois + bûches + pelle, farine qui vole, comptoir flou
 function pizzeria(t) { let s = rect(-M, -M, W + 2 * M, H + 2 * M, '#fff', 0, 0); for (let y = -M; y < 1250; y += 110) for (let x = -M + (((y + M) / 110) % 2) * 110; x < W + M; x += 220) s += rect(x, y, 110, 110, '#e8554a', 0, 0);
-  s += path('M640 1250L640 760Q820 560 1000 760L1000 1250Z', '#c96a3c', 7) + path('M700 1250L700 860Q820 740 940 860L940 1250Z', '#2b1a14', 6) + flames(820, 1240, 200, 200, t);
-  return s + rect(-M, 1250, W + 2 * M, 900, '#a8743f', 0, 0) + rect(-M, 1240, W + 2 * M, 30, '#7a4f2a', 0, 0); }
-function doctorRoom(t) { return grad('#d8f3ec', '#bfe9de', -M, -M, W + 2 * M, H + 2 * M) + rect(120, 300, 240, 180, '#c38a52', 8) + rect(140, 320, 200, 140, '#fdf6e3', 0, 4) + ftext(240, 410, 'DIPLÔME', { size: 30, fill: OL, stroke: 'none' }) + circ(240, 440, 16, '#e2463a', 4) + windowFrame(660, 300, 300, 330) + cloud(720 + (t * 30) % 180, 420, .35) + rect(-M, 1250, W + 2 * M, 900, '#9fc7d6', 0, 0) + line(-M, 1250, W + M, 1250, 6); }
+  s += WASH('rgba(255,255,255,.22)') + dBunting(-40, 1120, 50, t, ['#3aa65a', '#fff', '#e2463a']);
+  const on = Math.sin(t * 9) > -.7 || Math.sin(t * 2.3) > .3; s += G(tr(820, 230), (on ? glow(0, 0, 230, '#ff7ac0', .45) : '') + rect(-150, -55, 300, 110, '#2b1a14', 18, 5) + ftext(0, 22, 'PIZZA', { size: 64, fill: on ? '#ffd6ef' : '#7a4a5a', stroke: on ? '#ff4f87' : 'none', sw: 6 }));
+  s += G(tr(230, 330, 1, -2), rect(-170, -150, 340, 300, '#2f3a33', 14, 8) + rect(-170, -150, 340, 300, 'none', 14, 12, '#a8743f') + ftext(0, -90, 'MENU', { size: 46, fill: '#fff', stroke: 'none' }) +
+    ['Margherita 8€', 'Regina 9€', '4 Fromages 10€', 'Calzone 11€'].map((l, i) => ftext(-140, -36 + i * 44, l, { size: 28, fill: 'rgba(255,255,255,.85)', stroke: 'none', anchor: 'start' })).join(''));
+  s += dShelf(60, 700, 360, dJar(100, 700, '#e2463a') + dJar(160, 700, '#3aa65a') + dJar(220, 700, '#ffd23f') + dBottle(280, 700, '#3aa65a', 1) + dBottle(320, 700, '#7a2b2b', 1.1) + dJar(380, 700, '#e2463a', .8), '#8a5a3a');
+  s += dShelf(60, 900, 360, G(tr(120, 900), path('M-40 0L-46 -80L46 -80L40 0Z', '#f4ecd8', 5) + ftext(0, -30, 'FARINE', { size: 18, fill: OL, stroke: 'none' })) + G(tr(240, 900), circ(0, -40, 40, '#ffd23f') + circ(0, -40, 26, '#ffe38a', 0)) + dPic(360, 856, 90, 80, 0, '#a8743f', '#ffcf9a'), '#8a5a3a');
+  for (let i = 0; i < 5; i++) { const x = 1000 + (i % 2) * 30, y = 360 + i * 60, sw = Math.sin(t * 2 + i) * 4; s += G(tr(x + sw, y, 1, sw * 2), i % 2 ? path('M0 0Q20 30 0 70Q-10 30 0 0Z', '#e2463a', 4) : circ(0, 20, 22, '#fff8e6', 4)); }
+  s += line(1000, 300, 1030, 640, 4);
+  s += path('M640 1250L640 760Q820 560 1000 760L1000 1250Z', '#c96a3c', 7) + [0, 1, 2, 3].map(j => line(640, 820 + j * 100, 1000, 820 + j * 100, 4, 'rgba(0,0,0,.18)')).join('') + path('M700 1250L700 860Q820 740 940 860L940 1250Z', '#2b1a14', 6) + flames(820, 1240, 200, 200, t) + glow(820, 1150, 260, '#ff9a3c', .3 + .1 * Math.sin(t * 8));
+  s += G(tr(600, 1250, 1, -12), rect(-14, -420, 28, 360, '#c99a63', 6, 5) + path('M-60 -60L60 -60L50 0L-50 0Z', '#c99a63', 5));
+  s += [0, 1, 2].map(i => G(tr(1050, 1250 - i * 40), ell(-30 + (i % 2) * 20, 0, 50, 22, '#8a5a3a', 5) + circ(-70 + (i % 2) * 20, 0, 18, '#c99a63', 4))).join('');
+  for (let i = 0; i < 10; i++) { const k = (t * .25 + i / 10) % 1; s += circ((i * 113) % W, 300 + k * 900, 4, 'rgba(255,255,255,.75)', 0); }
+  s += dChecker(1250, '#a8743f', '#94632f', 100) + rect(-M, 1240, W + 2 * M, 30, '#7a4f2a', 0, 0) + G(tr(140, 1500), path('M-70 0L-80 -150Q0 -170 80 -150L70 0Z', '#f4ecd8', 5) + ftext(0, -60, '00', { size: 34, fill: OL, stroke: 'none' }));
+  return s + fgBlur(G(tr(0, 1800), rect(-100, -60, 1300, 220, '#8a5a3a', 10, 6) + [0, 1, 2].map(i => rect(760, -110 - i * 34, 220, 34, '#fff', 4, 4)).join('') + plant(140, -60, .7) + dBottle(320, -60, '#3aa65a', 1.4))); }
+
+// cabinet médical : diplôme, échelle d'acuité, horloge, fenêtre + rideaux, étagère de bocaux + trousse, toise, poster cœur, lavabo + distributeurs, tabouret, poubelle, plante
+function doctorRoom(t) { let s = grad('#d8f3ec', '#bfe9de', -M, -M, W + 2 * M, H + 2 * M) + dStripes(1250, 'rgba(0,0,0,0)', 'rgba(255,255,255,.18)', 100, 30) + rect(-M, 900, W + 2 * M, 350, '#a8ddd0', 0, 0) + rect(-M, 890, W + 2 * M, 18, '#fff', 0, 4);
+  s += rect(120, 300, 240, 180, '#c38a52', 8) + rect(140, 320, 200, 140, '#fdf6e3', 0, 4) + ftext(240, 410, 'DIPLÔME', { size: 30, fill: OL, stroke: 'none' }) + circ(240, 440, 16, '#e2463a', 4) + wallClock(470, 170, 48, t, 6);
+  s += dWindow(660, 300, 300, 330, t, 0, '#fff') + dShelf(640, 760, 340, dJar(680, 760, '#fff') + dJar(740, 760, '#bfe6ff') + dBottle(800, 760, '#ff6b6b') + dBottle(840, 760, '#7be07b', .8) + G(tr(910, 760), rect(-34, -50, 68, 50, '#fff', 6, 4) + rect(-8, -42, 16, 34, '#e2463a', 0, 0) + rect(-17, -33, 34, 16, '#e2463a', 0, 0)), '#fff');
+  s += G(tr(110, 640), rect(-70, -100, 140, 200, '#fff', 8, 5) + ['E', 'F P', 'T O Z', 'L P E D'].map((l, i) => ftext(0, -52 + i * 42, l, { size: 38 - i * 7, fill: OL, stroke: 'none' })).join(''));
+  s += G(tr(470, 330), rect(-70, -80, 140, 160, '#fff', 8, 5) + heart(0, -8, .45, '#ff5d73') + path('M-40 52l20 0l10 -16l12 30l10 -14l28 0', 'none', 4, '#e2463a'));
+  s += rect(1020, 640, 50, 610, '#fff', 6, 5) + [0, 1, 2, 3, 4, 5].map(i => line(1020, 700 + i * 100, 1046, 700 + i * 100, 4)).join('');
+  s += G(tr(120, 1020), rect(-90, -70, 180, 140, '#fff', 10, 5) + line(-60, -70, 60, -70, 6) + rect(-70, -170, 60, 80, '#e6e9ee', 8, 4) + rect(-56, -110, 32, 16, '#fff', 3, 3) + dBottle(60, -70, '#7fd0ff', .9));
+  s += WASH('rgba(255,255,255,.1)') + dChecker(1250, '#9fc7d6', '#8cbacb', 100) + line(-M, 1250, W + M, 1250, 6);
+  s += G(tr(80, 1500), rect(-50, -80, 100, 30, '#e2463a', 12, 5) + line(0, -50, 0, 30, 10) + [-40, 0, 40].map(x => circ(x, 40, 12, '#59616c', 4)).join('')) + dBin(960, 1480, '#e6e9ee', .7) + plant(1000, 1255, .7) + dSneakers(360, 1700, '#7a8a99', .6);
+  return s; }
+
 function gear(x, y, r, a, col = '#8d96a3') { let d = ''; for (let i = 0; i < 24; i++) { const an = R(a + i * 15), rr = i % 2 ? r : r * 1.18; d += (i ? 'L' : 'M') + f1(x + Math.cos(an) * rr) + ' ' + f1(y + Math.sin(an) * rr); } return path(d + 'Z', col, 6) + circ(x, y, r * .35, '#c9ced6', 6); }
-function factory(t) { let s = grad('#c9ced6', '#aab3bf', -M, -M, W + 2 * M, H + 2 * M) + gear(150, 420, 120, t * 60) + gear(330, 300, 80, -t * 90, '#a3abb6') + gear(930, 460, 140, t * 50) + rect(-M, 1250, W + 2 * M, 900, '#7d848c', 0, 0);
+// usine : tuyaux + vapeur, engrenages, passerelle, panneaux, tableau de commande clignotant, caisses, fût, gyrophare, tapis roulant avec cartons « CORPS v1 »
+function factory(t) { let s = grad('#c9ced6', '#aab3bf', -M, -M, W + 2 * M, H + 2 * M) + dTiles(-M, 100, W + M, 1250, 'rgba(0,0,0,0)', 'rgba(0,0,0,.06)', 140);
+  s += line(-M, 110, W + M, 110, 26, '#7d848c') + line(-M, 110, W + M, 110, 14, '#9aa3ad') + line(700, 110, 700, 420, 22, '#7d848c') + circ(700, 180, 26, '#e2463a', 5) + line(680, 180, 720, 180, 6);
+  for (let i = 0; i < 2; i++) { const k = (t * .8 + i * .5) % 1; s += op(.6 * (1 - k), cloud(720 + k * 60, 400 - k * 200, .3 + k * .4, '#fff')); }
+  s += gear(150, 420, 120, t * 60) + gear(330, 300, 80, -t * 90, '#a3abb6') + gear(930, 460, 140, t * 50);
+  s += rect(-M, 640, W + 2 * M, 16, '#59616c', 0, 4) + Array.from({ length: 20 }, (_, i) => line(-60 + i * 70, 560, -60 + i * 70, 640, 5, '#59616c')).join('') + line(-M, 560, W + M, 560, 6, '#59616c');
+  s += G(tr(540, 780), rect(-170, -46, 340, 92, '#ffd23f', 10, 5) + ftext(0, 16, 'CONTRÔLE QUALITÉ', { size: 30, fill: OL, stroke: 'none' })) + G(tr(110, 820), path('M0 -60L60 50L-60 50Z', '#ffd23f', 6) + ftext(0, 40, '!', { size: 56, fill: OL, stroke: 'none' }));
+  s += G(tr(970, 900), rect(-100, -140, 200, 280, '#59616c', 12, 5) + [0, 1, 2, 3, 4, 5].map(i => circ(-50 + (i % 3) * 50, -80 + Math.floor(i / 3) * 60, 14, Math.sin(t * 6 + i * 1.7) > 0 ? ['#7be07b', '#ff3b30', '#ffd23f'][i % 3] : '#2b2b33', 4)).join('') + rect(-70, 40, 140, 60, '#2b2b33', 6, 4) + line(-50, 70, -50 + 40 * Math.sin(t * 3), 50, 5, '#7be07b'));
+  s += Array.from({ length: 18 }, (_, i) => path(`M${-80 + i * 80} 1250l40 -50l40 0l-40 50Z`, i % 2 ? '#ffd23f' : '#2b2420', 0)).join('') + line(-M, 1200, W + M, 1200, 5);
+  s += WASH('rgba(255,255,255,.08)') + dTiles(-M, 1250, W + M, H + M, '#7d848c', '#6c737b', 120);
+  s += dBox(80, 1460, 170, 150, '#c99a63') + dBox(90, 1310, 130, 100, '#d8a96a') + G(tr(1010, 1460), rect(-60, -170, 120, 170, '#3a7cc4', 20, 5) + line(-60, -110, 60, -110, 5) + line(-60, -60, 60, -60, 5));
   s += rect(-M, 1500, W + 2 * M, 60, '#3a3f4a', 20) + Array.from({ length: 14 }, (_, i) => G(tr(-40 + i * 90, 1530, 1, t * 300), circ(0, 0, 22, '#c9d1db', 5) + line(-14, 0, 14, 0, 4))).join('');
   for (let i = -1; i < 14; i++) s += path(`M${i * 90 - (t * 120) % 90} 1500l40 0l-30 60l-40 0Z`, i % 2 ? '#ffd23f' : '#2b2420', 0);
+  for (let i = 0; i < 4; i++) { const x = ((i * 380 + t * 120) % 1520) - 220; s += dBox(x, 1500, 130, 80, '#d8a96a') + ftext(x, 1470, 'CORPS v1', { size: 18, fill: OL, stroke: 'none' }); }
   return s + G(tr(540, 220), circ(0, 0, 50, Math.sin(t * 10) > 0 ? '#ff3b30' : '#a8302a', 6) + op(.25 + .25 * Math.sin(t * 10), circ(0, 0, 140, '#ff3b30', 0))); }
+
 // plage 9:16 : horizon vers y 820, rivage vers y 1180 (sable dessous = zone sous-titres, décor seulement)
+// lointain : île brumeuse + phare, voilier, cerf-volant ; mer : bouées, nageurs ; sable : cabines, palmier, serviette, seau+pelle, château, ballon, coquillage, étoile de mer, crème solaire ; premier plan flou : herbes de dune
 function beach(t, o = {}) { const hz = o.hz ?? 820, sy = o.sy ?? 1180, dusk = o.dusk || 0;
   let s = grad(dusk ? '#ff9f7a' : '#8fd3ff', dusk ? '#ffd9a8' : '#e6f6ff', -M, -M, W + 2 * M, hz + M);
   s += circ(o.sunX ?? 860, o.sunY ?? (dusk ? 700 : 250), 80, dusk ? '#ffb15a' : '#fff3b0', 0) + glow(o.sunX ?? 860, o.sunY ?? (dusk ? 700 : 250), 280, '#fff3b0', .5);
-  s += cloud(((t * 26) % 1500) - 250, 200, 1.1, dusk ? '#ffe0d0' : '#fff') + cloud(((t * 15 + 800) % 1600) - 300, 470, .8, dusk ? '#ffe0d0' : '#fff');
+  s += cloud(((t * 26) % 1500) - 250, 200, 1.1, dusk ? '#ffe0d0' : '#fff') + cloud(((t * 15 + 800) % 1600) - 300, 470, .8, dusk ? '#ffe0d0' : '#fff') + cloud(((t * 10 + 300) % 1700) - 300, 340, .5, dusk ? '#ffe0d0' : '#fff');
+  if (o.kite !== false) { const kx = 250 + Math.sin(t * .9) * 60, ky = 300 + Math.cos(t * 1.3) * 30; s += path(`M${kx} ${ky + 70}Q${kx + 60} ${ky + 300} ${kx + 120} ${hz + 300}`, 'none', 2, 'rgba(43,36,32,.6)') + G(tr(kx, ky, .8, Math.sin(t * 2) * 10), path('M0 -70L50 0L0 90L-50 0Z', '#ff4f87', 5) + path('M0 -70L0 90M-50 0L50 0', 'none', 3) + path('M0 90q-14 20 0 40t0 40', 'none', 4, '#ffd23f')); }
+  s += haze(.35, dusk ? '#ffd9a8' : '#e6f6ff', path(`M-200 ${hz}Q-60 ${hz - 110} 120 ${hz - 70}Q240 ${hz - 130} 380 ${hz}Z`, dusk ? '#c77a6a' : '#7fae9a', 5) + rect(860, hz - 70, 26, 70, '#fff', 4, 4) + rect(860, hz - 46, 26, 14, '#e2463a', 0, 0) + path(`M852 ${hz - 70}L894 ${hz - 70}L873 ${hz - 96}Z`, '#e2463a', 4));
   s += grad(dusk ? '#4aa6c9' : SEA, dusk ? '#2c6f9a' : SEA_D, -M, hz, W + 2 * M, sy - hz + 80);
+  const bx = ((t * 18) % 1500) - 250; s += G(tr(bx, hz - 4 + Math.sin(t * 2) * 3, .7), path('M-70 0L70 0L50 26L-50 26Z', dusk ? '#5a3a3a' : '#fff', 5) + line(0, 0, 0, -130, 6) + path('M6 -125L6 -10L70 -10Z', dusk ? '#ffb15a' : '#ff6b6b', 5) + path('M-6 -110L-6 -14L-50 -14Z', '#fff', 5));
   if (dusk) s += op(.5, rect(760, hz + 10, 200, 14, '#ffd9a8', 7, 0) + rect(790, hz + 50, 140, 10, '#ffd9a8', 5, 0) + rect(820, hz + 90, 80, 8, '#ffd9a8', 4, 0));
   for (let i = 0; i < 6; i++) { const y = hz + 30 + i * (sy - hz) / 6, off = (t * (20 + i * 10)) % 200; s += path(`M${-300 - off} ${y}` + Array.from({ length: 12 }, () => 'q50 -10 100 0t100 0').join(''), 'none', 4, 'rgba(255,255,255,.35)'); }
+  if (sy - hz > 200) { s += [[180, .45], [980, .55]].map(([x, k], i) => G(tr(x, hz + (sy - hz) * k + Math.sin(t * 2.2 + i) * 6), path('M-18 0L-12 -40L12 -40L18 0Z', i ? '#ffd23f' : '#ff6b6b', 4) + circ(0, -46, 8, '#fff', 3))).join('');
+    s += [[420, .35], [560, .5]].map(([x, k], i) => G(tr(x + Math.sin(t + i) * 10, hz + (sy - hz) * k + Math.sin(t * 3 + i) * 4), circ(0, 0, 16, '#e0b088', 4) + path('M-30 10q15 -10 30 0t30 0', 'none', 4, '#fff') + (i ? '' : line(14, -6, 30 + Math.sin(t * 6) * 8, -30, 6)))).join(''); }
   const wv = wave(t, .3, 22, o.seed || 0);
   s += path(`M${-M} ${sy + wv}` + Array.from({ length: 26 }, () => 'q50 -18 100 0').join('') + `L${W + M} ${sy + 90}L${-M} ${sy + 90}Z`, 'rgba(255,255,255,.88)', 0);
   s += grad(SAND, SAND_D, -M, sy + 24 + wv, W + 2 * M, H - sy + M);
   const r = rng(5); for (let i = 0; i < 22; i++) s += ell(r() * W, sy + 120 + r() * 600, 6 + r() * 8, 3 + r() * 3, SAND_W, 0);
+  if (sy < H - 100) { const by = sy + 60;
+    if (o.huts !== false) s += haze(.15, '#fff3e0', [0, 1, 2].map(i => G(tr(-50 + i * 95, by, .62), rect(-60, -170, 120, 170, '#fff', 4, 5) + [0, 1, 2].map(j => rect(-60 + j * 40, -170, 20, 170, ['#ff6b6b', '#4d7cf0', '#7be07b'][i], 0, 0)).join('') + path('M-74 -170L0 -230L74 -170Z', ['#e2463a', '#2f6f8f', '#3aa65a'][i], 5) + rect(-60, -170, 120, 170, 'none', 4, 5))).join(''));
+    if (o.palm !== false) { const sw = Math.sin(t * 1.4) * 4; s += G(tr(1030, by + 40), path(`M0 0Q-30 -200 ${-10 + sw} -420`, 'none', 34, OL) + path(`M0 0Q-30 -200 ${-10 + sw} -420`, 'none', 22, '#b98552') + [0, 1, 2, 3, 4].map(i => G(tr(-10 + sw, -420, 1, -170 + i * 40 + sw * 2), path('M0 0Q90 -50 180 10Q90 -10 0 0Z', ['#5aa76a', '#6dbb7a'][i % 2], 5))).join('') + circ(-20 + sw, -405, 16, '#8a5a3a', 4) + circ(4 + sw, -400, 16, '#8a5a3a', 4)); }
+    s += towel(820, sy + 420, 300, 110, '#ff4f87', '#fff', -6) + G(tr(960, sy + 300), path('M-34 0L-40 -70L40 -70L34 0Z', '#5ec4f0', 5) + path('M-36 -70Q0 -110 36 -70', 'none', 5) + G(tr(60, -40, 1, 25), line(0, 0, 0, -90, 6, '#8a5a3a') + path('M-18 0L18 0L14 40L-14 40Z', '#ffd23f', 4)));
+    s += G(tr(130, sy + 330), rect(-70, -60, 140, 60, '#f0cc8a', 4, 5) + rect(-50, -110, 40, 50, '#f0cc8a', 4, 5) + rect(20, -100, 40, 40, '#f0cc8a', 4, 5) + path('M-30 -110l0 -40l26 12l-26 12', '#ff6b6b', 4)) + dBall(320, sy + 470, 44, '#ff6b6b', '#fff', t * 30);
+    s += fgShell(560, sy + 560, .5, 10) + G(tr(700, sy + 600, .5), path('M0 -50L14 -16L50 -14L22 8L32 46L0 24L-32 46L-22 8L-50 -14L-14 -16Z', '#ff9a3c', 5)) + sunscreen(40, sy + 560, .5, -20); }
   if (o.gulls !== false) for (let i = 0; i < 2; i++) { const x = ((t * (90 + i * 40) + i * 600) % 1500) - 200; s += eagle({ gull: 1, x, y: 330 + i * 110 + Math.sin(t * 2 + i) * 20, s: .22 - i * .05, flip: 1, seed: i }, t); }
+  if (sy < H - 100 && o.fg !== false) s += fgBlur(fgGrass(-20, H + 30, 1.3, t, '#8cae4a', 3) + fgGrass(1100, H + 40, 1.1, t, '#7ea044', 7), 8);
   return s; }
+
 const parasol = (x, y, s, col = '#ff4f87') => G(tr(x, y, s), line(0, 0, 0, -420, 14) + path('M-260 -380Q0 -560 260 -380Z', col, 7) + path('M-90 -390Q0 -540 90 -390Z', '#fff', 0));
 // téléphone géant (repère : écran -150..150 × -295..295)
 function phoneXL(x, y, s, r, screen) { return G(tr(x, y, s, r), rect(-170, -330, 340, 660, '#2b2b33', 44) + rect(-150, -295, 300, 590, '#fde8f0', 24, 0) + screen + rect(-50, -318, 100, 14, '#444', 7, 0)); }

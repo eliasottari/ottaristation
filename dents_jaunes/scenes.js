@@ -284,7 +284,7 @@ function bedroomDay(t) { let s = xStripes('#ffe6c8', '#ffdcb8', -M, 1250, 50) + 
   s += xRod(590, 1010, 250) + xWin(640, 290, 320, 360, t, 'day') + xCurtain(580, 250, 90, 520, '#7b5cff', t, -1) + xCurtain(930, 250, 90, 520, '#7b5cff', t, 1);
   s += xPoster(240, 490, 260, 340, '#7aa6d8', 'ROCK', -2) + xPoster(470, 400, 140, 190, '#ff8fb1', 'SKATE', 5);
   s += path('M60 220Q300 280 560 220', 'none', 3) + [[120, 0], [230, 6], [340, -5], [450, 4]].map(([x, r], i) => G(tr(x, 260 - Math.abs(x - 310) * .1, 1, r + Math.sin(t * 1.5 + i) * 2), rect(-36, 0, 72, 84, '#fff', 3, 4) + rect(-28, 8, 56, 52, ['#7be0ff', '#ffd23f', '#ff8fb1', '#7be07b'][i], 0, 0))).join('');
-  s += xShelf(60, 800, 380, xBooks(80, 800, 190, 3) + xTrophy(320, 800, .8) + xMiniPlant(400, 800, t, .8)) + xCalendarW(1010, 770, '16') + xSwitch(1030, 900) + xOutlet(180, 1180);
+  s += xShelf(60, 800, 380, xBooks(80, 800, 190, 3) + xTrophy(320, 800, .8) + xMiniPlant(400, 800, t, .8)) + xCalendarW(470, 650, '16') + xSwitch(1030, 900) + xOutlet(180, 1180);
   s += xBed(-60, 1250, 420, '#7be07b', t) + xDesk(640, 1250, 400, t);
   s += xParquet(1250) + xBaseboard(1254) + xRug(CX, 1520, 380, 110, '#ffd23f', '#ff8a3d');
   s += xGuitar(470, 1250, .7, -10) + xShoes(140, 1600, '#e2463a') + xBag(900, 1560, '#4d7cf0') + xBall(1000, 1700, 40) + xBox(220, 1820, 1, -4) + xPlush(760, 1800, .8);
@@ -382,7 +382,7 @@ function dining(t) { let s = grad('#ffe7c2', '#ffd59a', -M, -M, W + 2 * M, H + 2
   return s + xParquet(1240, '#b07a4a', '#966540'); }
 function diningTable(t, jump = 0, y = 1235) { let s = rect(-M, y, W + 2 * M, 900, '#fff6e6', 0, 0) + line(-M, y, W + M, y, 8) + rect(-M, y + 40, W + 2 * M, 18, '#ff8fb1', 0, 0) + Array.from({ length: 14 }, (_, i) => circ(-60 + i * 90, y + 140, 8, 'rgba(255,143,177,.4)', 0)).join('');
   for (let i = 0; i < 4; i++) { const x = 140 + i * 270, j = jump * Math.abs(Math.sin(t * 22 + i * 1.3)) * 30; s += G(tr(x, y + 60 - j), ell(0, 0, 90, 26, '#fff', 6) + ell(0, -6, 50, 14, ['#ff7a3d', '#7be07b', '#ffd23f', '#e2463a'][i], 0)) + steam(x, y + 10 - j, t + i, .35) + G(tr(x + 100, y + 10 - j * .8), rect(-20, -60, 40, 70, 'rgba(180,220,255,.7)', 8, 5)) + line(x - 120, y + 70, x - 120, y + 20, 5, '#9aa3ad') + line(x + 120, y + 70, x + 124, y + 20, 5, '#9aa3ad'); }
-  const j2 = jump * Math.abs(Math.sin(t * 20)) * 30; s += G(tr(CX + 10, y + 20 - j2), rect(-18, -110, 36, 110, '#2f6b3a', 10, 5) + rect(-10, -150, 20, 44, '#2f6b3a', 4, 4) + rect(-18, -70, 36, 34, '#fff3dc', 0, 4)) + G(tr(1000, y + 110 - j2), ell(0, 0, 70, 22, '#c58e55', 5) + ell(-20, -14, 30, 14, '#f0c070', 4) + ell(16, -16, 30, 14, '#e0b060', 4));
+  const j2 = jump * Math.abs(Math.sin(t * 20)) * 30; s += G(tr(1000, y + 110 - j2), ell(0, 0, 70, 22, '#c58e55', 5) + ell(-20, -14, 30, 14, '#f0c070', 4) + ell(16, -16, 30, 14, '#e0b060', 4));
   return s; }
 function classroomB(t) { let s = grad('#fff1d6', '#ffe2b0', -M, -M, W + 2 * M, H + 2 * M) + xDots('rgba(230,160,80,.18)', -M, 900, 110, 6) + xWainscot(920, 1250, '#9fd3a7');
   s += Array.from({ length: 9 }, (_, i) => G(tr(80 + i * 105, 130, 1, (i % 2 ? 4 : -4) + Math.sin(t * 2 + i) * 2), rect(-40, -44, 80, 88, ['#ff8fb1', '#ffd23f', '#7be0ff', '#7be07b', '#b49cff'][i % 5], 8, 4) + fl(0, 18, 'ABCDEFGHI'[i], 48, OL))).join('') + path('M20 86Q540 120 1060 86', 'none', 3);
