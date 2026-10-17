@@ -251,7 +251,7 @@ function pizzeria(t) { let s = rect(-M, -M, W + 2 * M, H + 2 * M, '#fff', 0, 0);
 function doctorRoom(t) { let s = grad('#d8f3ec', '#bfe9de', -M, -M, W + 2 * M, H + 2 * M) + dStripes(1250, 'rgba(0,0,0,0)', 'rgba(255,255,255,.18)', 100, 30) + rect(-M, 900, W + 2 * M, 350, '#a8ddd0', 0, 0) + rect(-M, 890, W + 2 * M, 18, '#fff', 0, 4);
   s += rect(120, 300, 240, 180, '#c38a52', 8) + rect(140, 320, 200, 140, '#fdf6e3', 0, 4) + ftext(240, 410, 'DIPLÔME', { size: 30, fill: OL, stroke: 'none' }) + circ(240, 440, 16, '#e2463a', 4) + wallClock(470, 170, 48, t, 6);
   s += dWindow(660, 300, 300, 330, t, 0, '#fff') + dShelf(640, 760, 340, dJar(680, 760, '#fff') + dJar(740, 760, '#bfe6ff') + dBottle(800, 760, '#ff6b6b') + dBottle(840, 760, '#7be07b', .8) + G(tr(910, 760), rect(-34, -50, 68, 50, '#fff', 6, 4) + rect(-8, -42, 16, 34, '#e2463a', 0, 0) + rect(-17, -33, 34, 16, '#e2463a', 0, 0)), '#fff');
-  s += G(tr(110, 640), rect(-70, -100, 140, 200, '#fff', 8, 5) + ['E', 'F P', 'T O Z', 'L P E D'].map((l, i) => ftext(0, -52 + i * 42, l, { size: 38 - i * 7, fill: OL, stroke: 'none' })).join(''));
+  s += G(tr(75, 560, .85), rect(-70, -100, 140, 200, '#fff', 8, 5) + ['E', 'F P', 'T O Z', 'L P E D'].map((l, i) => ftext(0, -52 + i * 42, l, { size: 38 - i * 7, fill: OL, stroke: 'none' })).join(''));
   s += G(tr(470, 330), rect(-70, -80, 140, 160, '#fff', 8, 5) + heart(0, -8, .45, '#ff5d73') + path('M-40 52l20 0l10 -16l12 30l10 -14l28 0', 'none', 4, '#e2463a'));
   s += rect(1020, 640, 50, 610, '#fff', 6, 5) + [0, 1, 2, 3, 4, 5].map(i => line(1020, 700 + i * 100, 1046, 700 + i * 100, 4)).join('');
   s += G(tr(120, 1020), rect(-90, -70, 180, 140, '#fff', 10, 5) + line(-60, -70, 60, -70, 6) + rect(-70, -170, 60, 80, '#e6e9ee', 8, 4) + rect(-56, -110, 32, 16, '#fff', 3, 3) + dBottle(60, -70, '#7fd0ff', .9));
@@ -450,7 +450,7 @@ B(11, { enter: 'whip', cam: (t, d) => ({ z: 1.05, shake: t > at(11, 'etire') - o
 B(12, { enter: 'punch', cam: () => ({ z: 1.05, shake: 3 }),
   draw: (t, d, T) => { const P = at(12, 'puberte') - .05, j = 1 + .06 * Math.max(0, Math.sin(t * 22)) * seg(t, 0, P);
     const hero_ = ado({ x: CX, y: 1500, s: 1.35 * j, expr: 'dizzy', look: [0, -.4] }, t);
-    return bedroom(t) + burst(CX, 450, 330, t, P, SX.acc, 16) + glitch(hero_, T, .5 * (1 - seg(t, P, P + .3)) + .15, 3) + bar(CX, 660, 640, seg(t, 0, d - .2) * .87 + .1, { label: 'MISE À JOUR…', col: SX.acc }) +
+    return bedroom(t) + burst(CX, 450, 330, t, P, SX.acc, 16) + glitch(hero_, T, .5 * (1 - seg(t, P, P + .3)) + .15, 3) + rect(CX - 360, 600, 720, 120, 'rgba(43,36,32,.7)', 30, 0) + bar(CX, 660, 640, seg(t, 0, d - .2) * .87 + .1, { label: 'MISE À JOUR…', col: SX.acc }) +
       kword('PUBERTÉ', CX, 450, t, P, { size: 110, fill: '#fff' }); },
   sfx: [[0, 'printer', .4], [at(12, 'notamment'), 'typing', .4], [at(12, 'puberte') - .05, 'boom', .6], [at(12, 'puberte') + .25, 'squeak', .4]] });
 
@@ -461,7 +461,7 @@ B(13, { enter: 'none', trans: 'push', transD: .25, cam: (t, d) => ({ z: lerp(1.0
     ppl.forEach(([x, sx, sy, sk, hair, hc, girl, sw], i) => { const pk = seg(t, P + i * .12, P + i * .12 + .4); const o = { x: 0, y: 0, s: 1, skin: sk, hair, hairColor: hc, expr: ['happy', 'cool', 'joy', 'smug', 'proud'][i], seed: 40 + i, trunks: sw, marks: pk, mcol: i === 2 ? MARK_S : MARK };
       const body = girl ? person(Object.assign({}, o, { age: 'kid', shirt: sw, sleeve: sk, pants: sk, shoes: sk, collar: false }), t) + G('', striae(-90, -150, .26, t, pk, { n: 3, r: -70, col: o.mcol })) : bare(person, Object.assign({ age: 'kid' }, o), t);
       s += G(`translate(${x} ${1420 + Math.sin(t * 3 + i) * 4}) scale(${sx} ${sy})`, body) + (pk > 0 && pk < 1 ? popStars(x, 1270, t, P + i * .12, 5, 90) : ''); });
-    return s + kthin('des morphologies', CX, 350, t, at(13, 'morphologie') - .1, { size: 56 }) + kword('TRÈS DIFFÉRENTES', CX, 460, t, at(13, 'tres') - .05, { size: 76, fill: SX.acc2 }); },
+    return s + rect(CX - 440, 290, 880, 230, 'rgba(43,36,32,.55)', 40, 0) + kthin('des morphologies', CX, 350, t, at(13, 'morphologie') - .1, { size: 56 }) + kword('TRÈS DIFFÉRENTES', CX, 460, t, at(13, 'tres') - .05, { size: 76, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(13, 'existent'), 'pop', .5], [at(13, 'personnes'), 'pop_hi', .5], [at(13, 'personnes') + .36, 'pop_hi', .5], [at(13, 'tres') - .05, 'boom', .5]] });
 
 // B014 — « ne signifient pas automatiquement un problème de santé » : médecin chill de ouf, alarme barrée, tampon BONNE SANTÉ
@@ -563,7 +563,7 @@ B(23, { enter: 'whip', cam: (t, d) => ({ z: 1.04, shake: t > at(23, 'eau') ? 5 :
 // B024 — « Comme si rien d'extraordinaire ne venait de se passer » : bouée flamant, coco, une mouette se pose sur sa tête
 B(24, { enter: 'drop', cam: zin(1.02, 1.08, .3),
   draw: (t, d, T) => { const Ri = at(24, 'rien'), Pa = at(24, 'passer'), gk = seg(t, Pa - .6, Pa);
-    return beach(t, { hz: 700, sy: 1900, gulls: false }) + flamingo(CX, 1180 + Math.sin(t * 2) * 10, 1.1, t) +
+    return beach(t, { hz: 700, sy: 1900, gulls: false, kite: false }) + flamingo(CX, 1180 + Math.sin(t * 2) * 10, 1.1, t) +
       bare(cuz, { x: CX - 20, y: 1250 + Math.sin(t * 2) * 10, s: 1.25, skin: SKIN_C, trunks: '#2f6f8f', expr: 'chill', armR: [-60, -120], holdR: G(tr(0, -20), circ(0, 0, 40, '#8a5a3a') + line(0, -40, 20, -90, 6, '#ff4f87')) }, t) +
       eagle({ gull: 1, x: lerp(1100, CX + 10, eOutCubic(gk)), y: lerp(400, 820 + Math.sin(t * 2) * 10, eOutCubic(gk)), s: .28, flip: 1, wingA: gk >= 1 ? -30 : undefined, expr: 'happy' }, t) +
       funTag(CX, 440, 'RIEN À SIGNALER', t, Ri - .05, { size: 52, bg: '#fff', fg: SX.ink }) + markerText('tranquille.', 780, 600, t, at(24, 'extraordinaire'), { size: 54, col: SX.acc2 }); },
@@ -571,7 +571,7 @@ B(24, { enter: 'drop', cam: zin(1.02, 1.08, .3),
 
 // B025 — « Tu restes un instant sur le sable » : plan large, coucher de soleil, seul assis, un crabe passe
 B(25, { enter: 'none', trans: 'circle', transD: .35, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d) }),
-  draw: (t, d, T) => beach(t, { dusk: 1 }) + ado({ x: 420, y: 1420, s: 1.35, expr: 'sad', look: [1, -.2], legL: [0, 90], legR: [-10, 85], armL: [70, 20], armR: [60, 30] }, t) +
+  draw: (t, d, T) => beach(t, { dusk: 1, gulls: false }) + ado({ x: 420, y: 1420, s: 1.35, expr: 'sad', look: [1, -.2], legL: [0, 90], legR: [-10, 85], armL: [70, 20], armR: [60, 30] }, t) +
     crab({ x: lerp(1150, 700, t / d), y: 1480, s: .45, walk: 1 }, t) + kthin('un instant…', 760, 430, t, at(25, 'instant') - .1, { size: 60 }),
   sfx: [[0, 'waves', .6], [.3, 'wind', .3], [at(25, 'instant'), 'tick', .3], [at(25, 'sable'), 'snip', .3]] });
 
@@ -600,7 +600,7 @@ B(28, { enter: 'none', trans: 'wipe', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d
   draw: (t, d, T) => { const Ex = at(28, 'excuser') - .05, Gr = at(28, 'grandi') - .05, off = t > Ex + .1, fk = seg(t, Ex + .1, Ex + 1.0), run = seg(t, Gr, d);
     const gx = lerp(1150, 820, seg(t, 0, Ex + 1.0)), gy = 760 + Math.sin(t * 3) * 20;
     const hx = lerp(380, 620, run), ho = { x: hx, y: lerp(1500, 1400, run), s: lerp(1.4, 1.15, run), expr: off ? 'ecstatic' : 'happy', armL: off ? [200, 240] : [110, 100], armR: off ? [-20, -60] : [70, 80], walk: run > 0 ? 4 : 0, flip: 0 };
-    return beach(t, { dusk: 1, gulls: false }) + cuzHead(860, 1110 + Math.sin(t * 2) * 8, 70, { expr: 'joy' }, t) + G(tr(940, 1060, 1, wave(t, 1.5, 30)), circ(0, 0, 20, SKIN_C)) +
+    return beach(t, { dusk: 1, gulls: false, kite: false }) + cuzHead(860, 1110 + Math.sin(t * 2) * 8, 70, { expr: 'joy' }, t) + G(tr(940, 1060, 1, wave(t, 1.5, 30)), circ(0, 0, 20, SKIN_C)) +
       (off ? bare(ado, Object.assign({ trunks: SX.acc, marks: 1, shine: 1 }, ho), t) : ado(ho, t)) +
       eagle({ gull: 1, x: gx, y: gy, s: .3, flip: 0, expr: fk >= 1 ? 'shock' : 'neutral' }, t) + (off ? tshirtShape(lerp(hx, gx - 20, fk), lerp(1050, gy - 40, fk) - Math.sin(fk * Math.PI) * 260, fk >= 1 ? .55 : .8, fk >= 1 ? -10 : fk * 700, SHIRT_H) : '') +
       kthin("et tu n'as pas à", CX, 330, t, 0, { size: 58 }) + kword("T'EXCUSER", CX, 440, t, Ex, { size: 104, fill: SX.acc2 }) + kword("D'AVOIR GRANDI.", CX, 560, t, Gr, { size: 72, fill: '#fff' }) + (t > Gr ? confetti(t, Gr, 30) : ''); },
