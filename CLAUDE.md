@@ -13,7 +13,13 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `hyperactif/` | Pourquoi c'est horrible de naître hyperactif ? (36 blocs → 37 plans, 9:16, style V2, SFX synthés) | 62,9 s | ✅ livré |
 | `calvitie/` | Pourquoi c'est horrible de devenir chauve ? (36 blocs → 39 plans, 9:16, style V2, SFX synthés seulement) | 66,7 s | ✅ livré |
 | `dents/` | Pourquoi c'est horrible d'avoir un appareil dentaire ? (33 blocs → 35 plans, 9:16, style V2, SFX synthés ; blocs tirés de la transcription) | 53,5 s | ✅ livré |
-| `front/` | Pourquoi c'est horrible d'avoir un grand front ? (33 blocs → 34 plans, **SIZEX fun** : intro motion, puis vrais décors + motion rebondi, police Komika) | 62,6 s | ✅ livré (2 parties) |
+| `front/` | Pourquoi c'est horrible d'avoir un grand front ? (33 blocs → 34 plans, **SIZEX fun** : intro motion, puis vrais décors + motion rebondi, police Komika — les suivants sont en Fredoka) | 62,6 s | ✅ livré (2 parties) |
+| `barbe/` | Pourquoi c'est horrible quand ta barbe ne pousse pas ? (27 blocs → 37 plans, SIZEX Fredoka, étoiles unlock, décors riches) | 62,1 s | ✅ livré (2 parties) |
+| `cernes/` | Pourquoi c'est horrible d'avoir des cernes permanents ? (35 blocs → 39 plans, SIZEX, décors riches) | 62,2 s | ✅ livré (2 parties) |
+| `dents_bonheur/` | Pourquoi c'est horrible d'avoir les dents du bonheur ? (32 blocs → 39 plans, SIZEX, décors riches) | 66,2 s | ✅ livré (3 parties) |
+| `dents_jaunes/` | Pourquoi c'est horrible d'avoir les dents jaunes ? (27 blocs → 40 plans, SIZEX, décors riches) | 61,1 s | ✅ livré (2 parties) |
+| `tache/` | Pourquoi c'est horrible d'avoir une tache de naissance sur le visage ? (32 blocs → 37 plans, SIZEX, décors riches) | 66,8 s | ✅ livré (2 parties) |
+| `vergetures/` | Pourquoi c'est horrible d'avoir des vergetures à 16 ans ? (28 blocs → 35 plans, SIZEX, décors riches) | 60,8 s | ✅ livré (2 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
