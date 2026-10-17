@@ -24,7 +24,9 @@ Le script vérifie d'abord ce qui est déjà là.
 ```bash
 tools/new_episode.sh <nom>            # ajouter 16x9 pour du YouTube long
 cd <nom>
-python3 ../tools/prep.py <chemin/voix.mp3>
+python3 ../tools/tighten.py <brut.mp3> assets/src.mp3 --keep .06 --min .12   # TikTok : silences retirés, phrases bord à bord (demande client)
+python3 ../tools/prep.py assets/src.mp3
+ffmpeg -i assets/src.mp3 -af "volume=10dB,alimiter=limit=0.89:level=false" assets/voix.mp3   # voix +10 dB (demande client), après prep
 ```
 `prep.py` fait quatre choses :
 1. il convertit la voix en `assets/voix.mp3` ;
