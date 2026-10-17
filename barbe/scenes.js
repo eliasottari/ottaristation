@@ -200,7 +200,7 @@ function bathroom2(t, c1 = '#cfeaf0', c2 = '#b2d6de') { const dk = shade(c1, -.2
   s += hangPlant(84, 300, t, 220) + shelfP(10, 640, 150) + flask(44, 640, .9, '#ff8fb1', 70) + flask(88, 640, .8, '#7be07b', 50) + jar(130, 640, .8, '#ffd23f') +
     shelfP(10, 880, 150) + circ(46, 856, 22, '#fff', 4) + circ(94, 856, 22, '#ffb3cb', 4) + circ(70, 818, 22, '#5ec4f0', 4) + hairDryer(62, 960, .62) + outlet(84, 1190, .9);
   s += medCab(922, 300, 140, 220) + line(915, 614, 1070, 614, 10, '#c9ced6') + towel(990, 760, 120, 300, '#ff8fb1', '#ffb3cb') + lightSwitch(992, 1000, .9);
-  s += mirror(190, 300, 700, 820) + op(.3, rect(720, 560, 150, 560, shade(c1, -.1), 6, 4) + circ(742, 860, 9, OL, 0) + circ(260, 880, 14, '#c9ced6', 4)) + G(tr(214, 322, 1, -6), rect(0, 0, 84, 80, '#fff27a', 4, 4) + circ(28, 30, 5, OL, 0) + circ(56, 30, 5, OL, 0) + path('M24 50Q42 64 60 50', 'none', 4));
+  s += mirror(190, 300, 700, 820) + op(.3, rect(720, 560, 150, 560, shade(c1, -.1), 6, 4) + circ(742, 860, 9, OL, 0) + circ(260, 880, 14, '#c9ced6', 4)) + G(tr(960, 380, .55, 6), rect(0, 0, 84, 80, '#fff27a', 4, 4) + circ(28, 30, 5, OL, 0) + circ(56, 30, 5, OL, 0) + path('M24 50Q42 64 60 50', 'none', 4));
   s += rect(-M, 1290, W + 2 * M, 30, '#f4f1ea', 6, 5) + rect(-M, 1320, W + 2 * M, 460, '#d9b48a', 0, 5) + [40, 380, 720].map(x => rect(x, 1350, 320, 380, '#e2c29a', 10, 4) + rect(x + 130, 1380, 60, 12, '#8a6a4a', 6, 3)).join('') + tiles('#9fb7c0', '#8aa4ae', 110, -M, 1780, W + 2 * M, 600);
   s += sink(CX, 1300) + drip(CX - 110, 1250, t) + tbCup(70, 1290, 1) + soapPump(160, 1290, .9) + mug(236, 1290, .8, t, '#ffd23f') + duck(860, 1290, .9, t) + foamCan(948, 1290, .85) + potPlant(1032, 1290, .6, t, '#e98a5b');
   return s + fgBlur(potPlant(30, 2000, 2.4, t, '#e98a5b', '#4f9a5f', 1), 8); }
@@ -259,7 +259,7 @@ function soiree(t, dim = 0) { let s = grad('#2a1f55', '#4b2b6e', -M, -M, W + 2 *
   for (let i = 0; i < 12; i++) { const x = i * 100 - 10, y = 170 + 45 * Math.sin(((i % 2) + .5) * Math.PI / 2) * (i % 2 ? .6 : 1) + 18; s += circ(x + 40, y, 16, Math.sin(t * 5 + i * 1.3) > -.3 ? ['#fff6a8', '#ff9fd0', '#a8f0ff'][i % 3] : '#6b5a7a', 4); }
   s += balloon(70, 330, .7, t, '#ff6fa5', 0) + balloon(1010, 320, .7, t, '#ffd23f', .3) + speaker(70, 1250, 1, t) + speaker(1010, 1250, 1, t);
   for (let i = 0; i < 4; i++) s += person({ age: 'adult', x: 90 + i * 300, y: 1220 + wave(t, 2, 12, i * .25), s: .5, hair: ['curly', 'ponytail', 'short', 'bun'][i], hairColor: ['#2b2420', '#e0a040', '#8a5a3a', '#c4521b'][i], shirt: ['#5ec4f0', '#7be07b', '#ffd23f', '#ff8fb1'][i], expr: 'joy', armL: [200 + wave(t, 2, 30, i * .3), 230], armR: [-20, -50 + wave(t, 2, 30, i * .3)], seed: 60 + i }, t);
-  s += rect(-M, 1250, W + 2 * M, 1400, '#2b2440', 0, 0); for (let j = 0; j < 7; j++) for (let i = -2; i < 10; i++) { const on = Math.sin(t * 4 + i * 1.3 + j * 2.1) > .4; s += rect(i * 140, 1250 + j * 110, 140, 110, on ? PAL[(i + j + 16) % 8] : 'rgba(255,255,255,.03)', 0, 3, '#1c1530'); }
+  s += rect(-M, 1250, W + 2 * M, 1400, '#2b2440', 0, 0); for (let j = 0; j < 7; j++) for (let i = -2; i < 10; i++) { const on = Math.sin(t * 4 + i * 1.3 + j * 2.1) > .4; s += rect(i * 140, 1250 + j * 110, 140, 110, on ? PAL[(i + j + 16) % 8] : 'rgba(255,255,255,.03)', 0, 3, '#1c1530').replace('/>', on ? ' fill-opacity=".38"/>' : '/>'); }
   s += fgBlur(partyCup(60, 2000, 1.6), 8);
   return s + (dim ? rect(-M, -M, W + 2 * M, H + 2 * M, `rgba(10,5,30,${dim})`, 0, 0) : ''); }
 // salle d'examen : néons (un clignote), frise alphabet, tableau + craies, carte, globe, soubassement, horloge, pupitres vides, avion en papier, parquet, sac, poubelle
@@ -278,7 +278,7 @@ function labBoard(t) { let s = grad('#e8f4ff', '#cfe6fb', -M, -M, W + 2 * M, H +
   s += blackboard(60, 250, 960, 640, '');
   let pt = rect(40, 930, 200, 140, '#fff', 8, 5); for (let i = 0; i < 6; i++) for (let j = 0; j < 4; j++) if (!(j < 2 && i > 0 && i < 5)) pt += rect(52 + i * 31, 944 + j * 30, 26, 24, PAL[(i + j) % 8], 3, 2); s += pt + rect(880, 940, 120, 80, '#36a85a', 8, 5) + rect(925, 952, 30, 56, '#fff', 3, 0) + rect(912, 965, 56, 30, '#fff', 3, 0);
   s += rect(-M, 1150, W + 2 * M, 30, '#3b3f4a', 4, 5) + rect(-M, 1180, W + 2 * M, 900, '#cfd8e2', 0, 5) + [30, 380, 730].map(x => rect(x, 1210, 320, 160, '#e3e9f0', 8, 4) + rect(x + 130, 1236, 60, 12, '#8a96a3', 6, 3)).join('');
-  s += microscope(130, 1150, .9) + beaker(250, 1150, .8, t, '#7be07b') + flask(320, 1150, .8, '#b56cff', 60) + tubeRack(820, 1150, .7) + erlen(950, 1150, .8, t, '#ff8fb1') + beaker(1040, 1150, .6, t, '#5ec4f0', 2);
+  s += beaker(150, 1150, .8, t, '#7be07b') + flask(232, 1150, .8, '#b56cff', 60) + microscope(330, 1150, .9) + tubeRack(820, 1150, .7) + erlen(950, 1150, .8, t, '#ff8fb1') + beaker(1040, 1150, .6, t, '#5ec4f0', 2);
   return s; }
 // placard : portes ouvertes (1er plan flou), planches, étagère haute (cartons, chapeau), tringle + chemises, ampoule à chaînette qui balance, étagère du milieu, chaussures, carton souvenirs, ballon, poussières
 function closetBg(t) { let s = grad('#c49a6c', '#a87c50', -M, -M, W + 2 * M, H + 2 * M) + wallpaper('rgba(255,255,255,.07)', 'stripes', -M, 1250) + parquet(1250, '#8a5a3a', '#6b4a2a');
