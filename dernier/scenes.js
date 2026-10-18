@@ -327,7 +327,7 @@ function shopFront(t) { const yb = 1250;
 B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const D = at(1, 'dernier'); const fam = sib(0, { x: 160, y: 1290, s: .9, expr: 'smug' }, t) + sib(1, { x: 365, y: 1290, s: .82, expr: 'mock' }, t) + sib(2, { x: 560, y: 1290, s: .74, expr: 'laugh' }, t) + sib(3, { x: 735, y: 1290, s: .82, expr: 'smug' }, t);
     return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + cutout(fam, 12) + unlock(918, 1110, t, D, { part: 'back', r: 480 }) + G(tr(918, 1290, 1 + .04 * Math.sin(t * 7)), cutout(nino({ x: 0, y: 0, s: .6, expr: t > D ? 'shock' : 'worried', face: t > D ? { eyes: 'huge' } : {} }, t), 10)) + unlock(918, 1110, t, D, { part: 'front', r: 480 }) + funBox(918, 1120, 180, 250, t, D + .3, { label: 'dernier.png' }) +
-      kthin("POURQUOI C'EST", CX, 330, t, .05, { size: 62 }) + kthin("HORRIBLE D'ÊTRE LE", CX, 415, t, .3, { size: 58 }) + kword('DERNIER ?', CX, 540, t, D - .05, { size: 96, fill: SX.acc2 }) + funTag(CX, 660, 'de la famille', t, at(1, 'famille') - .05, { size: 38, bg: SX.acc }); },
+      kthin("POURQUOI C'EST", CX, 330, t, .05, { size: 62 }) + kthin("HORRIBLE D'ÊTRE LE", CX, 415, t, .3, { size: 58 }) + kword('DERNIER ?', CX, 540, t, D - .05, { size: 96, fill: SX.acc2 }) + funTag(CX, 660, 'DE LA FAMILLE', t, at(1, 'famille') - .05, { size: 46, bg: SX.acc }); },
   sfx: [[0, 'whoosh', .6], [.05, 'pop_hi', .4], [.3, 'pop_hi', .4], [at(1, 'dernier') - .05, 'boom', .6], [at(1, 'dernier'), 'sparkle', .6], [at(1, 'famille'), 'pop', .5]] });
 // B002 — « Tu viens de naître » : papier + gobo, bébé en cut-out, BÉBÉ N°5
 B(2, { enter: 'none', trans: 'wipe', cam: zin(1.02, 1.1, .3),
@@ -354,21 +354,21 @@ B(4, { enter: 'punch', cam: (t, d) => ({ z: 1.05, hand: .5, shake: t < .3 ? 6 : 
 // B005a — « Bref, tu viens d'arriver dans une famille » : la porte s'ouvre, maman rentre avec le bébé, fratrie blasée
 B(5, { enter: 'whip', cam: zin(1.0, 1.08, .4),
   draw: (t, d, T) => { const A = at(5, 'arriver'); return entree(t, { open: eOutCubic(seg(t, 0, .4)) }) + hugo({ x: 150, y: 1560, s: 1.0, expr: 'deadpan', armL: [60, 150], armR: [120, 30] }, t) + sib(3, { x: 330, y: 1530, s: 1.1, expr: 'deadpan' }, t) +
-      maman({ x: 560, y: 1580, s: 1.15, expr: 'sleep', armL: [80, 20], armR: [100, 160] }, t) + bebe({ x: 560, y: 1250, s: .55, expr: 'joy' }, t) + sib(2, { x: 880, y: 1560, s: 1.0, expr: 'deadpan', flip: 1, armR: [-40, -100], holdR: rect(-30, -50, 60, 100, '#2b2b33', 12, 5) }, t) +
+      maman({ x: 560, y: 1580, s: 1.15, expr: 'sleep', armL: [80, 20], armR: [100, 160] }, t) + bebe({ x: 665, y: 1250, s: .55, expr: 'joy' }, t) + sib(2, { x: 880, y: 1560, s: 1.0, expr: 'deadpan', flip: 1, armR: [-40, -100], holdR: rect(-30, -50, 60, 100, '#2b2b33', 12, 5) }, t) +
       funTag(CX, 450, 'ARRIVÉE N°5', t, A - .05, { size: 60, bg: SX.acc }) + markerText('clap… clap.', 230, 760, t, at(5, 'famille') - .1, { size: 46, col: '#fff' }); },
   sfx: [[0, 'steps', .6], [at(5, 'arriver') - .1, 'ding', .6], [at(5, 'arriver') - .05, 'pop', .5], [at(5, 'famille'), 'crickets', .6]] });
 // B005b — « où plus personne ne tombe dans tes pièges » : peau de banane du bébé, papa l'enjambe sans lever les yeux du journal
 B(5, { enter: 'none', trans: 'push', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const o = at(5, 'ou') - .15, Tb = at(5, 'tombe') - o, P = at(5, 'pieges') - o, px = lerp(1000, 430, eInOut(seg(t, .1, P + .1))), up = seg(t, Tb - .2, Tb) * (1 - seg(t, Tb + .25, Tb + .45));
     return salonF(t) + bananaPeel(560, 1440, 1.2) + markerCircle(560, 1430, 140, 60, t, .15, { col: SX.acc2 }) + funTag(560, 1250, 'PIÈGE', t, .15, { size: 40, bg: SX.acc2, fg: SX.ink }) + bebe({ x: 190, y: 1420, s: 1.05, expr: t > P ? 'rage' : 'smugger' }, t) +
-      papa({ x: px, y: 1580, s: 1.2, expr: 'deadpan', flip: 1, walk: 3, legL: [95 - up * 70, 90 + up * 30], armL: [70, -10], armR: [110, -170], look: [0, .6] }, t) + G(tr(px - 40, 1580 - 300 * 1.2, 1, -6), rect(-110, -70, 220, 150, '#f4f1ea', 4, 5) + [0, 1, 2, 3].map(i => line(-90, -40 + i * 30, 90, -40 + i * 30, 5, '#9aa3ad')).join('') + ftext(0, -46, 'JOURNAL', { size: 24, fill: OL, stroke: 'none' })) +
+      papa({ x: px, y: 1580, s: 1.2, expr: 'deadpan', flip: 1, walk: 3, legL: [95 - up * 70, 90 + up * 30], armL: [70, -10], armR: [110, -170], look: [0, .6] }, t) + G(tr(px - 40, 1580 - 225 * 1.2, 1, -6), rect(-110, -70, 220, 150, '#f4f1ea', 4, 5) + [0, 1, 2, 3].map(i => line(-90, -40 + i * 30, 90, -40 + i * 30, 5, '#9aa3ad')).join('') + ftext(0, -46, 'JOURNAL', { size: 24, fill: OL, stroke: 'none' })) +
       stamp(CX, 520, 'ÉCHEC', t, P, '#e2463a', -8, 90); },
   sfx: [[.15, 'scratch', .4], [at(5, 'personne') - at(5, 'ou'), 'steps', .6], [at(5, 'tombe') - at(5, 'ou') - .1, 'whoosh', .5], [at(5, 'pieges') - at(5, 'ou') + .15, 'thud', .8], [at(5, 'pieges') - at(5, 'ou') + .3, 'rimshot', .5]] }, at(5, 'ou') - .15);
 // B006 — « Bienvenue dans la vie du petit dernier » : banderole recyclée « BIENVENUE HUGO » (barré, NINO ? au marqueur)
 B(6, { enter: 'none', trans: 'circle', transD: .3, cam: zin(1.0, 1.08, .3),
   draw: (t, d, T) => { const Pd = at(6, 'petit'); return salonF(t) + G(tr(CX, 420, 1, -2 + wave(t, .5, 1)), path('M-470 -60Q0 -30 470 -60L470 60Q0 90 -470 60Z', '#fff8e0', 7) + [-400, -200, 0, 200, 400].map((x, i) => circ(x, -50, 10, DPAL[i], 4)).join('') + ftext(-120, 24, 'BIENVENUE', { size: 64, fill: '#e2463a', stroke: 'none' }) + ftext(270, 24, 'HUGO', { size: 64, fill: '#5b8fd8', stroke: 'none' })) +
       (t > .5 ? G(tr(CX + 270, 420), path(`M-110 0L${f1(-110 + 220 * seg(t, .5, .75))} -6`, 'none', 14, '#2b2420')) : '') + markerText('NINO ?', CX + 290, 530, t, .8, { size: 54, col: SX.acc }) +
-      maman({ x: 420, y: 1600, s: 1.25, expr: 'deadpan', armL: [70, 10], armR: [110, 170] }, t) + bebe({ x: 430, y: 1290, s: .6, expr: 'wow' }, t) + papa({ x: 800, y: 1610, s: 1.2, expr: 'sleep', flip: 1, armR: [-50, -110], holdR: dMug(0, 0, 1, t, '#fff') }, t) +
+      maman({ x: 420, y: 1600, s: 1.25, expr: 'deadpan', armL: [70, 10], armR: [110, 170] }, t) + bebe({ x: 575, y: 1265, s: .6, expr: 'wow' }, t) + papa({ x: 800, y: 1610, s: 1.2, expr: 'sleep', flip: 1, armR: [-50, -110], holdR: dMug(0, 0, 1, t, '#fff') }, t) +
       kword('PETIT DERNIER', CX, 690, t, Pd - .05, { size: 84, fill: SX.acc2 }); },
   sfx: [[0, 'pop', .5], [.5, 'scratch', .6], [.8, 'scratch', .5], [at(6, 'petit') - .05, 'boom', .5], [at(6, 'dernier'), 'baby_coo', .5]] });
 // B007 — « À 5 ans, tu veux un nouveau vélo » : collé à la vitrine du magasin, yeux en cœur
@@ -425,8 +425,8 @@ B(16, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: 1.06, shake: t > .22 && t
   sfx: [[0, 'whoosh', .7], [.22, 'thud', .9], [.25, 'boom', .5], [at(16, 'intervient'), 'siren', .4]] });
 // B017 — « Moi, à ton âge, je rentrais à 18h » : Hugo nostalgique, souvenir déchiré en noir & blanc, 18H qui claque
 B(17, { enter: 'none', trans: 'zoom', transD: .25, cam: zin(1.0, 1.08, .2),
-  draw: (t, d, T) => { const H18 = at(17, '18'), mem = filmBW(entree(t, { open: 0 }) + hugo({ x: 560, y: 1500, s: 1.0, expr: 'proud', age: 'kid', beard: false }, t) + bigClockF(560, 760, '18:00', '#fff', .9), T);
-    return depth({ zoom: 1 }, [{ z: 1.6, svg: entree(t, { night: 1 }), blur: 7 }, { z: 1, svg: hugoHead(CX, 1010, 190, { expr: 'calm', look: [.5, -1] }, t) }]) + tornWindow(CX, 630, 640, 320, mem, seg(t, at(17, 'age') - .3, at(17, 'age') + .2)) +
+  draw: (t, d, T) => { const H18 = at(17, '18'), mem = filmBW(entree(t, { open: 0 }) + hugo({ x: 720, y: 820, s: .8, expr: 'proud', age: 'kid', beard: false }, t) + bigClockF(390, 620, '18:00', '#fff', .75), T);
+    return depth({ zoom: 1 }, [{ z: 1.6, svg: entree(t, { night: 1 }), blur: 7 }, { z: 1, svg: hugo({ x: CX, y: 1830, s: 2.05, expr: 'calm', look: [.5, -1] }, t) }]) + tornWindow(CX, 630, 640, 320, mem, seg(t, at(17, 'age') - .3, at(17, 'age') + .2)) +
       kthin('moi, à ton âge…', CX, 410, t, at(17, 'moi') - .05, { size: 52 }) + kword('18H', 820, 760, t, H18 - .05, { size: 110, fill: SX.acc2 }); },
   sfx: [[at(17, 'moi'), 'rewind', .5], [at(17, 'age') - .3, 'flutter', .5], [at(17, 'rentrais'), 'tick', .4], [at(17, '18') - .05, 'ding', .7]] });
 // B018 — « Mais personne t'a demandé, toi ! » : l'ado pointe Hugo, Hugo mâchoire au sol
@@ -436,7 +436,7 @@ B(18, { enter: 'punch', cam: (t, d) => ({ z: 1.07, hand: .6, shake: t > at(18, '
   sfx: [[0, 'whoosh', .5], [at(18, 'personne') - .05, 'pop', .6], [at(18, 'toi') - .05, 'boom', .6], [at(18, 'toi') + .1, 'gasp', .6]] });
 // B019a — « Et le pire, tes frères et sœurs ont déjà… » : la fratrie médaillée, vétérans de l'excuse
 B(19, { enter: 'whip', cam: zin(1.0, 1.07, .3),
-  draw: (t, d, T) => { const P = at(19, 'pire'), F = at(19, 'freres'); return cuisine(t) + [[0, 160, 1560, 1.0], [1, 395, 1560, .96], [2, 630, 1560, .96], [3, 875, 1500, 1.25]].map(([i, x, y, s]) => sib(i, { x, y, s, expr: 'smugger', armL: [60, 150], armR: [120, 30] }, t) + nMedal(x + 22 * s, y - (i === 3 ? 160 : 260) * s, s * 1.1)).join('') +
+  draw: (t, d, T) => { const P = at(19, 'pire'), F = at(19, 'freres'); return cuisine(t) + [[0, 160, 1500, 1.0], [1, 395, 1500, .96], [2, 630, 1500, .96], [3, 875, 1440, 1.25]].map(([i, x, y, s]) => sib(i, { x, y, s, expr: 'smugger', armL: [60, 150], armR: [120, 30] }, t) + nMedal(x + 22 * s, y - (i === 3 ? 160 : 260) * s, s * 1.1)).join('') +
       kword('LE PIRE', CX, 450, t, P - .05, { size: 110, fill: SX.acc2 }) + funTag(CX, 590, 'VÉTÉRANS', t, F - .05, { size: 50, bg: SX.cool }); },
   sfx: [[at(19, 'pire') - .05, 'boom', .6], [at(19, 'freres') - .05, 'drum', .6], [at(19, 'deja'), 'glint', .5], [at(19, 'deja') + .1, 'tada', .4]] });
 // B019b — « …testé toutes les excuses possibles » : registre géant des excuses, tout est TESTÉ ✓
@@ -497,7 +497,7 @@ B(27, { enter: 'drop', cam: zin(1.02, 1.1, .3),
   sfx: [[0, 'baby_coo', .5], [at(27, 'bebe') - .05, 'pop', .7], [at(27, 'famille'), 'kiss', .6], [at(27, 'famille') + .2, 'squeak', .4]] });
 // B028 — « Tout le monde te protège » : garde rapprochée de la fratrie, lunettes noires, oreillettes, dans la rue
 B(28, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.04, 1.0, t / d), hand: .4 }),
-  draw: (t, d, T) => depth({ zoom: 1, x: wave(t, .3, 12) }, [{ z: 1.5, svg: streetT(t, 2), haze: .06 }, { z: 1, svg: hugo({ x: 140, y: 1600, s: 1.05, expr: 'cool', armL: [60, 150], armR: [120, 30] }, t) + sib(2, { x: 940, y: 1600, s: 1.05, expr: 'cool', flip: 1, armL: [60, 150], armR: [120, 30] }, t) + nino({ x: CX, y: 1540, s: 1.3, expr: 'chill' }, t) + sib(1, { x: 330, y: 1640, s: .95, expr: 'cool', armR: [-40, -80] }, t) + sib(3, { x: 760, y: 1560, s: 1.15, expr: 'cool', armL: [200, 230], flip: 1 }, t) }]) +
+  draw: (t, d, T) => depth({ zoom: 1, x: wave(t, .3, 12) }, [{ z: 1.5, svg: streetT(t, 2), haze: .06 }, { z: 1, svg: hugo({ x: 140, y: 1600, s: 1.05, expr: 'cool', armL: [60, 150], armR: [120, 30] }, t) + sib(2, { x: 940, y: 1600, s: 1.05, expr: 'cool', flip: 1, armL: [60, 150], armR: [120, 30] }, t) + nino({ x: CX, y: 1500, s: 1.3, expr: 'chill' }, t) + sib(1, { x: 330, y: 1560, s: .95, expr: 'cool', armR: [-40, -80] }, t) + sib(3, { x: 760, y: 1560, s: 1.15, expr: 'cool', armL: [200, 230], flip: 1 }, t) }]) +
     funTag(CX, 450, 'PROTECTION MAX', t, at(28, 'protege') - .1, { size: 56, bg: '#2b2420', fg: SX.acc2 }) + G(tr(130, 1600 - 402 * 1.05 + 10), path('M-80 -10Q-110 20 -90 60', 'none', 4)),
   sfx: [[0, 'whoosh', .5], [at(28, 'monde'), 'steps', .6], [at(28, 'protege') - .1, 'pop', .6], [at(28, 'protege') + .3, 'whistle', .4]] });
 // B029 — « Tout le monde s'occupe de toi » : roi du canapé (couronne), Léa évente, Jade coiffe, Max sert le jus — chill de ouf
