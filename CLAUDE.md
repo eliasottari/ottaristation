@@ -26,6 +26,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `dernier/` | Pourquoi c'est horrible d'être le dernier de la famille ? (voix resserrée, 41 blocs → 45 plans) | 70,7 s | ✅ livré (3 parties) |
 | `oreilles/` | Pourquoi c'est horrible d'avoir les oreilles décollées ? (voix resserrée, 28 blocs → 34 plans) | 56,5 s | ✅ livré (2 parties) |
 | `acouphene/` | Pourquoi c'est horrible d'avoir des acouphènes ? (voix resserrée, 35 blocs → 36 plans) | 55,8 s | ✅ livré (2 parties) |
+| `oct17/` | **Chronique actu** « 17 octobre 2026, la journée qui a secoué la France » (format JT cartoon sérieux : bandeau horaire, carte de France, compteurs ; 50 blocs → 56 plans) | 84,5 s | ✅ livré (3 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
