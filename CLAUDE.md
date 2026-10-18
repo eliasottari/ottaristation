@@ -20,6 +20,12 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `dents_jaunes/` | Pourquoi c'est horrible d'avoir les dents jaunes ? (27 blocs → 40 plans, SIZEX, décors riches) | 61,1 s | ✅ livré (2 parties) |
 | `tache/` | Pourquoi c'est horrible d'avoir une tache de naissance sur le visage ? (32 blocs → 37 plans, SIZEX, décors riches) | 66,8 s | ✅ livré (2 parties) |
 | `vergetures/` | Pourquoi c'est horrible d'avoir des vergetures à 16 ans ? (28 blocs → 35 plans, SIZEX, décors riches) | 60,8 s | ✅ livré (2 parties) |
+| `fevrier29/` | Pourquoi c'est horrible de naître le 29 février ? (voix resserrée, 37 blocs → 43 plans, SIZEX, décors riches) | 82,9 s | ✅ livré (3 parties) |
+| `albinos/` | Pourquoi c'est horrible de naître albinos ? (voix resserrée, 31 blocs → 37 plans) | 67,4 s | ✅ livré (3 parties) |
+| `acne/` | Pourquoi c'est horrible de garder des cicatrices d'acné ? (voix resserrée, 29 blocs → 35 plans) | 58,8 s | ✅ livré (2 parties) |
+| `dernier/` | Pourquoi c'est horrible d'être le dernier de la famille ? (voix resserrée, 41 blocs → 45 plans) | 70,7 s | ✅ livré (3 parties) |
+| `oreilles/` | Pourquoi c'est horrible d'avoir les oreilles décollées ? (voix resserrée, 28 blocs → 34 plans) | 56,5 s | ✅ livré (2 parties) |
+| `acouphene/` | Pourquoi c'est horrible d'avoir des acouphènes ? (voix resserrée, 35 blocs → 36 plans) | 55,8 s | ✅ livré (2 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
@@ -28,6 +34,10 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 - `tools/` : setup.sh, new_episode.sh, prep.py (voix → words.js + blocks.txt + timing.js), deliver.sh, build_kit.sh.
 - `template/` : squelette d'épisode (TOTAL/BT dans timing.js). `kitfiles/` : CLAUDE.md + README du kit.
 - `tools/build_kit.sh` → `dist/video-pourquoi-kit.zip` (sans clé API ni voix client). Le refaire après chaque amélioration du moteur.
+
+## Voix (retours client)
+- **Silences supprimés** (TikTok) : `python3 tools/tighten.py brut.mp3 assets/src.mp3 --keep .06 --min .12` AVANT la transcription (phrases bord à bord).
+- **Voix +10 dB** : après prep, `ffmpeg -i assets/src.mp3 -af "volume=10dB,alimiter=limit=0.89:level=false" assets/voix.mp3` (le client montait la voix de +10 dB dans CapCut).
 
 ## Ce que l'utilisateur fournit pour un nouvel épisode
 1. Un fichier voix (mp3/wav) uploadé.
