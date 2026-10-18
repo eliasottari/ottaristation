@@ -389,8 +389,8 @@ B(2, { enter: 'none', trans: 'up', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1
   draw: (t, d, T) => { const C = at(2, 'cheveux') - O2, P = at(2, 'peau') - O2;
     return gridBg('#2a2440') + halftoneFade('#fff', .05, 1) + cutout(albHead(CX, 1000, 185, { expr: 'happy', hstyle: 'babyRed' }, t), 12) +
       swatch(270, 520, ALB_HAIR, 'CHEVEUX', '#F8F5EE', t, C, -6) + swatch(810, 520, ALB_SKIN, 'PEAU', '#FDEEE4', t, P, 6) +
-      markerArrow(300, 660, 470, 800, t, C + .25, { bend: -40, col: SX.acc2 }) + markerArrow(780, 660, 700, 960, t, P + .25, { bend: 40, col: SX.acc2 }) + markerText('presque blancs', 300, 1180, t, at(2, 'blancs') - O2, { size: 40, col: '#fff' }); },
-  sfx: [[at(2, 'cheveux') - O2, 'pop', .6], [at(2, 'cheveux') - O2 + .25, 'scratch', .4], [at(2, 'peau') - O2, 'pop', .6], [at(2, 'peau') - O2 + .25, 'scratch', .4], [at(2, 'claire') - O2, 'glint', .5]] });
+      markerArrow(300, 660, 470, 800, t, C + .25, { bend: -40, col: SX.acc2 }) + markerArrow(780, 660, 700, 960, t, P + .25, { bend: 40, col: SX.acc2 }) + markerText('presque blancs', 300, 1120, t, at(2, 'blancs') - O2, { size: 40, col: '#fff' }); },
+  sfx: [[at(2, 'cheveux') - O2, 'pop', .6], [at(2, 'cheveux') - O2 + .25, 'scratch', .4], [at(2, 'peau') - O2, 'pop', .6], [at(2, 'peau') - O2 + .25, 'scratch', .4], [at(2, 'claire') - O2, 'glint', .5]] }, O2);
 // B003 — avant même d'avoir appris à marcher : chambre de bébé, bébé qui tente de se lever… et retombe
 B(3, { enter: 'whip', cam: zin(1.0, 1.07, .4),
   draw: (t, d, T) => { const Mr = at(3, 'marcher'), fall = eOutBack(seg(t, Mr, Mr + .3)), w = Math.sin(t * 9) * 9 * (1 - fall);
@@ -401,7 +401,7 @@ B(3, { enter: 'whip', cam: zin(1.0, 1.07, .4),
 B(4, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: t > at(4, 'pire') ? 1.1 : lerp(1.0, 1.04, t / d), shake: t > at(4, 'ennemi') ? 5 : 0, hand: .4 }),
   draw: (t, d, T) => { const S = at(4, 'soleil'), k = eOutBack(seg(t, S - .1, S + .4));
     return nurseryA(t, { sun: 1 }) + op(.4 * clamp(k), path('M640 480L980 480L620 1350L220 1350Z', '#fff3a0', 0)) + G(tr(800, 520, .5 * k), sun(0, 0, 1, t, 'evil')) +
-      albBaby({ x: 330, y: 1350, s: 1.5, expr: t > S ? 'terror' : 'happy', look: [1, -1] }, t) + kword('PIRE ENNEMI', CX, 330, t, at(4, 'pire') - .05, { size: 92, fill: SX.acc2 }); },
+      albBaby({ x: 330, y: 1350, s: 1.5, expr: t > S ? 'terror' : 'happy', look: [1, -1] }, t) + kword('PIRE ENNEMI', CX, 330, t, at(4, 'pire') - .05, { size: 72, fill: SX.acc2 }); },
   sfx: [[at(4, 'soleil') - .1, 'whoosh_up', .6], [at(4, 'soleil') + .1, 'sizzle', .6], [at(4, 'pire') - .05, 'boom', .6], [at(4, 'ennemi'), 'growl', .6]] });
 // B005 — bienvenue dans la vie… : salon, banderole BIENVENUE, famille qui applaudit, « débloqué » sur ALBINISME
 B(5, { enter: 'drop', cam: zin(1.0, 1.06, .3),
@@ -419,7 +419,7 @@ B(6, { enter: 'none', trans: 'zoom', transD: .25, cam: (t, d) => ({ z: lerp(1.0,
 B(7, { enter: 'whip', cam: zin(1.02, 1.08, .4),
   draw: (t, d, T) => { const C = at(7, 'colorne'), k = seg(t, C - .1, C + .6);
     return classroomT(t, ftext(540, 470, 'ARTS PLASTIQUES', { size: 54, fill: 'rgba(255,255,255,.85)', font: SX.marker, stroke: 'none' })) +
-      G(tr(300, 1000, 1, wave(t, 2, 6)), rect(-120, -160, 240, 200, '#fff', 20, 7) + path('M-120 -160Q-60 -120 0 -160T120 -160L120 -110Q60 -80 0 -110T-120 -110Z', '#8a5a3a', 6) + path('M-80 -110Q-90 -40 -70 -20Q-60 -40 -60 -110Z', '#8a5a3a', 5) + ftext(0, -20, 'MÉLANINE', { size: 34, fill: '#8a5a3a', stroke: 'none' }) + circ(-40, -70, 10, OL, 0) + circ(40, -70, 10, OL, 0) + path('M-30 -50Q0 -30 30 -50', 'none', 6)) +
+      G(tr(460, 1060, 1, wave(t, 2, 6)), rect(-120, -160, 240, 200, '#fff', 20, 7) + path('M-120 -160Q-60 -120 0 -160T120 -160L120 -110Q60 -80 0 -110T-120 -110Z', '#8a5a3a', 6) + path('M-80 -110Q-90 -40 -70 -20Q-60 -40 -60 -110Z', '#8a5a3a', 5) + ftext(0, -20, 'MÉLANINE', { size: 34, fill: '#8a5a3a', stroke: 'none' }) + circ(-40, -70, 10, OL, 0) + circ(40, -70, 10, OL, 0) + path('M-30 -50Q0 -30 30 -50', 'none', 6)) +
       `<path d="M220 700Q540 560 860 720" fill="none" stroke="#8a5a3a" stroke-width="70" stroke-linecap="round" stroke-dasharray="${f1(800 * k)} 900"/>` + G(tr(lerp(220, 860, k), lerp(700, 720, k) - 80 * Math.sin(k * Math.PI), 1, 30), rect(-14, -170, 28, 180, '#ffd23f', 8, 5) + path('M-24 10L24 10L16 70L-16 70Z', '#8a5a3a', 5)) +
       kword('PIGMENT', CX, 360, t, at(7, 'pigment') - .05, { size: 110, fill: '#c9874a' }); },
   sfx: [[at(7, 'pigment') - .05, 'boom', .5], [at(7, 'colorne') - .1, 'spray', .6], [at(7, 'normalement'), 'squeak', .4]] });
@@ -430,7 +430,7 @@ B(7, { enter: 'none', trans: 'push', transD: .25, cam: camHand(1.04, .3),
     return depth({ zoom: 1, x: Math.sin(t) * 8 }, [{ z: 1.4, svg: bathroomT(t), haze: .1 }, { z: 1, svg: albHead(CX, 930, 230, { expr: t > Y ? 'wow' : 'happy' }, t) }, { z: .6, svg: fgLayer('bath', t) }]) +
       funTag(200, 470, 'PEAU', t, P - .05, { size: 50, bg: ALB_SKIN, fg: SX.ink, r: -6 }) + funTag(CX, 400, 'CHEVEUX', t, C - .05, { size: 50, bg: '#fff', fg: SX.ink, r: 3 }) + funTag(880, 470, 'YEUX', t, Y - .05, { size: 50, bg: ALB_IRIS, fg: SX.ink, r: 6 }) +
       markerArrow(220, 540, 370, 960, t, P + .1, { bend: -30 }) + markerArrow(CX, 470, CX + 40, 690, t, C + .1, { bend: 30 }) + markerArrow(860, 540, 640, 900, t, Y + .05, { bend: 30, d: .25 }); },
-  sfx: [[at(7, 'peau') - O7 - .05, 'pop', .6], [at(7, 'cheveux') - O7 - .05, 'pop', .6], [at(7, 'yeux') - O7 - .05, 'pop_hi', .6], [at(7, 'yeux') - O7 + .1, 'glint', .5]] });
+  sfx: [[at(7, 'peau') - O7 - .05, 'pop', .6], [at(7, 'cheveux') - O7 - .05, 'pop', .6], [at(7, 'yeux') - O7 - .05, 'pop_hi', .6], [at(7, 'yeux') - O7 + .1, 'glint', .5]] }, O7);
 // B008 — sauf que la mélanine aide aussi : SUPER-MÉLANINE, rayons, pose de super-héros
 B(8, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.08, 1.0, eOutCubic(clamp(t / .5))), cy: 1000 }),
   draw: (t, d, T) => { const Mn = at(8, 'melanine'); return rays(t, CX, 940, '#ffb36b', '#ff8a3d', 22) + G(tr(CX, 960, eOutBack(seg(t, Mn - .3, Mn + .1))), melano(0, 0, 2.1, t, { expr: 'proud', arm: 1 })) + popStars(CX, 900, t, Mn, 8, 360) +
@@ -440,8 +440,8 @@ B(8, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.08, 1.0, eOutCubic(
 B(9, { enter: 'none', trans: 'circle', transD: .3, ty: 900, cam: zin(1.0, 1.06, .4),
   draw: (t, d, T) => { const Ry = at(9, 'rayons'), k1 = seg(t, Ry - .2, Ry + .15), k2 = seg(t, Ry + .1, Ry + .45), bounce = t > Ry + .15;
     return depth({ zoom: 1, x: Math.sin(t) * 12 }, [{ z: 1.5, svg: streetT(t), haze: .1 }, { z: 1, svg: kid(3, { x: 420, y: 1500, s: 1.35, expr: 'chill', armR: [-40, -60] }, t) + G(tr(640, 900, 1, -20), melano(0, 0, .8, t, { expr: 'effort', label: false }) + G(tr(-40, -140, 1, -10), path('M-120 0Q0 -90 120 0Q0 40 -120 0Z', '#5b8fd8', 7) + ftext(0, 0, 'M', { size: 40, fill: '#fff', stroke: 'none' }))) }]) +
-      G(tr(900, 330, .38), sun(0, 0, 1, t, 'evil')) + uvBolt(860, 420, 640, 720, k1) + uvBolt(940, 440, 720, 760, k2) + (bounce ? impactStar(620, 740, .5, '#a259ff') + uvBolt(620, 740, 300 + 60 * Math.sin(t * 9), 520, seg(t, Ry + .15, Ry + .4)) : '') +
-      funTag(860, 560, 'UV', t, Ry - .1, { size: 54, bg: '#a259ff' }) + kword('ULTRAVIOLETS', CX, 400, t, at(9, 'ultraviolets') - .05, { size: 84, fill: '#d9b8ff' }); },
+      G(tr(930, 620, .36), sun(0, 0, 1, t, 'evil')) + uvBolt(860, 700, 630, 770, k1) + uvBolt(900, 740, 700, 800, k2) + (bounce ? impactStar(620, 770, .5, '#a259ff') + uvBolt(620, 770, 300 + 60 * Math.sin(t * 9), 600, seg(t, Ry + .15, Ry + .4)) : '') +
+      funTag(930, 470, 'UV', t, Ry - .1, { size: 54, bg: '#a259ff' }) + kword('ULTRAVIOLETS', CX, 400, t, at(9, 'ultraviolets') - .05, { size: 84, fill: '#d9b8ff' }); },
   sfx: [[at(9, 'proteger'), 'whoosh', .5], [at(9, 'rayons') - .2, 'zap', .7], [at(9, 'rayons') + .15, 'ding', .7], [at(9, 'ultraviolets') - .05, 'boom', .5]] });
 // B010 — Kevin peut passer l'après-midi dehors : parc, Kevin chill de ouf, ballon, horloge qui file
 B(10, { enter: 'whip', cam: zin(1.02, 1.08, .4),
@@ -464,7 +464,7 @@ B(11, { enter: 'none', trans: 'wipe', cam: zin(1.0, 1.06, .3),
     items.forEach(([s, w], i) => { const y = -40 + i * 80; list += rect(-170, y - 26, 44, 44, '#fff', 8, 5) + ftext(-110, y + 10, s, { size: 34, fill: SX.ink, stroke: 'none', anchor: 'start' }) + (t > w ? path(`M${-162} ${y - 4}L${-148} ${y + 12}L${-122} ${y - 26}`, 'none', 9, '#36a85a') : ''); });
     return depth({ zoom: 1, x: Math.sin(t) * 12 }, [{ z: 1.5, svg: parkA(t, { shade: 340 }), haze: .08 }, { z: 1, svg: umbrella(470, 860, .85, '#ff7a2e', '#fff') + alb({ x: 340, y: 1500, s: 1.35, expr: 'proud', hat: t > V ? 1 : 0, face: t > P ? { eyes: 'shades' } : {}, armR: [-20, -80], sleeve: '#5b4aa8' }, t) }, { z: .6, svg: fgA('park', t) }]) +
       G(tr(810, 560, 1, 4), list) + popStars(340, 960, t, V) + popStars(340, 1100, t, P); },
-  sfx: [[at(11, 'vetements') - O11, 'pop', .6], [at(11, 'vetements') - O11 + .05, 'tick', .6], [at(11, 'protecteurs') - O11, 'glint', .6], [at(11, 'et') + .1 - O11, 'tick', .7], [at(11, 'et') + .1 - O11 + .05, 'ding', .5]] });
+  sfx: [[at(11, 'vetements') - O11, 'pop', .6], [at(11, 'vetements') - O11 + .05, 'tick', .6], [at(11, 'protecteurs') - O11, 'glint', .6], [at(11, 'et') + .1 - O11, 'tick', .7], [at(11, 'et') + .1 - O11 + .05, 'ding', .5]] }, O11);
 // B012 — et ce n'est même pas le pire : nuit d'orage graphique, héros inquiet
 B(12, { enter: 'none', trans: 'glitch', transD: .2, cam: () => ({ z: 1.05, shake: 3 }),
   draw: (t, d, T) => { const P = at(12, 'pire'); return gridBg('#231a35') + halftoneFade('#000', .25, 1) + (Math.sin(t * 25) > .7 ? rect(-M, -M, W + 2 * M, H + 2 * M, 'rgba(255,255,255,.25)', 0, 0) : '') + cloud(300, 300, 1.8, '#3a2f52') + cloud(800, 260, 1.6, '#3a2f52') + lightning(720, 420, .4, .5 + .5 * Math.sin(t * 30)) +
@@ -482,7 +482,7 @@ B(13, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.04, 1.12, t / d) }),
   draw: (t, d, T) => { const Y = at(13, 'yeux') - O13, D = at(13, 'developpement') - O13;
     return blur(5, officeA(t)) + unlock(CX, 940, t, Y - .05, { part: 'back', r: 460 }) + albHead(CX, 940, 270, { expr: 'neutral', look: [0, -.2] }, t) + unlock(CX, 940, t, Y - .05, { part: 'front', r: 460 }) +
       markerCircle(CX - 92, 945, 80, 70, t, Y, { col: SX.acc2 }) + markerCircle(CX + 92, 945, 80, 70, t, Y + .1, { col: SX.acc2 }) + funTag(CX, 400, 'DÉVELOPPEMENT', t, D, { size: 52, bg: SX.cool }) + kword('TES YEUX', CX, 530, t, Y - .05, { size: 96, fill: ALB_IRIS }); },
-  sfx: [[at(13, 'developpement') - O13, 'pop', .6], [at(13, 'normal') - O13, 'tick', .5], [at(13, 'yeux') - O13 - .05, 'boom', .5], [at(13, 'yeux') - O13, 'sparkle', .7]] });
+  sfx: [[at(13, 'developpement') - O13, 'pop', .6], [at(13, 'normal') - O13, 'tick', .5], [at(13, 'yeux') - O13 - .05, 'boom', .5], [at(13, 'yeux') - O13, 'sparkle', .7]] }, O13);
 // B014 — vision réduite : le tableau des lettres devient flou, le héros plisse les yeux
 B(14, { enter: 'none', trans: 'wipe', cam: zin(1.0, 1.08, .3),
   draw: (t, d, T) => { const V = at(14, 'vision'), bl = lerp(0, 9, seg(t, V, at(14, 'reduite') + .3));
@@ -502,7 +502,7 @@ B(15, { enter: 'none', trans: 'up', transD: .2, cam: () => ({ z: 1.06, hand: .3 
   draw: (t, d, T) => { const Mv = at(15, 'mouvements') - O15, jig = t > Mv ? Math.sin(t * 24) : 0;
     return blur(6, officeA(t)) + albHead(CX, 930, 280, { expr: 'neutral', look: [jig, 0] }, t) + G(tr(CX, 700), path('M-160 0L160 0M-160 0l40 -30M-160 0l40 30M160 0l-40 -30M160 0l-40 30', 'none', 12, SX.acc2).replace('<path', `<path transform="translate(${f1(jig * 20)} 0)"`)) +
       funTag(CX, 420, 'NYSTAGMUS', t, Mv, { size: 62, bg: SX.acc }) + markerText('= mouvements involontaires', CX, 540, t, at(15, 'involontaires') - O15, { size: 38, col: '#fff', r: -3 }); },
-  sfx: [[at(15, 'mouvements') - O15, 'pop', .6], [at(15, 'mouvements') - O15 + .1, 'vibrate', .5], [at(15, 'involontaires') - O15, 'scratch', .4], [at(15, 'yeux') - O15, 'boing', .4]] });
+  sfx: [[at(15, 'mouvements') - O15, 'pop', .6], [at(15, 'mouvements') - O15 + .1, 'vibrate', .5], [at(15, 'involontaires') - O15, 'scratch', .4], [at(15, 'yeux') - O15, 'boing', .4]] }, O15);
 // B016 — « Magnifique. » : fond accent, pouce levé ironique
 B(16, { enter: 'punch', flash: 1, cam: () => ({ z: 1.05 }),
   draw: (t, d, T) => gridBg(SX.acc, 'rgba(255,255,255,.12)') + cutout(albHead(CX, 930, 210, { expr: 'deadpan', tilt: -6 }, t), 12) + G(tr(820, 1140, .9, -90), hand(0, 0, .8, 0, HERO, ALB_SKIN)) + G(tr(870, 1020), rect(-26, -70, 52, 90, ALB_SKIN, 24, 6)) + kword('MAGNIFIQUE.', CX, 470, t, 0, { size: 104, fill: '#fff', puff: false }),
@@ -603,6 +603,6 @@ B(31, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), s
   draw: (t, d, T) => { const P = at(31, 'pain') - O31, Q = P + .5;
     return depth({ zoom: 1, x: Math.sin(t) * 8 }, [{ z: 1.4, svg: bakeryA(t), haze: .06 }, { z: 1, svg: adult(3, { x: 820, y: 1300, s: 1.0, expr: t > Q ? 'wow' : 'happy', flip: 1, cap: '#fff', look: [-1, 0] }, t) + alb({ x: 300, y: 1520, s: 1.3, expr: t > Q + .2 ? 'deadpan' : 'ecstatic', hat: 1, armR: [-50, -80], holdR: aBaguette(0, 0, .55, -60) }, t) }, { z: .6, svg: fgA('bakery', t) }]) +
       kword('DU PAIN.', CX, 420, t, P - .05, { size: 110, fill: SX.acc2 }) + qBubble(760, 600, "C'EST TA VRAIE COULEUR ?", t, Q, '#fff', 30) + popStars(300, 1000, t, P); },
-  sfx: [[0, 'ring', .5], [at(31, 'acheter') - O31, 'steps', .5], [at(31, 'pain') - O31 - .05, 'tada', .7], [at(31, 'pain') - O31 + .5, 'pop', .6], [at(31, 'pain') - O31 + .8, 'rimshot', .6]] });
+  sfx: [[0, 'ring', .5], [at(31, 'acheter') - O31, 'steps', .5], [at(31, 'pain') - O31 - .05, 'tada', .7], [at(31, 'pain') - O31 + .5, 'pop', .6], [at(31, 'pain') - O31 + .8, 'rimshot', .6]] }, O31);
 
 SCENES.sort((a, b) => a.s - b.s);

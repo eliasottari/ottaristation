@@ -416,7 +416,7 @@ B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
 B(2, { enter: 'none', trans: 'wipe', transD: .25, cam: zin(1.02, 1.07, .3),
   draw: (t, d, T) => { const x = lerp(220, 470, eOutCubic(clamp(t / d)));
     return paper(SX.paper) + gobo(T, .12) + blob(800, 900, 260, t, '#ffe1b8', 2) + cutout(G(tr(800, 1480), rect(-170, -640, 340, 640, '#c98a5e', 10, 7) + rect(-110, -580, 220, 160, '#cfe8ff', 8, 5) + circ(120, -300, 18, '#ffd23f', 5) + rect(-120, -360, 120, 60, '#fff', 6, 4) + ftext(-60, -318, 'CM1', { size: 34, fill: SX.ink, stroke: 'none' })), 10) +
-      cutout(toi({ x, y: 1480, s: 1.2, expr: 'worried', walk: 4, e: {} }, t), 10) + funTag(800, 760, 'CLASSE', t, at(2, 'classe') - .1, { size: 48, bg: SX.cool }) + kthin('tu entres en classe…', CX, 380, t, 0, { size: 56 }); },
+      cutout(toi({ x, y: 1480, s: 1.2, expr: 'worried', walk: 4, e: {} }, t), 10) + funTag(800, 760, 'CLASSE', t, at(2, 'classe') - .1, { size: 48, bg: SX.cool }) + kthin('tu entres en classe…', CX, 380, t, 0, { size: 60, fill: SX.ink, font: 'Fredoka' }); },
   sfx: [[0, 'steps', .7], [at(2, 'entres'), 'squeak', .5], [at(2, 'classe') - .1, 'pop', .6]] });
 // B003 — « tes oreilles sont DÉJÀ ARRIVÉES » : porte fermée… mais les oreilles dépassent déjà de chaque côté
 B(3, { enter: 'none', trans: 'up', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.07, t / d) }),
@@ -525,7 +525,7 @@ B(16, { enter: 'none', trans: 'circle', transD: .3, cam: (t, d) => ({ z: lerp(1.
   draw: (t, d, T) => { const o = at(16, 'que') - .15, C = at(16, 'certains') - o, ks = [.35, .45, 1.05, .3, .5], lab = ['2 cm', '3 cm', 'TOI', '2 cm', '3 cm']; let s = schoolyard(t);
     for (let i = 0; i < 5; i++) { const x = 140 + i * 200, y = 960 + Math.sin(t * 3 + i) * 6; s += i === 2 ? toiHead(x, y - 20, 86, { expr: 'worried', e: { k: ks[i] } }, t) : kidEarHead(i, x, y, 80, ks[i], { expr: ['happy', 'smug', '', 'joy', 'neutral'][i] }, t);
       s += G(tr(x, 1130), funTag(0, 0, lab[i], t, C + i * .1, { size: 30, bg: i === 2 ? SX.acc : SX.cool, r: 0 })); }
-    return s + G(tr(CX, 760), rect(-500, -18, 1000, 36, SX.acc2, 10, 6) + Array.from({ length: 21 }, (_, i) => line(-480 + i * 48, -18, -480 + i * 48, i % 5 ? -2 : 8, 4)).join('')) + kword('AUTRES ENFANTS', CX, 470, t, at(16, 'enfants') - o - .05, { size: 76, fill: '#fff' }); },
+    return s + G(tr(CX, 760), rect(-500, -18, 1000, 36, SX.acc2, 10, 6) + Array.from({ length: 21 }, (_, i) => line(-480 + i * 48, -18, -480 + i * 48, i % 5 ? -2 : 8, 4)).join('')) + kword('AUTRES ENFANTS', CX, 470, t, at(16, 'enfants') - o - .25, { size: 62, fill: '#fff' }); },
   sfx: [[0, 'whoosh', .4], [.5, 'pop_hi', .5], [.7, 'pop_hi', .5], [.9, 'pop', .6], [1.3, 'boom', .4]] }, at(16, 'que') - .15);
 // B017 — les gens transforment une différence en SPECTACLE : scène, projecteurs, public, écran « LE SHOW DES OREILLES »
 B(17, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), hand: .3 }),
@@ -568,14 +568,14 @@ B(22, { enter: 'none', trans: 'zoom', transD: .3, cam: zin(1.0, 1.06, .3),
 // B023 — tu te recoiffes nerveusement (mains qui tapotent, sueur), tu caches ton profil
 B(23, { enter: 'punch', cam: camHand(1.06, .9),
   draw: (t, d, T) => { const N = at(23, 'nerveusement'), Pf = at(23, 'profil'), turn = eInOut(seg(t, Pf - .3, Pf + .1)), pat = Math.sin(t * 22);
-    return depth({ zoom: 1, x: 0 }, [{ z: 1.5, svg: cafeT(t), haze: .2 }, { z: 1, svg: elle({ x: 900, y: 1700, s: 1.2, expr: 'neutral', flip: 1 }, t) }]) +
+    return depth({ zoom: 1, x: 0 }, [{ z: 1.5, svg: cafeT(t), haze: .2 }, { z: 1, svg: elle({ x: 900, y: 1560, s: 1.1, expr: 'neutral', flip: 1 }, t) }]) +
       G(tr(380, 880) + ` scale(${f1(1 - .15 * turn)} 1)`, toiHead(0, 0, 210, { expr: 'embarrassed', look: [-turn, 0], e: { cover: 1 + .05 * pat } }, t)) + sweatSpray(380, 800, t, 6) +
       (t > N - .2 ? hand(380 - 330, 820 + pat * 30, 1.6) + hand(380 + 330, 820 - pat * 30, 1.6) : '') + funTag(380, 500, `RECOIFFAGE ×${counter(1, 99, t, N, Pf - N)}`, t, N - .1, { size: 42, bg: SX.acc }) + kword('DE PROFIL', 760, 1060, t, Pf - .05, { size: 64, fill: SX.acc2, puff: false }); },
   sfx: [[at(23, 'recoiffe'), 'squeak', .5], [at(23, 'nerveusement'), 'heartbeat', .7], [at(23, 'cacher'), 'squeak', .5], [at(23, 'profil') - .05, 'whoosh', .5], [at(23, 'profil') + .2, 'gulp', .5]] });
 // B024a — cette personne te regarde (gros plan, regard curieux)
 B(24, { enter: 'whip', cam: zin(1.04, 1.1),
   draw: (t, d, T) => cafeT(t) + elleHead(CX + 60, 880, 230, { expr: t > at(24, 'demande') ? 'confused' : 'neutral', look: [-.8, 0] }, t) + blur(10, G(tr(-30, 1100), toiHead(0, 0, 230, { expr: 'worried', e: { cover: 1 } }, t))) +
-    funTag(CX + 60, 470, '?', t, at(24, 'demande') - .1, { size: 80, bg: SX.acc2, fg: SX.ink }),
+    kword('?', CX + 330, 560, t, at(24, 'demande') - .1, { size: 150, fill: SX.acc2 }),
   sfx: [[0, 'whoosh', .4], [at(24, 'regarde'), 'glint', .5], [at(24, 'demande') - .1, 'hmm', .5]] });
 // B024b — « pourquoi tu passes ton temps à remettre tes cheveux ? » : compteur qui s'affole
 B(24, { enter: 'none', trans: 'push', transD: .2, cam: () => ({ z: 1.04, hand: .4 }),
@@ -605,8 +605,8 @@ B(27, { enter: 'none', trans: 'zoom', transD: .25, cam: (t, d) => ({ z: lerp(1.0
 // B028a — des années à cacher : éventail de souvenirs (photo, rideau, vent, Kevin)
 B(28, { enter: 'none', trans: 'up', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d) }),
   draw: (t, d, T) => { const mem = [{ cover: 0, k: 1.3 }, { cover: 1 }, { cover: 1, wind: 1 }, { cover: 1 }, { cover: 1 }], ex = ['sad', 'smugger', 'panic', 'effort', 'embarrassed'];
-    return paper(SX.paper) + gobo(T, .12) + cardArc(CX, 1080, 5, 380, t, .05, i => toiHead(0, 10, 44, { expr: ex[i], e: mem[i] }, t), { w: 190, h: 170 }) +
-      kthin('tu as passé des années à', CX, 360, t, 0, { size: 50, fill: SX.ink }) + kword('CACHER', CX, 490, t, at(28, 'cacher') - .05, { size: 120, fill: SX.acc }); },
+    return paper(SX.paper) + gobo(T, .12) + cardArc(CX, 1060, 5, 400, t, .05, i => toiHead(0, 14, 50, { expr: ex[i], e: mem[i] }, t), { w: 220, h: 200 }) +
+      kthin('tu as passé des années à', CX, 360, t, 0, { size: 56, fill: SX.ink, font: 'Fredoka' }) + kword('CACHER', CX, 490, t, at(28, 'cacher') - .05, { size: 120, fill: SX.acc }); },
   sfx: [[.05, 'pop', .5], [.2, 'pop', .5], [.35, 'pop', .5], [.5, 'pop', .5], [at(28, 'cacher') - .05, 'boom', .6]] });
 // B028b — FIN : « un détail que certaines personnes n'avaient même pas remarqué » — tu libères tes oreilles… et une rafale te fait décoller (Kevin passe en faisant l'avion)
 B(28, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(28, 'remarque') - (at(28, 'detail') - .3) + .4 ? 3 : 0 }),

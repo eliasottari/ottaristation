@@ -318,7 +318,7 @@ B(2, { enter: 'none', trans: 'wipe', cam: zin(1.02, 1.08, .3),
   draw: (t, d, T) => { const P = at(2, 'personne'), S = at(2, 'syflement'); return paper(SX.paper) + gobo(T, .12) +
     G(tr(220, 1060), cutout(person({ age: 'adult', x: 0, y: 380, s: .85, hair: 'bun', hairColor: '#8a5a3a', shirt: '#7aa6d8', expr: 'chill', seed: 31 }, t), 10)) + G(tr(860, 1060), cutout(kevin({ x: 0, y: 380, s: .85, expr: 'happy' }, t), 10)) +
     (t > P ? qmark(220, 640, .55, '#fff', -10) + qmark(860, 640, .55, '#fff', 10) : '') +
-    ringing(CX, 900, 150, t, seg(t, S - .2, S + .1)) + cutout(guyHead(CX, 900, 150, { expr: t > S ? 'shock' : 'worried', face: t > S ? { eyes: 'huge' } : {} }, t), 12) + (t > S ? iFloat(CX, 720, t, 4, { size: 54, col: SX.acc }) + zig(CX - 340, CX + 340, 1160, t, 26) : '') +
+    ringing(CX, 900, 150, t, seg(t, S - .2, S + .1)) + cutout(guyHead(CX, 900, 150, { expr: t > S ? 'shock' : 'worried', face: t > S ? { eyes: 'huge' } : {} }, t), 12) + (t > S ? iFloat(CX, 720, t, 4, { size: 54, col: SX.acc }) + zig(CX - 340, CX + 340, 1300, t, 22) : '') +
     kthin("que personne d'autre n'entend", CX, 350, t, P - .05, { size: 48 }) + kword('SIFFLEMENT', CX, 480, t, S - .05, { size: 84, fill: SX.acc }); },
   sfx: [[.02, 'whoosh', .5], [at(2, 'personne'), 'pop', .5], [at(2, 'entend'), 'hmm', .4], [at(2, 'syflement') - .05, 'boom', .5], [at(2, 'syflement'), 'ecg_beep', .3]] });
 
@@ -328,7 +328,7 @@ B(3, { enter: 'none', trans: 'up', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1
     return gridBg(lerpColor('#2a2440', '#0c0a14', off)) + op(1 - off * .7, glow(860, 520, 240, '#fff3b0', .6)) + G(tr(860, 380), line(0, -400, 0, 0, 5, '#fff') + path('M-70 60L70 60L40 0L-40 0Z', off > .5 ? '#555' : SX.acc2, 6) + circ(0, 74, 20, off > .5 ? '#777' : '#fff6c0', 5)) +
       cutout(guy({ x: wx, y: 1500, s: 1.15, expr: off > .5 ? 'terror' : 'worried', walk: off > .5 ? 0 : 3, look: [-1, 0] }, t), 12) + guyRing({ x: wx, y: 1500, s: 1.15 }, t, .8) +
       iiiBug(wx - 300, 820 + Math.sin(t * 3) * 20, .9, t, { look: [1, 0] }) + glow(wx - 300, 820, 200, SX.acc, .25 + .3 * off) +
-      kthin('il te suit…', CX, 340, t, at(3, 'suit') - .1, { size: 56 }) + kword('MÊME ÉTEINT', CX, 460, t, E - .05, { size: 78, fill: SX.acc2 }); },
+      kthin('il te suit…', CX, 340, t, at(3, 'suit') - .1, { size: 56 }) + kword('MÊME ÉTEINT', CX, 460, t, E - .05, { size: 64, fill: SX.acc2 }); },
   sfx: [[.05, 'tiptoe', .5], [at(3, 'suit'), 'ghost', .4], [at(3, 'eteint') - .1, 'tick', .8], [at(3, 'eteint') - .05, 'boom', .4]] });
 
 // B004 — « Tu as 20 ans, tu rentres chez toi après une longue journée » : rue du soir vivante, il traîne des pieds, sac à dos, étiquette 20 ANS
@@ -359,7 +359,7 @@ B(7, { enter: 'punch', flash: 1, cam: (t, d) => ({ z: lerp(1.1, 1.18, t / d), sh
 // B008 — « Iiiiiii » : crash zoom sur l'oreille, IIIIII géant, glitch, tout tremble
 B(8, { enter: 'crash', flash: 1, cam: () => ({ z: 1.12, shake: 14 }),
   draw: (t, d, T) => glitch(rect(-M, -M, W + 2 * M, H + 2 * M, SX.ink, 0, 0) + sunburst(260, 960, 22, 'rgba(138,92,255,.35)', 'rgba(0,0,0,0)', t * 40) + G(tr(140, 1000, 1, 8), guyHead(0, 0, 340, { expr: 'terror' }, t)) +
-    ringing(140, 1000, 340, t * 2, 1, { side: 1, reach: .8 }) + zig(560, 1100, 820, t, 40, SX.acc2, 12) + kword('IIIIIIII', 760, 560, t, .02, { size: 170, fill: SX.acc2, r: -10, d: .15 }), T, .3),
+    ringing(140, 1000, 340, t * 2, 1, { side: 1, reach: .8 }) + zig(560, 1100, 820, t, 40, SX.acc2, 12) + kword('iiiiiii', 760, 560, t, .02, { size: 170, fill: SX.acc2, r: -10, d: .15 }), T, .3),
   sfx: [[0, 'flash_hit', .6], [.02, 'ecg_beep', .4], [.15, 'zap', .4]] });
 
 // B009 — « Tu vérifies le chargeur » : gros plan prise + chargeur, loupe, cadre « chargeur.png », croix
@@ -447,7 +447,7 @@ B(20, { enter: 'none', trans: 'circle', transD: .3, tx: CX, ty: 860, cam: zin(1.
   draw: (t, d, T) => { const P = at(20, 'piece'), Bq = at(20, 'bruit');
     return streetBg(t, { day: 1 }) + WASH('rgba(255,255,255,.25)') + guyHead(CX, 880, 280, { expr: 'deadpan' }, t) + earplug(CX - 290, 900, .7, 90) + earplug(CX + 290, 900, .7, -90) +
       (t > Bq ? G(tr(CX, 860), circ(0, 0, 130, 'rgba(43,36,32,.85)', 7) + iiiBug(0, 30, .55, t, { look: [0, 0] })) : '') + (t > Bq ? markerCircle(CX, 870, 180, 170, t, Bq, { col: SX.acc2 }) : '') +
-      kevinHead(940, 1070, 100, { expr: 'confused' }, t) + (t > P ? qmark(1000, 930, .5, '#fff', 10) : '') + funTag(CX, 420, 'PAS DANS LA PIÈCE', t, at(20, 'kevin') + .2, { size: 50, bg: SX.acc }) + markerText('dans la tête', CX, 1230, t, P - .05, { size: 54, col: SX.acc2 }); },
+      kevinHead(940, 1070, 100, { expr: 'confused' }, t) + (t > P ? qmark(1000, 930, .5, '#fff', 10) : '') + funTag(CX, 420, 'PAS DANS LA PIÈCE', t, at(20, 'kevin') + .2, { size: 50, bg: SX.acc }) + markerText('dans la tête', CX, 540, t, P - .05, { size: 54, col: SX.acc2 }); },
   sfx: [[at(20, 'kevin'), 'squeak', .5], [at(20, 'bruit'), 'ecg_beep', .3], [at(20, 'bruit') + .1, 'scratch', .4], [at(20, 'piece'), 'rimshot', .4]] });
 
 // B021 — « Tu vas au restaurant » : plan large resto vivant
@@ -484,8 +484,8 @@ B(25, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.05, 1.2, t / d) }),
 // B026 — « plus il semble prendre toute la place » : les lettres IIII gonflent et remplissent la chambre, il est écrasé dans le coin
 B(26, { enter: 'none', trans: 'zoom', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(26, 'toute') ? 5 : 0 }),
   draw: (t, d, T) => { const g = eOutBack(seg(t, at(26, 'semble'), at(26, 'place') + .3)); let s = bedroom(t, 1) + op(.3, rect(-M, -M, W + 2 * M, H + 2 * M, '#0b1030', 0, 0));
-    s += guy({ x: 140 - g * 40, y: 1500, s: .95, expr: 'panic', rot: -10 * g, armL: [200, 230], armR: [-20, -50] }, t);
-    for (let i = 0; i < 4; i++) s += G(tr(420 + i * 170, 1250 - 10 * Math.sin(t * 6 + i), .5 + 1.3 * g * (1 + .1 * Math.sin(t * 5 + i))), ftext(0, 0, 'i', { size: 480, fill: [SX.acc, SX.acc2, '#ff8fb1', SX.cool][i] }));
+    s += guy({ x: 190 - g * 30, y: 1480, s: 1.0, expr: 'panic', rot: -10 * g, armL: [200, 230], armR: [-20, -50] }, t);
+    for (let i = 0; i < 4; i++) { const c = [SX.acc, SX.acc2, '#ff8fb1', SX.cool][i]; s += G(tr(470 + i * 160, 1250 - 10 * Math.sin(t * 6 + i), .4 + 1.1 * g * (1 + .1 * Math.sin(t * 5 + i))), rect(-42, -230, 84, 230, c, 34, 8) + circ(0, -310, 50, c, 8) + ell(-14, -190, 10, 30, 'rgba(255,255,255,.5)', 0)); }
     return s + iiiBug(820, 520, .6 + .3 * g, t, { look: [-1, .5] }) + kword('TOUTE LA PLACE', CX, 380, t, at(26, 'toute') - .05, { size: 62, fill: '#fff' }); },
   sfx: [[at(26, 'semble'), 'whoosh_up', .6], [at(26, 'prendre'), 'boing', .5], [at(26, 'toute') - .05, 'boom', .6], [at(26, 'place'), 'crack', .5]] });
 
@@ -549,12 +549,12 @@ B(35, { enter: 'none', trans: 'black', transD: .25, cam: (t, d) => ({ z: lerp(1.
 
 // B035b — FIN : « …le moment où ton bruit devient le plus fort » : le monstre sort un mégaphone, ondes énormes, LE PLUS FORT ; le héros, blasé, met… un bouchon au monstre
 B(35, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), shake: t > at(35, 'fort') - o35 ? 9 : 2 }),
-  draw: (t, d, T) => { const Bt = at(35, 'bruit') - o35, F = at(35, 'fort') - o35, g = eOutBack(seg(t, Bt - .2, F + .2)), plug = seg(t, F + .1, F + .35);
+  draw: (t, d, T) => { const Bt = at(35, 'bruit') - o35, F = at(35, 'fort') - o35, g = eOutBack(seg(t, Bt - .2, F + .2)), plug = seg(t, F - .05, F + .2);
     return bedroom(t, 1) + op(.35, rect(-M, -M, W + 2 * M, H + 2 * M, '#05061a', 0, 0)) + sunburst(760, 760, 22, 'rgba(138,92,255,.3)', 'rgba(0,0,0,0)', t * 30) + ringing(760, 760, 140 + 80 * g, t * 1.5, 1) +
       guy({ x: 260, y: 1520, s: 1.1, expr: plug > 0 ? 'smugger' : 'terror', armR: plug > 0 ? [-30, -20] : [70, 80] }, t) + iiiBug(760, 760, .9 + .5 * g, t, { mega: 1 }) + iFloat(760, 520, t, 5, { size: 70, col: SX.acc2 }) +
       (plug > 0 ? earplug(lerp(420, 790, eOutCubic(plug)), lerp(1000, 820, eOutCubic(plug)), .6, 70) : '') +
       kthin('le moment où ton bruit devient', CX, 340, t, 0, { size: 44 }) + kword('LE PLUS FORT', CX, 460, t, F - .3, { size: 72, fill: SX.acc2 }); },
-  sfx: [[0, 'flash_hit', .4], [at(35, 'bruit') - o35, 'ghost', .5], [at(35, 'fort') - o35 - .3, 'boom', .7], [at(35, 'fort') - o35, 'siren', .3], [at(35, 'fort') - o35 + .12, 'pop', .6], [at(35, 'fort') - o35 + .35, 'rimshot', .5]] }, o35);
+  sfx: [[0, 'flash_hit', .4], [at(35, 'bruit') - o35, 'ghost', .5], [at(35, 'fort') - o35 - .3, 'boom', .7], [at(35, 'fort') - o35, 'siren', .3], [at(35, 'fort') - o35, 'pop', .6], [at(35, 'fort') - o35 + .25, 'rimshot', .5]] }, o35);
 
 function heartsUpA(t, x, y, n = 5) { let s = ''; for (let i = 0; i < n; i++) { const k = (t * .9 + i / n) % 1; s += op(1 - k, heart(x + Math.sin(k * 9 + i) * 60 + (i - n / 2) * 40, y - k * 360, .6 + k * .3)); } return s; }
 
