@@ -387,7 +387,7 @@ B(4, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.12, 1.04, eOutCubic
 // B005 — « Puis, minuit » : le réveil bascule à 00:00 (vert), mâchoires au sol
 B(5, { enter: 'none', cam: (t, d) => ({ z: 1.05, shake: t > at(5, 'minuit') ? 8 * (1 - seg(t, at(5, 'minuit'), at(5, 'minuit') + .5)) : 0 }),
   draw: (t, d, T) => { const Mn = at(5, 'minuit'), on = t > Mn; return maternite(t, { noClock: 1 }) + (on ? rays(t, CX, 580, 'rgba(255,240,170,.4)', 'rgba(255,255,255,0)', 18) + impactStar(CX, 580, 1.8) : '') + fDigi(CX, 580, 1.3, on ? '00:00' : '23:59', t, on ? '#5dff8a' : '#ff4d4d') +
-    docP({ x: 250, y: 1560, s: 1.15, expr: on ? 'jawdrop' : 'worried', look: [1, -1] }, t) + nurse({ x: 850, y: 1560, s: 1.15, expr: on ? 'terror' : 'scared', flip: 1 }, t) + kword('MINUIT !', CX, 860, t, Mn - .05, { size: 96, fill: '#fff' }); },
+    docP({ x: 250, y: 1560, s: 1.15, expr: on ? 'jawdrop' : 'worried', look: [1, -1] }, t) + nurse({ x: 850, y: 1560, s: 1.15, expr: on ? 'terror' : 'scared', flip: 1 }, t) + kword('MINUIT !', CX, 900, t, Mn - .05, { size: 96, fill: '#fff' }); },
   sfx: [[at(5, 'puis'), 'clock_fast', .5], [at(5, 'minuit') - .05, 'ding', .9], [at(5, 'minuit'), 'boom', .6], [at(5, 'minuit') + .1, 'gasp', .6]] });
 // B006 — « 29 février » : la page « 28 » du calendrier s'arrache, le « 29 » brille (rayons, étoiles)
 B(6, { enter: 'punch', flash: 1, cam: zin(1.05, 1.12, .3),
@@ -434,7 +434,7 @@ B(10, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.08, 1.0, eOutCubic
 // B011 — « Kevin te regarde » : gros plan Kevin soupçonneux, fond flou
 B(11, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d) }),
   draw: (t, d, T) => depth({ zoom: 1 }, [{ z: 1.6, svg: salonParty(t, { fg: false }), blur: 6, haze: .1 }, { z: 1, svg: kevinHead(CX, 860, 230, { expr: 'suspicious', look: [-1, 0] }, t) }]) +
-    funTag(CX + 250, 500, 'KEVIN', t, at(11, 'kevin'), { size: 50, bg: '#5fb85f' }) + markerCircle(CX - 30, 850, 240, 90, t, at(11, 'regarde'), { col: SX.acc2 }),
+    funTag(CX + 250, 500, 'KEVIN', t, at(11, 'kevin'), { size: 50, bg: '#5fb85f' }) + markerArrow(CX + 250, 560, CX + 60, 760, t, at(11, 'regarde'), { col: SX.acc2, bend: -40 }),
   sfx: [[0, 'whoosh', .5], [at(11, 'kevin'), 'pop', .5], [at(11, 'regarde'), 'hmm', .6]] });
 // B012 — « t'as 4 ans ou 1 an ? » : Kevin perdu (points d'interrogation), tu rigoles
 B(12, { cam: camHand(1.04, .4),
@@ -481,7 +481,7 @@ B(18, { enter: 'drop', cam: zin(1.02, 1.1),
 // B019 — Kevin proteste ENCORE : manif dans la cour, mégaphone, pancartes
 B(19, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .5 }),
   draw: (t, d, T) => { const E = at(19, 'encore'), D = at(19, 'deja'); return schoolyard2(t) + person({ age: 'kid', x: 600, y: 1400, s: .9, hair: 'curly', hairColor: '#2b2420', shirt: '#7aa6d8', expr: 'angry', seed: 24 }, t) + fSign(600, 900, .6, 'BOUH', -6, '#ffd23f') + person({ age: 'kid', x: 960, y: 1400, s: .9, hair: 'bun', hairColor: '#8a5a3a', shirt: '#ffd23f', expr: 'angry', flip: 1, seed: 25 }, t) + fSign(960, 880, .6, 'NON', 8, '#ff8fb1') +
-    fHero({ x: 220, y: 1500, s: 1.25, expr: 'worried' }, t) + sweatSpray(220, 1080, t, 4) + kevin({ x: 760, y: 1500, s: 1.35, expr: 'rage', flip: 1, armL: [180, 170] }, t) + fMega(640, 1110, .7, 190) + motionLines(520, 1110, 3, 70, 180) +
+    fHero({ x: 220, y: 1500, s: 1.25, expr: 'worried' }, t) + sweatSpray(220, 1080, t, 4) + kevin({ x: 800, y: 1500, s: 1.35, expr: 'rage', flip: 1, armL: [180, 170] }, t) + fMega(590, 1130, .65, 190) + motionLines(470, 1130, 3, 70, 180) +
     funTag(CX, 580, 'MANIF ANTI-ANNIV', t, E, { size: 40, bg: '#fff', fg: SX.ink }) + kword('DÉJÀ PASSÉ !', CX, 430, t, D - .05, { size: 92, fill: '#ff4d4d' }); },
   sfx: [[0, 'siren', .4], [at(19, 'proteste'), 'whistle', .6], [at(19, 'encore'), 'pop', .5], [at(19, 'deja') - .05, 'boom', .6], [at(19, 'passe'), 'buzz', .4]] });
 // B020 — « je vais te faire passer ton DERNIER anniversaire » : rage, flammes, l'invitation de Kevin déchirée
@@ -529,8 +529,8 @@ B(25, { enter: 'whip', cam: camHand(1.06, .4),
   sfx: [[0, 'whoosh', .5], [at(25, 'toi'), 'scratch', .5], [at(25, '20') - .05, 'pop', .6], [at(25, '20') + .1, 'sting', .4]] });
 // B025b — « … comment fonctionne un calendrier » : Kevin tient le calendrier à l'envers, kevin.exe a planté
 B(25, { enter: 'none', trans: 'wipe', transD: .22, cam: zin(1.02, 1.1, .3),
-  draw: (t, d, T) => { const Dc = at(25, 'decouvert') - o25, Cl = at(25, 'calendrier') - o25; return streetBg(t, { main: 'cafe' }) + WASH('rgba(255,255,255,.15)') + kevinA({ x: CX, y: 1580, s: 1.25, expr: 'dizzy', armL: [200, 160], armR: [-20, 20] }, t) +
-    G(tr(CX, 1170, 1, 180 + Math.sin(t * 3) * 8), fFeb(0, 0, .45, t, {})) + qMarks(CX, 640, t, 3) + funBox(CX, 900, 360, 340, t, Dc, { label: 'kevin.exe', col: '#ff4d4d' }) + kword('CALENDRIER ?!', CX, 440, t, Cl - .05, { size: 84, fill: SX.acc2 }); },
+  draw: (t, d, T) => { const Dc = at(25, 'decouvert') - o25, Cl = at(25, 'calendrier') - o25; return streetBg(t, { main: 'cafe' }) + WASH('rgba(255,255,255,.15)') + kevinA({ x: 380, y: 1560, s: 1.2, expr: 'dizzy', armR: [-30, -10] }, t) +
+    G(tr(790, 900, 1, 170 + Math.sin(t * 3) * 10), fFeb(0, 0, .5, t, {})) + qMarks(380, 660, t, 3) + funBox(380, 990, 360, 440, t, Dc, { label: 'kevin.exe', col: '#ff4d4d' }) + kword('CALENDRIER ?!', CX, 440, t, Cl - .05, { size: 68, fill: SX.acc2 }); },
   sfx: [[at(25, 'decouvert') - o25, 'error_beep', .5], [at(25, 'comment') - o25, 'hmm', .5], [at(25, 'calendrier') - o25 - .05, 'boing', .7], [at(25, 'calendrier') - o25 + .3, 'rimshot', .5]] }, o25);
 // B026 — « ton 20e anniversaire » : salon de fête, bras en l'air
 B(26, { enter: 'none', trans: 'push', transD: .25, cam: zin(1.0, 1.06, .3),
@@ -550,7 +550,7 @@ B(28, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
 // B029 — le gâteau arrive… avec 5 bougies (marqueur « 5 ?! »), ton sourire s'éteint
 B(29, { enter: 'whip', cam: zin(1.02, 1.12, .4),
   draw: (t, d, T) => { const Gt = at(29, 'gateau'), C = at(29, '5'); const cx = lerp(1300, 700, eOutCubic(seg(t, Gt - .1, Gt + .5))); return salonParty(t, { fg: false }) + fHeroA({ x: 270, y: 1560, s: 1.15, expr: t > C ? 'deadpan' : 'ecstatic', hh: { droop: seg(t, C, C + .4) } }, t) +
-    amieA({ x: cx + 170, y: 1560, s: 1.05, expr: 'laugh', flip: 1 }, t) + fCake(cx - 40, 1180, .8, t, 5) + markerCircle(cx - 40, 930, 170, 70, t, C, { col: '#ff4d4d' }) + markerText('5 ?!', cx - 40, 760, t, C + .2, { size: 80, col: SX.acc2 }); },
+    amieA({ x: cx + 260, y: 1560, s: 1.05, expr: 'laugh', flip: 1 }, t) + fCake(cx - 60, 1270, .8, t, 5) + markerCircle(cx - 60, 1020, 170, 70, t, C, { col: '#ff4d4d' }) + markerText('5 ?!', cx - 60, 850, t, C + .2, { size: 80, col: SX.acc2 }); },
   sfx: [[at(29, 'gateau') - .1, 'steps', .5], [at(29, 'gateau') + .2, 'angel', .4], [at(29, '5'), 'scratch', .6], [at(29, '5') + .2, 'pop', .6], [at(29, 'bougies'), 'sting', .4]] });
 // B030 — « Tout le monde rigole » : crash zoom, fou rire général, toi de marbre
 B(30, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.15, 1.05, eOutCubic(clamp(t / .3))), shake: 5 }),
@@ -567,7 +567,7 @@ B(31, { enter: 'none', trans: 'circle', transD: .3, cam: (t, d) => ({ z: lerp(1.
 // B032 — « même la règle des 4 ans a une exception » : tableau, TOUS LES 4 ANS… EXCEPTION
 B(32, { enter: 'whip', cam: zin(1.0, 1.08, .3),
   draw: (t, d, T) => { const Rg = at(32, 'regle'), Ex = at(32, 'exception'); return classroom(t) + op(seg(t, Rg, Rg + .3), ftext(540, 520, 'TOUS LES 4 ANS', { size: 66, fill: 'rgba(255,255,255,.92)', font: 'Fredoka', stroke: 'none' })) +
-    prof({ x: 180, y: 1560, s: 1.1, expr: t > Ex ? 'smug' : 'talk', armR: [-60, -80] }, t) + fHeroA({ x: 850, y: 1560, s: 1.1, expr: t > Ex ? 'shock' : 'neutral', flip: 1 }, t) + kword('EXCEPTION', CX, 690, t, Ex - .05, { size: 100, fill: '#ff4d4d' }) + markerPath('M300 560L780 560', t, Ex - .2, { col: '#ff4d4d', w: 12 }); },
+    prof({ x: 180, y: 1560, s: 1.1, expr: t > Ex ? 'smug' : 'talk', armR: [-60, -80] }, t) + fHeroA({ x: 850, y: 1560, s: 1.1, expr: t > Ex ? 'shock' : 'neutral', flip: 1 }, t) + kword('EXCEPTION', CX, 690, t, Ex - .05, { size: 90, fill: '#ff4d4d' }) + markerPath('M300 560L780 560', t, Ex - .2, { col: '#ff4d4d', w: 12 }); },
   sfx: [[0, 'whoosh', .4], [at(32, 'regle'), 'scratch', .5], [at(32, '4'), 'tick', .5], [at(32, 'exception') - .05, 'boom', .6], [at(32, 'exception') + .1, 'gasp', .5]] });
 // B033 — 2100 : ville du futur, toi à 96 ans, hologramme de février qui bugge (pas de 29) → sanglots
 B(33, { enter: 'none', trans: 'zoom', transD: .3, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
@@ -584,19 +584,19 @@ B(34, { enter: 'crash', cam: zin(1.02, 1.08, .4),
 // B034b — « …bissextiles que si divisibles par 400 » : cerveau en surchauffe, les règles tournent autour de la tête
 B(34, { enter: 'none', trans: 'glitch', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.12, eInOut(clamp(t / d))), shake: t > at(34, '400') - o34 ? 5 : 1 }),
   draw: (t, d, T) => { const Bi = at(34, 'bisextiles') - o34, Q = at(34, '400') - o34; const nums = ['÷4', '÷100', '÷400', '2000 OUI', '1900 NON', '2100 NON', '366 j', '¼']; let s = gridBg(SX.ink) + halftoneFade(SX.acc, .1, 1);
-    nums.forEach((nm, i) => { const a = t * 1.3 + i * 6.283 / nums.length; s += funTag(CX + Math.cos(a) * 360, 880 + Math.sin(a) * 250, nm, t, Bi - .2 + i * .15, { size: 40, bg: [SX.acc2, '#fff', SX.cool, '#ff8fb1'][i % 4], fg: SX.ink, r: Math.sin(a) * 10 }); });
-    return s + cutout(fHeroHead(CX, 880, 160, { expr: t > Q ? 'dizzy' : 'confused' }, t), 12) + steam(CX - 80, 700, t, .9) + steam(CX + 80, 700, t, .9) + (t > Q ? burst(CX, 420, 210, t, Q - .05, SX.acc, 14) : '') + kword('÷ 400 ?!', CX, 420, t, Q - .05, { size: 110, fill: SX.acc2 }); },
+    nums.forEach((nm, i) => { const a = t * 1.3 + i * 6.283 / nums.length; s += funTag(CX + Math.cos(a) * 350, 880 + Math.sin(a) * 300, nm, t, Bi - .2 + i * .15, { size: 40, bg: [SX.acc2, '#fff', SX.cool, '#ff8fb1'][i % 4], fg: SX.ink, r: Math.sin(a) * 10 }); });
+    return s + cutout(fHeroHead(CX, 910, 120, { expr: t > Q ? 'dizzy' : 'confused' }, t), 12) + steam(CX - 80, 700, t, .9) + steam(CX + 80, 700, t, .9) + (t > Q ? burst(CX, 420, 210, t, Q - .05, SX.acc, 14) : '') + kword('÷ 400 ?!', CX, 420, t, Q - .05, { size: 110, fill: SX.acc2 }); },
   sfx: [[0, 'zap', .4], [at(34, 'bisextiles') - o34, 'typing', .5], [at(34, 'si') - o34, 'clock_fast', .5], [at(34, '400') - o34 - .05, 'boom', .7], [at(34, '400') - o34 + .15, 'boing', .5]] }, o34);
 // B035 — le calendrier a décidé de compliquer ton existence : calendrier méchant dans son repaire, toi en cage
 B(35, { enter: 'drop', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, eInOut(clamp(t / d))), hand: .3, shake: t > at(35, 'compliquer') ? 4 : 0 }),
   draw: (t, d, T) => { const Cl = at(35, 'calendrier'), Cp = at(35, 'compliquer'); let cage = ''; for (let i = 0; i < 6; i++) cage += line(770 + i * 36, 830, 770 + i * 36, 1180, 9, '#9aa3ad');
     return lair(t) + (t > Cp ? op(.5, rays(t, 380, 820, 'rgba(255,60,90,.4)', 'rgba(0,0,0,0)', 16)) : '') + fVillain(380, 820, 1.45, t, t > at(35, 'decide') ? 1 : 0) + fHeroHead(860, 1010, 78, { expr: 'terror', hh: { droop: .7 } }, t) + G('', path('M740 830Q860 740 980 830Z', '#9aa3ad', 7) + cage + rect(740, 1170, 240, 24, '#9aa3ad', 6, 6)) +
-      funTag(380, 460, 'LE CALENDRIER', t, Cl - .05, { size: 46, bg: '#7a1a3a' }) + kword('COMPLIQUER', CX, 600 - 0, t, Cp - .05, { size: 100, fill: SX.acc2 }); },
+      funTag(CX, 330, 'LE CALENDRIER', t, Cl - .05, { size: 46, bg: '#7a1a3a' }) + kword('COMPLIQUER', CX, 450, t, Cp - .05, { size: 100, fill: SX.acc2 }); },
   sfx: [[at(35, 'autrement'), 'thunder', .5], [at(35, 'calendrier') - .05, 'pop', .5], [at(35, 'decide'), 'growl', .5], [at(35, 'compliquer') - .05, 'boom', .7], [at(35, 'existence'), 'ghost', .5]] });
 // B036 — « il y a quand même un avantage » : chill de ouf, hamac au parc, lunettes de soleil, cocktail
 B(36, { enter: 'whip', cam: zin(1.0, 1.06, .3),
   draw: (t, d, T) => { const Av = at(36, 'avantage'), sw = Math.sin(t * 2) * 12; return park(t) + path(`M90 880Q${CX} ${1080 + sw} 990 880`, 'none', 10, '#c38a52') + path(`M150 900Q${CX} ${1110 + sw} 930 900L930 930Q${CX} ${1150 + sw} 150 930Z`, '#ffb3c8', 6) +
-    G(tr(CX + 300, 1000 + sw, 1, -82), fHeroA({ x: 0, y: 0, s: .95, expr: 'chill', glasses: true }, t)) + G(tr(780, 860 + sw), rect(-24, -60, 48, 70, 'rgba(220,240,255,.8)', 10, 5) + rect(-20, -30, 40, 36, '#ff9a3c', 6, 0) + line(8, -60, 24, -100, 5, '#ff4f87') + circ(-26, -60, 14, '#7be07b', 4)) +
+    G(tr(CX + 300, 1110 + sw, 1, -82), fHeroA({ x: 0, y: 0, s: .95, expr: 'chill', glasses: true }, t)) + G(tr(780, 960 + sw), rect(-24, -60, 48, 70, 'rgba(220,240,255,.8)', 10, 5) + rect(-20, -30, 40, 36, '#ff9a3c', 6, 0) + line(8, -60, 24, -100, 5, '#ff4f87') + circ(-26, -60, 14, '#7be07b', 4)) +
     funTag(CX, 470, 'AVANTAGE', t, Av - .05, { size: 76, bg: SX.cool }) + popStars(CX, 470, t, Av, 8, 280) + sparkle(260, 700, .5 + .2 * Math.sin(t * 8)); },
   sfx: [[0, 'chirp', .5], [at(36, 'bon'), 'whoosh', .3], [at(36, 'avantage') - .05, 'ding', .6], [at(36, 'avantage') + .1, 'sparkle', .5]] });
 // B037a — « quand quelqu'un oublie ton anniversaire » : soirée, ton amie découvre le rappel… trop tard
@@ -611,7 +611,7 @@ B(37, { enter: 'none', trans: 'wipe', transD: .25, cam: (t, d) => ({ z: lerp(1.0
   draw: (t, d, T) => { const So = at(37, 'sortir') - o37, Q = at(37, '3') - o37, ts = ['meme', 'excuse', 'pendant'].map(w => at(37, w) - o37), df = seg(t, Q + .2, Q + 1.4);
     let s = streetBg(t, { main: 'cafe', sky1: '#ff9a6b', sky2: '#ffe3c2', night: 1 }) + amieA({ x: 820, y: 1560, s: 1.15, expr: t > Q ? 'smugger' : 'embarrassed', flip: 1, armL: [210, 200], armR: [-30, -20] }, t) +
       fHeroA({ x: 270, y: 1560, s: 1.15, expr: t > Q + .4 ? 'sob' : 'sad', hh: { droop: 1 } }, t) + (t > Q + .4 ? tears(270, 950, t, 4) : '') +
-      (df < 1 ? G(tr(400 + df * 300 + Math.sin(t * 30) * 20 * df, 1180 - df * 900, 1 - df * .6, df * 360), fBalloon(0, 0, .8 * (1 - df * .5), '#ff8fb1', t)) : '');
+      (df < 1 ? G(tr(470 + df * 300 + Math.sin(t * 30) * 20 * df, 1300 - df * 1000, 1 - df * .6, df * 360), fBalloon(0, 0, .8 * (1 - df * .5), '#ff8fb1', t)) : '');
     ['2025', '2026', '2027'].forEach((y, i) => { const x = 230 + i * 310; s += card(x, 720, 230, 210, ftext(0, -45, y, { size: 40, fill: SX.acc, stroke: 'none', font: 'Fredoka' }) + ftext(0, 50, '28 FÉV', { size: 46, fill: OL, stroke: 'none', font: 'Fredoka' }), t, ts[i] - .05, { ry: 0, thick: 8, r: (i - 1) * 6, bw: 6 }) + stamp(x, 760, 'EXCUSE', t, ts[i] + .15, '#ff4d4d', -14, 40); });
     return s + (t < Q - .1 ? funTag(CX, 450, "C'ÉTAIT PAS TON ANNIV !", t, So, { size: 40, bg: '#b56cff' }) : kword('3 ANS', CX, 450, t, Q - .05, { size: 150, fill: SX.acc2 }) + popStars(CX, 450, t, Q, 8, 300)); },
   sfx: [[at(37, 'sortir') - o37, 'pop', .6], [at(37, 'meme') - o37, 'pop_hi', .5], [at(37, 'excuse') - o37, 'pop_hi', .5], [at(37, 'pendant') - o37, 'pop_hi', .5], [at(37, '3') - o37 - .05, 'boom', .7], [at(37, '3') - o37 + .3, 'squeak', .6], [at(37, 'ans') - o37 + .3, 'rimshot', .5]] }, o37);
