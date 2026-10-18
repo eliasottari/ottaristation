@@ -544,7 +544,7 @@ B(36, { enter: 'whip', cam: camHand(1.05, .5),
   sfx: [[0, 'steps', .5], [at(36, 'fati'), 'error_beep', .6], [at(36, 'plus'), 'gulp', .4], [at(36, 'vite'), 'thud', .5]] });
 // B037 — « Et tu comprends quelque chose » : gros plan, battement de cœur, dolly-zoom, le salon s'éloigne
 B(37, { enter: 'none', trans: 'circle', transD: .3, cam: () => ({ z: 1.0 }),
-  draw: (t, d, T) => { const k = t / d; return depth({ zoom: lerp(1, 1.35, k) }, [{ z: 2.2, svg: salonF(t), blur: 6, haze: .1 }, { z: 1, svg: ninoHead(CX, 920, 230, { expr: 'worried', look: [0, -.2] }, t) }]) + kthin('et tu comprends…', CX, 430, t, at(37, 'comprends') - .1, { size: 56 }) + squiggle(CX, 560, 300, t, SX.acc2, { t0: at(37, 'quelque') }); },
+  draw: (t, d, T) => { const k = t / d; return depth({ zoom: lerp(1, 1.18, k) }, [{ z: 2.2, svg: salonF(t), blur: 6, haze: .1 }, { z: 1, svg: ninoHead(CX, 920, 230, { expr: 'worried', look: [0, -.2] }, t) }]) + kthin('et tu comprends…', CX, 410, t, at(37, 'comprends') - .1, { size: 56 }); },
   sfx: [[0, 'heartbeat', .6], [at(37, 'comprends'), 'hmm', .4], [at(37, 'chose'), 'heartbeat', .5]] });
 // B038 — « Tes frères et sœurs les ont connus jeunes » : album photo, 4 polaroïds éclatants (parents jeunes + chaque aîné)
 B(38, { enter: 'drop', cam: zin(1.0, 1.06, .2),
@@ -563,7 +563,7 @@ B(39, { enter: 'none', trans: 'push', transD: .2, cam: zin(1.02, 1.1, .2),
 B(40, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), hand: .3 }),
   draw: (t, d, T) => { const Gr = at(40, 'grandir'), V = at(40, 'vite'), str = 1 + .18 * eOutBack(seg(t, Gr - .1, Gr + .3)) + .04 * Math.sin(t * 20) * seg(t, Gr, Gr + .1);
     return entree(t) + G(`translate(600 1540) scale(1 ${f1(str * 100) / 100}) translate(-600 -1540)`, nino({ x: 600, y: 1540, s: 1.2, expr: 'effort', armL: [-100, -80], armR: [-80, -100], legL: [100, 95], legR: [80, 85] }, t)) + G(tr(600, 1600), dBox(0, 0, .8, 'LIVRES')) +
-      markerArrow(820, 900, 700, 650, t, Gr, { bend: -40, col: SX.acc2 }) + funTag(860, 960, '+ VITE !', t, Gr + .1, { size: 46, bg: SX.acc }) + kword('PLUS VITE', CX, 440, t, V - .05, { size: 100, fill: SX.acc2 }) + funTag(280, 560, 'ENFANCE', t, at(40, 'enfance') - .1, { size: 44, bg: SX.cool }); },
+      markerArrow(820, 900, 700, 650, t, Gr, { bend: -40, col: SX.acc2 }) + funTag(860, 960, '+ VITE !', t, Gr + .1, { size: 46, bg: SX.acc }) + kword('PLUS VITE', CX, 440, t, V - .05, { size: 84, fill: SX.acc2 }) + funTag(280, 560, 'ENFANCE', t, at(40, 'enfance') - .1, { size: 44, bg: SX.cool }); },
   sfx: [[at(40, 'passe'), 'rewind', .4], [at(40, 'enfance') - .1, 'pop', .5], [at(40, 'grandir') - .1, 'squeak', .7], [at(40, 'grandir') + .2, 'boing', .5], [at(40, 'vite') - .05, 'whoosh_up', .6]] });
 // B041a — « Et maintenant, tu aimerais juste… » : coucher de soleil, banc devant la maison, Nino adulte entre ses parents âgés
 B(41, { enter: 'none', trans: 'zoom', transD: .3, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d) }),
@@ -573,10 +573,10 @@ B(41, { enter: 'none', trans: 'zoom', transD: .3, cam: (t, d) => ({ z: lerp(1.0,
 // B041b — FIN : « …que tes parents vieillissent moins vite » : il scotche les aiguilles de l'horloge… qui continuent de tourner
 B(41, { enter: 'none', trans: 'circle', transD: .3, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), shake: t > at(41, 'vite', 2) - at(41, 'que') + .5 ? 3 : 0 }),
   draw: (t, d, T) => { const o = at(41, 'que') - .15, Mv = at(41, 'moins') - o, Vt = at(41, 'vite', 2) - o, tape = seg(t, .2, .5), wob = Math.sin(t * 30) * 4 * tape;
-    const ck = G(tr(CX, 720), circ(0, 0, 230, '#fbf6e8', 8) + Array.from({ length: 12 }, (_, i) => line(Math.sin(R(i * 30)) * 190, -Math.cos(R(i * 30)) * 190, Math.sin(R(i * 30)) * 210, -Math.cos(R(i * 30)) * 210, 6)).join('') + G(`rotate(${f1(60 + wob)})`, line(0, 0, 0, -170, 10)) + G(`rotate(${f1(200 + wob * .5 + (t > Vt + .3 ? (t - Vt - .3) * 200 : 0))})`, line(0, 0, 0, -120, 14)) + circ(0, 0, 14, OL, 0) +
+    const ck = G(tr(CX, 680), circ(0, 0, 230, '#fbf6e8', 8) + Array.from({ length: 12 }, (_, i) => line(Math.sin(R(i * 30)) * 190, -Math.cos(R(i * 30)) * 190, Math.sin(R(i * 30)) * 210, -Math.cos(R(i * 30)) * 210, 6)).join('') + G(`rotate(${f1(60 + wob)})`, line(0, 0, 0, -170, 10)) + G(`rotate(${f1(200 + wob * .5 + (t > Vt + .3 ? (t - Vt - .3) * 200 : 0))})`, line(0, 0, 0, -120, 14)) + circ(0, 0, 14, OL, 0) +
       (tape > 0 ? G(tr(40, -90, 1, 30), rect(-90 * tape, -22, 180 * tape, 44, 'rgba(240,220,160,.9)', 4, 3)) + G(tr(-50, 40, 1, -40), rect(-80 * tape, -22, 160 * tape, 44, 'rgba(240,220,160,.9)', 4, 3)) : ''));
-    return houseExt(t, { dusk: 1, car: false }) + op(.25, rect(-M, -M, W + 2 * M, H + 2 * M, '#3a1d3e', 0, 0)) + ck + G(tr(CX, 1640), maman({ x: -250, y: 0, s: 1.1, old: 1, expr: 'love' }, t) + papa({ x: 250, y: 0, s: 1.1, old: 1, expr: 'love', flip: 1 }, t) + nino({ x: 0, y: 0, s: 1.15, age: 'adult', expr: 'sob', armL: [200, 170], armR: [-20, 10] }, t)) +
-      kword('MOINS VITE.', CX, 400, t, Mv - .05, { size: 110, fill: SX.acc2 }) + (t > Vt + .3 ? funTag(CX + 200, 1000, '…ça marche pas', t, Vt + .3, { size: 40, bg: '#fff', fg: SX.ink }) : ''); },
+    return houseExt(t, { dusk: 1, car: false }) + op(.25, rect(-M, -M, W + 2 * M, H + 2 * M, '#3a1d3e', 0, 0)) + ck + G(tr(CX, 1560), maman({ x: -250, y: 0, s: 1.1, old: 1, expr: 'love' }, t) + papa({ x: 250, y: 0, s: 1.1, old: 1, expr: 'love', flip: 1 }, t) + nino({ x: 0, y: 0, s: 1.15, age: 'adult', expr: 'sob', armL: [200, 170], armR: [-20, 10] }, t)) +
+      kword('MOINS VITE.', CX, 400, t, Mv - .05, { size: 110, fill: SX.acc2 }) + (t > Vt + .3 ? funTag(CX + 230, 930, '…ça marche pas', t, Vt + .3, { size: 40, bg: '#fff', fg: SX.ink }) : ''); },
   sfx: [[.2, 'tick', .5], [.3, 'snip', .5], [.5, 'squeak', .4], [at(41, 'moins') - at(41, 'que') + .1, 'boom', .5], [at(41, 'vite', 2) - at(41, 'que') + .3, 'tick', .6], [at(41, 'vite', 2) - at(41, 'que') + .5, 'boing', .5]] }, at(41, 'que') - .15);
 
 SCENES.sort((a, b) => a.s - b.s);
