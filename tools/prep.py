@@ -8,9 +8,16 @@ usage (depuis le dossier de l'épisode) :
 """
 import json, os, re, subprocess, sys, unicodedata, difflib
 
+def _stem(w):
+    # tolère pluriels / accords (vitres≈vitre, brisées≈brisé) pour l'alignement
+    for suf in ('es', 's', 'e', 'x'):
+        if len(w) > 3 and w.endswith(suf): w = w[:-len(suf)]
+    return w
 def norm(s):
     s = unicodedata.normalize('NFD', s.lower())
-    return re.findall(r"[a-z0-9]+", ''.join(c for c in s if unicodedata.category(c) != 'Mn'))
+    s = ''.join(c for c in s if unicodedata.category(c) != 'Mn')
+    s = re.sub(r"(\d+)\s*h(?=\d|\b)", r"\1 heure ", s)   # « 7h », « 14h30 » = « 7 heures », « 14 heures 30 »
+    return [_stem(w) for w in re.findall(r"[a-z0-9]+", s)]
 
 def transcribe(src, model):
     import numpy as np
