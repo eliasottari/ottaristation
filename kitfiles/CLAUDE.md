@@ -1,22 +1,42 @@
-# Studio vidéo « Pourquoi c'est horrible de… » (cartoon 2D généré par code)
+# Studio vidéo « Pourquoi c'est horrible de… ? » — format SIZEX fun
 
-Ce dépôt fabrique des vidéos animées (SVG → frames → MP4) calées mot à mot sur une voix off.
-**Dès que l'utilisateur envoie un fichier audio (mp3/wav) : utiliser la skill `video-pourquoi`** (`.claude/skills/video-pourquoi/SKILL.md`)
-et la suivre de bout en bout, sans poser de questions : préparation → plans → planches → rendu → livraison.
-Répondre en français, ton direct et concis.
+Ce dossier fabrique des dessins animés 9:16 (Shorts / TikTok / Reels), générés par code (SVG → frames → MP4) et calés mot à mot sur une voix off.
+**Dès que l'utilisateur envoie un fichier audio (mp3/wav), utilise la skill `video-pourquoi`** (`.claude/skills/video-pourquoi/SKILL.md`)
+et suis-la de bout en bout, sans poser de questions :
+1. `tools/new_episode.sh <nom> <voix>` ;
+2. correction de `blocks.txt` ;
+3. écriture de `scenes.js` ;
+4. planches de contrôle ;
+5. `tools/finish.sh <nom>` ;
+6. envoi des parties.
 
-## Règles client (résumé — détail dans la skill)
-- Cartoon flat, contours `#2b2420`, têtes rondes, joues roses ; style V2 ciné : fausse 3D, caméra épaule, crash zooms, réactions extrêmes.
-- Chaque action et chaque bruitage calés sur le mot prononcé (`at(n,'mot')`), jamais sur les temps d'un découpage fourni.
-- 9:16 : visages/textes entre y 380 et 1150, rien d'important sous y 1250 (sous-titres du client). Pas de sous-titres incrustés.
-- Titre d'accroche 3 lignes en haut du plan 1, dernier mot en couleur, loin des bords.
-- 3–5 bruitages synthétisés par plan ; pas de musique sur les Shorts.
-- Livraison : MP4 1080p ; si > 30 Mo, découpé en `partie_1, partie_2…` (`tools/deliver.sh`).
+Réponds en français, ton direct et concis.
+Au tout premier usage sur une machine : `bash tools/setup.sh`.
+
+## Règles client (résumé — le détail fait foi dans la skill)
+- **Style et intro** :
+  - cartoon flat, contours `#2b2420`, police **Fredoka** via `sxFun('#accent')`, un accent par épisode ;
+  - intro motion (plans 1–3) avec titre 3 lignes et effet « débloqué » en étoiles ;
+  - ensuite, des **décors riches** (15–30 éléments, 3 couches, éléments animés) avec une couche motion fun par-dessus.
+- **Rythme et calage** :
+  - voix resserrée (silences supprimés) et +10 dB ;
+  - chaque action et chaque bruitage calés sur le mot (`at(n, 'mot')`) ;
+  - 3–5 bruitages synthétisés par plan, pas de musique.
+- **Cadrage** : visages et textes entre y 380 et 1150 ; sous y 1250, décor seulement, car le client met ses propres sous-titres. Aucun sous-titre incrusté.
+- **Livraison** : MP4 1080p découpé en `partie_1, partie_2…` de moins de 30 Mo, à recoller dans CapCut.
 
 ## Arborescence
-- `engine/` moteur (lib.js persos/primitives, cine.js fausse 3D, player.js caméra, sfx.py bruitages+mix, render.mjs, snap.mjs, check.mjs, thèmes bugs/sea/hair/teeth.js)
-- `template/` squelette d'épisode · `tools/` setup.sh, new_episode.sh, prep.py, deliver.sh
-- `exemple_dents/`, `exemple_hyperactif/`, `exemple_calvitie/` : épisodes de référence complets (lire `exemple_dents/scenes.js` avant d'écrire)
+- `engine/` : le moteur.
+  - lib.js : persos et primitives ;
+  - motion.js : couche SIZEX ;
+  - decor.js : décors riches, Kevin et figurants ;
+  - cine.js : fausse 3D ;
+  - player.js ;
+  - sfx.py : bruitages et mix ;
+  - render.mjs, snap.mjs, check.mjs.
+- `template/` : squelette d'épisode.
+- `tools/` : setup.sh, new_episode.sh, tighten.py, prep.py, gaps.py, finish.sh, deliver.sh.
+- `exemple_gentil/`, `exemple_pauvres/`, `exemple_secours/`, `exemple_aine/` : épisodes de référence complets. **En lire un en entier avant d'écrire.**
 
 ## Épisodes faits
 | Dossier | Épisode | Durée | Statut |

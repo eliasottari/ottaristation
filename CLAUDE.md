@@ -27,14 +27,22 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `oreilles/` | Pourquoi c'est horrible d'avoir les oreilles décollées ? (voix resserrée, 28 blocs → 34 plans) | 56,5 s | ✅ livré (2 parties) |
 | `acouphene/` | Pourquoi c'est horrible d'avoir des acouphènes ? (voix resserrée, 35 blocs → 36 plans) | 55,8 s | ✅ livré (2 parties) |
 | `oct17/` | **Chronique actu** « 17 octobre 2026, la journée qui a secoué la France » (format JT cartoon sérieux : bandeau horaire, carte de France, compteurs ; 50 blocs → 56 plans) | 84,5 s | ✅ livré (3 parties) |
+| `aine/` | Pourquoi c'est horrible d'être l'aîné de la famille ? (SIZEX fun, voix resserrée, 44 plans) | 70,2 s | ✅ livré (3 parties) |
+| `drole/` | Pourquoi c'est horrible d'être le mec drôle ? (SIZEX fun, voix resserrée) | 66,6 s | ✅ livré (3 parties) |
+| `parents/` | Pourquoi c'est horrible d'avoir des parents divorcés ? (SIZEX fun, voix resserrée) | 70,7 s | ✅ livré (3 parties) |
+| `pauvres/` | Pourquoi c'est horrible d'être le pote pauvre du groupe ? (SIZEX fun, 47 plans) | 66,6 s | ✅ livré (3 parties) |
+| `secours/` | Pourquoi c'est horrible d'être le pote de secours ? (SIZEX fun, 45 plans) | 70,7 s | ✅ livré (2 parties) |
+| `gentil/` | Pourquoi c'est horrible d'être le mec trop gentil ? (SIZEX fun, 48 plans) | 71,3 s | 📝 scènes prêtes, rendu annulé (demande client) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
-## Skill / kit vendable
-- Skill `.claude/skills/video-pourquoi/SKILL.md` = méthode complète audio → MP4 (à suivre pour tout nouvel épisode).
-- `tools/` : setup.sh, new_episode.sh, prep.py (voix → words.js + blocks.txt + timing.js), deliver.sh, build_kit.sh.
-- `template/` : squelette d'épisode (TOTAL/BT dans timing.js). `kitfiles/` : CLAUDE.md + README du kit.
-- `tools/build_kit.sh` → `dist/video-pourquoi-kit.zip` (sans clé API ni voix client). Le refaire après chaque amélioration du moteur.
+## Skill / kit vendable (format FINAL = SIZEX fun, validé client)
+- Skill `.claude/skills/video-pourquoi/SKILL.md` = recette complète du format SIZEX fun (à suivre pour tout nouvel épisode).
+- `tools/new_episode.sh <nom> <voix>` : template + voix resserrée + transcription + calage + voix +10 dB + contrôle des trous (`gaps.py`, `--fix` = medium).
+- `tools/finish.sh <nom>` (depuis l'épisode) : check → rendu → niveau audio → planche finale → parties < 30 Mo.
+- `engine/decor.js` : décors riches communs (streetT, schoolyard, classroomT, hallway, bedroomN, salonF, partyT, restoT, accessoires d*), kevin, kid, adult, aides.
+- `template/` : index.html + scenes.js SIZEX (l'ancien format V2 : index_v2.html / scenes_v2.js / index_16x9.html). `kitfiles/` : CLAUDE.md + README du kit.
+- `tools/build_kit.sh` → `dist/video-pourquoi-kit.zip` (exemples gentil/pauvres/secours/aine, sans voix ni clé API). Le refaire après chaque amélioration du moteur.
 
 ## Voix (retours client)
 - **Silences supprimés** (TikTok) : `python3 tools/tighten.py brut.mp3 assets/src.mp3 --keep .06 --min .12` AVANT la transcription (phrases bord à bord).
