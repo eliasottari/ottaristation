@@ -32,7 +32,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `parents/` | Pourquoi c'est horrible d'avoir des parents divorcés ? (SIZEX fun, voix resserrée) | 70,7 s | ✅ livré (3 parties) |
 | `pauvres/` | Pourquoi c'est horrible d'être le pote pauvre du groupe ? (SIZEX fun, 47 plans) | 66,6 s | ✅ livré (3 parties) |
 | `secours/` | Pourquoi c'est horrible d'être le pote de secours ? (SIZEX fun, 45 plans) | 70,7 s | ✅ livré (2 parties) |
-| `gentil/` | Pourquoi c'est horrible d'être le mec trop gentil ? (SIZEX fun, 48 plans) | 71,3 s | 📝 scènes prêtes, rendu annulé (demande client) |
+| `gentil/` | Pourquoi c'est horrible d'être le mec trop gentil ? (SIZEX fun, 48 plans) | 71,3 s | ✅ livré (3 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
