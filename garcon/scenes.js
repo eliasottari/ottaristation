@@ -208,7 +208,7 @@ B(12, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04
 // B012b — « …courir derrière un ballon, Kevin. » : la meute (Kevin dedans) court après le ballon comme des chiots — Kevin se fige
 B(12, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.07, t / d), hand: .5 }),
   draw: (t, d, T) => { const Kv = at(12, 'kevin') - O12, Bl = at(12, 'ballon') - O12, kvx = t > Kv ? lerp(560, 600, seg(t, Kv, Kv + .3)) : 1100 - t * 600;
-    let pack = ''; for (let i = 0; i < 3; i++) { const x = 1250 - t * 650 + i * 190; pack += kid(i + 1, { x, y: 1430 + (i % 2) * 20, s: .9, expr: 'starving', rot: -10, armL: [160, 190], armR: [-160, -190], legL: [70 + Math.sin(t * 25 + i) * 30, 100], legR: [110 - Math.sin(t * 25 + i) * 30, 80] }, t + i); }
+    let pack = ''; for (let i = 0; i < 3; i++) { const x = 1250 - t * 650 + i * 190; pack += kid([0, 1, 4][i], { x, y: 1430 + (i % 2) * 20, s: .9, expr: 'starving', rot: -10, armL: [160, 190], armR: [-160, -190], legL: [70 + Math.sin(t * 25 + i) * 30, 100], legR: [110 - Math.sin(t * 25 + i) * 30, 80] }, t + i); }
     return schoolyard(t) + WASH() + dBall(1000 - t * 650, 1520, 1.0, -t * 4) + pack +
       kevin({ x: kvx, y: 1480, s: 1.1, expr: t > Kv ? 'jawdrop' : 'starving', rot: t > Kv ? 0 : -10, legL: t > Kv ? [95, 90] : [70 + Math.sin(t * 25) * 30, 100], legR: t > Kv ? [85, 90] : [110 - Math.sin(t * 25) * 30, 80] }, t) +
       motionLines(1180, 1150, 4, 110, 0, '#fff') + heroP({ x: 180, y: 1500, s: 1.15, expr: 'chill', armL: [60, -60], armR: [120, -120] }, t) + G(tr(180, 1300), gBook('#8a6ad8')) +
@@ -232,7 +232,7 @@ B(14, { enter: 'whip', cam: camHand(1.06, .4),
 // B015 — « Tes potes répondent. » : trois potes sur le banc tournent la tête en même temps (synchro parfaite)
 B(15, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), shake: t > .3 && t < .45 ? 4 : 0 }),
   draw: (t, d, T) => { const lk = t > .3 ? [-1, 0] : [0, -1];
-    return schoolyard(t) + WASH() + dBench(560, 1500, 1.6) + kid(2, { x: 330, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t) + kevin({ x: 560, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t) + kid(4, { x: 790, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t + 1) +
+    return schoolyard(t) + WASH() + dBench(560, 1500, 1.6) + kid(0, { x: 330, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t) + kevin({ x: 560, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t) + kid(4, { x: 790, y: 1500, s: 1.25, expr: 'suspicious', look: lk, flip: t > .3 }, t + 1) +
       (t > .3 ? motionLines(330, 1000, 3, 60, 0) + motionLines(560, 1000, 3, 60, 0) + motionLines(790, 1000, 3, 60, 0) : '') + funTag(CX, 470, 'TES POTES', t, at(15, 'potes') - .1, { size: 72, bg: SX.acc2, fg: SX.ink }); },
   sfx: [[at(15, 'potes') - .1, 'pop', .6], [.3, 'whoosh', .5], [.32, 'squeak', .4], [at(15, 'repondent'), 'hmm', .4]] });
 
@@ -240,7 +240,7 @@ B(15, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04
 B(16, { enter: 'drop', flash: 1, cam: (t, d) => ({ z: 1.06, shake: t > at(16, 'fragile') && t < at(16, 'fragile') + .25 ? 7 : 0 }),
   draw: (t, d, T) => { const Fr = at(16, 'fragile'), k = eOutCubic(seg(t, Fr - .25, Fr));
     return schoolyard(t) + WASH() + kevin({ x: 790, y: 1500, s: 1.35, expr: 'smugger', flip: 1, armL: [200, -100], armR: [-20, -80] }, t) +
-      heroHead(320, 1040, 135, { expr: t > Fr ? 'embarrassed' : 'shock' }, t) + G(tr(320, lerp(-200, 1500, k)), gBox(0, 0, 1.15, t)) + (t > Fr ? impactStar(320, 1180, .6 * (1 - seg(t, Fr + .2, Fr + .5))) : '') +
+      heroHead(320, 960, 135, { expr: t > Fr ? 'embarrassed' : 'shock' }, t) + G(tr(320, lerp(-200, 1560, k)), gBox(0, 0, 1.15, t)) + (t > Fr ? impactStar(320, 1200, .6 * (1 - seg(t, Fr + .2, Fr + .5))) : '') +
       kthin('frère, fais pas le', CX, 430, t, at(16, 'frere') - .1, { size: 56 }) + stamp(CX, 590, 'FRAGILE', t, Fr - .05, '#e2463a', -6, 90); },
   sfx: [[at(16, 'frere'), 'pop_hi', .4], [at(16, 'fragile') - .25, 'whoosh', .5], [at(16, 'fragile'), 'thud', .8], [at(16, 'fragile') + .1, 'boing', .4]] });
 
@@ -248,7 +248,7 @@ B(16, { enter: 'drop', flash: 1, cam: (t, d) => ({ z: 1.06, shake: t > at(16, 'f
 const O17 = at(17, 'fais') - .15;
 B(17, { enter: 'none', trans: 'wipe', transD: .2, cam: camHand(1.06, .5),
   draw: (t, d, T) => { const Rg = at(17, 'rigoles');
-    return schoolyard(t) + WASH() + kevin({ x: 800, y: 1500, s: 1.3, expr: 'laugh', flip: 1 }, t) + kid(2, { x: 1010, y: 1500, s: 1.2, expr: 'laugh', flip: 1 }, t) +
+    return schoolyard(t) + WASH() + kevin({ x: 800, y: 1500, s: 1.3, expr: 'laugh', flip: 1 }, t) + kid(5, { x: 1010, y: 1500, s: 1.2, expr: 'laugh', flip: 1 }, t) +
       heroP({ x: 330, y: 1500 + Math.abs(Math.sin(t * 16)) * -10, s: 1.35, expr: 'laugh', face: { sweat: 1 }, armL: [200, 240], armR: [-20, -60] }, t) +
       ['HA', 'HA', 'HA !'].map((w, i) => funTag(220 + i * 230, 760 - i * 60, w, t, Rg + i * .12, { size: 58, bg: ['#fff', SX.acc2, SX.cool][i], fg: SX.ink, r: [-8, 5, -4][i] })).join('') +
       kword('TU RIGOLES', CX, 480, t, Rg - .1, { size: 90, fill: SX.acc2 }); },
@@ -327,8 +327,8 @@ B(24, { enter: 'none', trans: 'black', transD: .25, cam: (t, d) => ({ z: lerp(1.
 // B024b — « …Kevin t'appelle après une mauvaise nouvelle. » : Kevin dans sa chambre, téléphone à l'oreille, nuage de pluie au-dessus
 B(24, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.03, 1.08, t / d), hand: .3 }),
   draw: (t, d, T) => { const Mv = at(24, 'mauvaise') - O24;
-    return bedroomN(t) + DIM(.25) + kevin({ x: 540, y: 1500, s: 1.35, expr: t > Mv ? 'sad' : 'worried', armR: [-100, -150], holdR: phone(0, -10, .35, 20) }, t) + gRain(560, 640, t) +
-      funTag(CX, 430, 'KEVIN APPELLE', t, .05, { size: 56, bg: '#5fb85f', fg: '#fff' }) + kword('MAUVAISE NOUVELLE', CX, 1010, t, Mv - .05, { size: 70, fill: '#fff' }); },
+    return bedroomN(t) + DIM(.25) + kevin({ x: 540, y: 1500, s: 1.35, expr: t > Mv ? 'sad' : 'worried', armR: [-60, -130], holdR: phone(0, -10, .26, 20) }, t) + gRain(560, 820, t) +
+      funTag(CX, 430, 'KEVIN APPELLE', t, .05, { size: 56, bg: '#5fb85f', fg: '#fff' }) + kword('MAUVAISE NOUVELLE', CX, 590, t, Mv - .05, { size: 70, fill: '#fff' }); },
   sfx: [[0, 'ring', .5], [.05, 'pop', .5], [.3, 'wind', .3], [at(24, 'mauvaise') - O24 - .05, 'thunder', .5]] }, O24);
 
 // B025 — « Tu l'écoutes. » : le héros au téléphone, calme, toute ouïe (oreille qui grandit)
@@ -340,7 +340,7 @@ B(25, { enter: 'none', trans: 'push', transD: .18, cam: () => ({ z: 1.08 }),
 // B026 — « Il te dit : parle à personne de ce que je viens de te raconter. » : Kevin « chut », tampon TOP SECRET
 B(26, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.02, 1.1, t / d), hand: .3 }),
   draw: (t, d, T) => { const Ps = at(26, 'personne'), Rc = at(26, 'raconter');
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: bedroomN(t), haze: .3 }, { z: 1, svg: kevinHead(CX, 990, 210, { expr: 'worried', look: [0, 0] }, t) + G(tr(CX, 1130), rect(-16, -150, 32, 120, SKIN, 14, 6) + circ(0, 0, 52, SKIN, 6)) + phone(CX - 250, 990, .65, -15) }]) +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: bedroomN(t), haze: .3 }, { z: 1, svg: kevinHead(CX, 990, 210, { expr: 'worried', look: [0, 0] }, t) + G(tr(CX, 1190), rect(-14, -150, 28, 110, SKIN, 14, 6) + circ(0, 0, 52, SKIN, 6)) + phone(CX - 250, 990, .65, -15) }]) +
       kthin('parle à personne…', CX, 430, t, at(26, 'par') - .1, { size: 60 }) + stamp(CX, 600, 'TOP SECRET', t, Ps - .05, '#e2463a', -8, 80) + (t > Rc ? markerText('chut.', 820, 760, t, Rc, { size: 56 }) : ''); },
   sfx: [[0, 'whoosh', .4], [at(26, 'dit'), 'hmm', .4], [at(26, 'par') - .1, 'pop_hi', .4], [at(26, 'personne') - .05, 'thud', .7], [at(26, 'raconter'), 'tiptoe', .5]] });
 
@@ -388,8 +388,8 @@ B(30, { enter: 'none', trans: 'wipe', transD: .2, cam: (t, d) => ({ z: lerp(1.02
       [0, 1, 2, 3, 4, 5].map(i => line(-160, -100 + i * 34, 160 - (i % 3) * 40, -100 + i * 34, 4, '#c9c4b4')).join('') + line(-160, 170, -20, 170, 4) + line(20, 170, 160, 170, 4) +
       (t > Sg ? path(`M-150 160q20 -30 40 0t40 0`, 'none', 4, '#1478b4') : '') + (t > Sg + .4 ? path('M30 160q20 -30 40 0t40 0', 'none', 4, '#36a85a') : '');
     return officeBg(t) + heroP({ x: 220, y: 1500, s: 1.2, expr: 'worried', armR: [-20, -60], holdR: G(tr(0, 0, 1, 30), path('M0 0L-10 -90Q20 -120 30 -80Z', '#fff', 4)) }, t) +
-      kevin({ x: 880, y: 1500, s: 1.2, expr: 'worried', flip: 1 }, t) + adult(0, { x: CX, y: 1420, s: 1.0, expr: 'deadpan', shirt: '#2b2b33', glasses: true }, t) +
-      G(tr(CX, 1330), rect(-330, -30, 660, 50, '#6b3e26', 8, 7) + rect(-310, 20, 620, 260, '#7a4a2a', 6, 6)) + card(CX, 860, 430, 520, doc, t, Ac - .2, { ry: 0, thick: 10, r: -2, bw: 6 }) +
+      kevin({ x: 880, y: 1500, s: 1.2, expr: 'worried', flip: 1 }, t) + adult(0, { x: CX, y: 1480, s: 1.0, expr: 'deadpan', shirt: '#2b2b33', glasses: true }, t) +
+      G(tr(CX, 1330), rect(-330, -30, 660, 50, '#6b3e26', 8, 7) + rect(-310, 20, 620, 260, '#7a4a2a', 6, 6)) + card(CX, 760, 340, 420, G(tr(0, 0, .8), doc), t, Ac - .2, { ry: 0, thick: 10, r: -2, bw: 6 }) +
       kword('CONFIDENTIALITÉ', CX, 470, t, Cf - .05, { size: 80, fill: SX.acc2 }) + stamp(860, 1020, 'SIGNÉ', t, Cf + .4, SX.acc, -12, 56); },
   sfx: [[at(30, 'faut'), 'pop_hi', .3], [at(30, 'accord') - O30 - .2, 'printer', .4], [at(30, 'signer') - O30, 'scratch', .5], [at(30, 'confidentialite') - O30 - .05, 'boom', .5], [at(30, 'confidentialite') - O30 + .4, 'thud', .7]] }, O30);
 
