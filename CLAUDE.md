@@ -33,6 +33,13 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `pauvres/` | Pourquoi c'est horrible d'être le pote pauvre du groupe ? (SIZEX fun, 47 plans) | 66,6 s | ✅ livré (3 parties) |
 | `secours/` | Pourquoi c'est horrible d'être le pote de secours ? (SIZEX fun, 45 plans) | 70,7 s | ✅ livré (2 parties) |
 | `gentil/` | Pourquoi c'est horrible d'être le mec trop gentil ? (SIZEX fun, 48 plans) | 71,3 s | ✅ livré (3 parties) |
+| `strabisme/` | Pourquoi c'est horrible d'avoir un strabisme ? (SIZEX fun, 39 plans) | 63,8 s | ✅ livré (2 parties) |
+| `eczema/` | Pourquoi c'est horrible d'avoir de l'eczéma ? (SIZEX fun, 41 plans) | 66,3 s | ✅ livré (2 parties) |
+| `aveugle/` | Pourquoi c'est horrible d'être aveugle ? (SIZEX fun, 43 plans) | 68,5 s | ✅ livré (3 parties) |
+| `visages/` | Pourquoi c'est horrible de ne jamais reconnaître les visages ? (prosopagnosie, SIZEX fun, 40 plans) | 62,7 s | ✅ livré (2 parties) |
+| `fille/` | Pourquoi c'est horrible d'être une fille ? (SIZEX fun, 45 plans) | 63,6 s | ✅ livré (2 parties) |
+| `garcon/` | Pourquoi c'est horrible d'être un garçon ? (SIZEX fun, 42 plans) | 55,7 s | ✅ livré (2 parties) |
+| `tourette/` | Pourquoi c'est horrible d'avoir le syndrome de Gilles de la Tourette ? (SIZEX fun, 43 plans) | 73,2 s | ✅ livré (3 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
