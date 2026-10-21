@@ -10,7 +10,7 @@ for a in "${@:2}"; do if [ "$a" = "16x9" ]; then FMT=16x9; else VOICE="$(realpat
 mkdir -p "$EP/assets" "$EP/out"
 if [ "$FMT" = "16x9" ]; then cp "$ROOT/template/index_16x9.html" "$EP/index.html"; cp "$ROOT/template/scenes_v2.js" "$EP/scenes.js"
 else cp "$ROOT/template/index.html" "$EP/index.html"; cp "$ROOT/template/scenes.js" "$EP/scenes.js"; fi
-printf 'out/tmp/\nout/partie_*.mp4\nout/planche_finale.png\n' > "$EP/.gitignore"
+printf 'out/tmp/\nout/partie_*.mp4\nout/planche_finale.png\nout/check.txt\n' > "$EP/.gitignore"
 [ -z "$VOICE" ] && { echo "OK -> $EP  (ensuite : $0 $1 <voix.mp3>, ou cd $1 && python3 ../tools/prep.py <voix>)"; exit 0; }
 cd "$EP"
 ffmpeg -v error -y -i "$VOICE" -c:a libmp3lame -q:a 2 assets/brut.mp3
