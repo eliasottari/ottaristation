@@ -52,7 +52,7 @@ const SCRF = (t, sp = 34) => ({ armR: [-60 + 8 * Math.sin(t * sp), -120 + 16 * M
 
 // ---------- gros plan avant-bras (plaques, main qui gratte, pancartes de grève, feu de l'inflammation) ----------
 function picket(x, y, s, str, t, t0 = 0, col = '#e2463a') { const k = pop(t, t0, .35); if (k <= 0) return ''; const b = Math.abs(Math.sin(t * 8 + x)) * 12;
-  return G(tr(x, y - b, s * k, Math.sin(t * 6 + x) * 6), line(0, 10, 0, -150, 8, '#8a5a3a') + rect(-90, -235, 180, 95, '#fff', 12, 6) + ftext(0, -172, str, { size: 34, fill: col, stroke: 'none' }) + ell(0, 30, 48, 36, PLQ, 6) + path('M-26 12l16 7M26 12l-16 7', 'none', 5) + circ(-13, 26, 5, OL, 0) + circ(13, 26, 5, OL, 0) + path('M-11 48Q0 38 11 48', 'none', 4) + G(tr(30, 0), circ(0, 0, 14, SKIN, 4))); }
+  return G(tr(x, y - b, s * k, Math.sin(t * 6 + x) * 6), line(0, 10, 0, -150, 8, '#8a5a3a') + rect(-Math.max(90, str.length * 11 + 22), -235, Math.max(180, str.length * 22 + 44), 95, '#fff', 12, 6) + ftext(0, -172, str, { size: 34, fill: col, stroke: 'none' }) + ell(0, 30, 48, 36, PLQ, 6) + path('M-26 12l16 7M26 12l-16 7', 'none', 5) + circ(-13, 26, 5, OL, 0) + circ(13, 26, 5, OL, 0) + path('M-11 48Q0 38 11 48', 'none', 4) + G(tr(30, 0), circ(0, 0, 14, SKIN, 4))); }
 function scratchHand(x, y, t, sp = 22) { const sx = x + 170 * Math.sin(t * sp); let g = ''; [-66, -22, 22, 66].forEach((fx, i) => g += rect(fx - 21, -20, 42, 135 - Math.abs(i - 1.5) * 12, SKIN, 21, 7) + rect(fx - 13, 82 - Math.abs(i - 1.5) * 12, 26, 24, '#fff', 8, 3));
   return G(tr(sx, y, 1, 8 * Math.sin(t * sp)), g + ell(0, -50, 112, 82, SKIN, 8) + rect(-92, -300, 184, 230, SHIRT_E, 30, 8)) + itchFx(sx, y - 170, t, 1.4) + motionLines(sx - 190, y, 3, 60, 180) + motionLines(sx + 190, y, 3, 60, 0); }
 function armCU(x, y, s, t, o = {}) { const k = o.red ?? 1; let g = rect(-1000, -120, 1290, 240, SKIN, 120, 8);
@@ -176,8 +176,8 @@ B(2, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.1, 1.16, t / d), shake: t < .
 // B003 — « Parce que ton bras te gratte, tu grattes. » : papier, gros plan bras en cut-out, la main se met à gratter
 B(3, { enter: 'none', trans: 'up', transD: .25, cam: (t, d) => ({ z: lerp(1, 1.05, t / d) }),
   draw: (t, d, T) => { const G1 = at(3, 'gratte'), G2 = at(3, 'gratte', 2);
-    return paper(SX.paper) + gobo(T, .12) + cutout(armCU(CX + 60, 900, .9, t, { red: t > G1 ? 1.4 : 1, scr: t > G2 }), 10) + (t > G1 && t < G2 ? itchFx(CX - 260, 760, t, 1.4) : '') +
-      funTag(CX - 140, 470, 'TON BRAS', t, at(3, 'bras') - .05, { size: 56, bg: SX.cool, fg: SX.ink }) + kword('TU GRATTES.', CX, 600, t, G2 - .05, { size: 96, fill: SX.acc2 }); },
+    return paper(SX.paper) + gobo(T, .12) + cutout(armCU(CX + 60, 1020, .9, t, { red: t > G1 ? 1.4 : 1, scr: t > G2 }), 10) + (t > G1 && t < G2 ? itchFx(CX - 260, 880, t, 1.4) : '') +
+      funTag(CX - 140, 390, 'TON BRAS', t, at(3, 'bras') - .05, { size: 56, bg: SX.cool, fg: SX.ink }) + kword('TU GRATTES.', CX, 505, t, G2 - .05, { size: 96, fill: SX.acc2 }); },
   sfx: [[at(3, 'bras') - .05, 'pop_hi', .5], [at(3, 'gratte'), 'buzz', .4], [at(3, 'gratte', 2) - .05, 'boom', .5], [at(3, 'gratte', 2), 'scratch', .7], [at(3, 'gratte', 2) + .4, 'scratch', .5]] });
 
 // B004a — « Ça soulage pendant deux secondes » : chambre de nuit, extase chill de ouf, compte à rebours 2… 1…
@@ -213,7 +213,7 @@ B(6, { enter: 'none', trans: 'circle', transD: .3, cam: (t, d) => ({ z: lerp(1, 
 B(7, { enter: 'whip', cam: zin(1.02, 1.08, .4),
   draw: (t, d, T) => { const E = at(7, 'hex'); let tubes = ''; for (let i = 0; i < 9; i++) { const k = pop(t, .2 + i * .1, .3); if (k > 0) tubes += G(tr(620 + (i % 5) * 70, 800 - Math.floor(i / 5) * 160, k), eTube(0, 0, .55, (i % 3 - 1) * 8, ['#fff', '#cfe8ff', '#e8f7e0', '#ffe1ee'][i % 4])); }
     return bathE(t) + dShelf(580, 800, 380, tubes) + G(tr(CX - 120, 1290), rect(-260, -30, 520, 90, '#c58e55', 26, 7) + ftext(0, 32, 'BIENVENUE', { size: 50, fill: '#7a4a2a', stroke: 'none' })) +
-      ecz({ x: CX - 120, y: 1480, s: 1.3, expr: 'happy', armL: [200, 230], armR: [-20, -60], holdR: eTube(0, 0, .5, 20) }, t) + kthin('bienvenue dans la vie de', CX, 400, t, at(7, 'bienvenue') - .1, { size: 54 }) +
+      ecz({ x: CX - 120, y: 1480, s: 1.3, expr: 'happy', armL: [200, 230], armR: [-20, -60], holdR: eTube(0, 0, .5, 20) }, t) + funTag(CX, 400, 'BIENVENUE DANS LA VIE DE', t, at(7, 'bienvenue') - .1, { size: 36, bg: '#fff', fg: SX.ink }) +
       kword("L'ECZÉMA", CX, 520, t, E - .05, { size: 100, fill: SX.acc }) + popStars(780, 700, t, E, 6, 180); },
   sfx: [[0, 'whoosh', .4], [.2, 'pop_hi', .3], [.5, 'pop_hi', .3], [.8, 'pop_hi', .3], [at(7, 'bienvenue'), 'magic', .5], [at(7, 'hex') - .05, 'tada', .6]] });
 
@@ -256,7 +256,7 @@ B(11, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), shake: t > 
 
 // B012 — « Alors tu grattes, la peau s'abîme » : gros plan bras sur chambre floue, la main gratte, traces, tampon ABÎMÉE
 B(12, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .5 }),
-  draw: (t, d, T) => { const A = at(12, 'abime'); return blur(10, chambreE(t)) + WASH('rgba(255,255,255,.15)') + armCU(CX + 60, 900, .9, t, { red: 1.3, scr: t < A + .2, raw: seg(t, A - .3, A + .1) }) +
+  draw: (t, d, T) => { const A = at(12, 'abime'); return blur(10, chambreE(t)) + WASH('rgba(255,255,255,.15)') + armCU(CX + 60, 980, .9, t, { red: 1.3, scr: t < A + .2, raw: seg(t, A - .3, A + .1) }) +
     funTag(CX, 450, 'TU GRATTES', t, at(12, 'grattes') - .05, { size: 52, bg: SX.acc2, fg: SX.ink }) + stamp(800, 1120, 'ABÎMÉE', t, A - .05, '#e2463a', 8, 64); },
   sfx: [[0, 'scratch', .7], [.4, 'scratch', .6], [at(12, 'grattes') - .05, 'pop', .5], [at(12, 'abime') - .05, 'thud', .6]] });
 
@@ -283,7 +283,7 @@ B(14, { enter: 'none', trans: 'wipe', transD: .25, cam: (t, d) => ({ z: lerp(1.0
 B(14, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.06, 1.12, t / d), hand: .3 }),
   draw: (t, d, T) => { const P = at(14, 'plaques') - O14; return schoolyard(t) + WASH() + ecz({ x: 330, y: 1490, s: 1.35, expr: t > P ? 'embarrassed' : 'neutral', armL: [70, -20] }, t) +
     kevin({ x: 790, y: 1490, s: 1.35, expr: 'suspicious', flip: 1, armR: [-20, -30], holdR: magnifier(0, 0, .7, 0), headTilt: -10 }, t) + funTag(790, 460, 'KEVIN', t, 0, { size: 46, bg: '#5fb85f' }) +
-    markerCircle(315, 1020, 110, 90, t, P, { col: SX.acc2 }) + markerText('plaques rouges', 400, 820, t, P + .1, { size: 46, col: SX.acc2 }); },
+    markerCircle(262, 1150, 80, 64, t, P, { col: SX.acc2 }) + markerText('plaques rouges', 330, 800, t, P + .1, { size: 60, col: SX.acc2 }); },
   sfx: [[0, 'pop', .5], [at(14, 'remarque') - O14, 'hmm', .5], [at(14, 'plaques') - O14, 'scratch', .6], [at(14, 'rouges') - O14, 'glint', .5]] }, O14);
 
 // B015 — « Wesh, c'est contagieux ? » : Kevin bondit en arrière, masque sur le nez
@@ -317,15 +317,15 @@ B(17, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .3 })
   sfx: [[0, 'wind', .5], [at(17, 'hiver') - .1, 'pop', .5], [at(17, 'chauffage'), 'sizzle', .5], [at(17, 'seche') - .05, 'pop', .5], [at(17, 'air'), 'wind', .3]] });
 // B017b — « ta peau proteste » : gros plan bras, les plaques sortent des pancartes de grève
 B(17, { enter: 'crash', cam: camHand(1.06, .5),
-  draw: (t, d, T) => { const P = at(17, 'proteste') - O17; return blur(10, salonF(t)) + WASH('rgba(255,255,255,.15)') + armCU(CX + 60, 980, .85, t, { red: 1.3, signs: [[-360, 'GRÈVE !', P - .1], [-60, 'TROP SEC', P + .1], [-640, 'NON !', P + .25]] }) +
+  draw: (t, d, T) => { const P = at(17, 'proteste') - O17; return blur(10, salonF(t)) + WASH('rgba(255,255,255,.15)') + armCU(CX + 60, 980, .85, t, { red: 1.3, signs: [[-470, 'GRÈVE !', P - .1], [-170, 'NON !', P + .25], [110, 'TROP SEC', P + .1]] }) +
     kword('TA PEAU PROTESTE', CX, 480, t, P - .05, { size: 72, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(17, 'proteste') - O17 - .1, 'pop', .5], [at(17, 'proteste') - O17, 'whistle', .5], [at(17, 'proteste') - O17 + .25, 'pop', .5]] }, O17);
 
 // B018 — « Tu prends une douche trop chaude, elle proteste encore » : douche fumante, thermomètre rouge, pancartes ENCORE ?!
 B(18, { enter: 'none', trans: 'push', transD: .25, cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .3 }),
-  draw: (t, d, T) => { const C = at(18, 'chaude'), P = at(18, 'proteste'); return bathE(t, { tub: false, shower: 1, steam: 1 }) + ecz({ x: 790, y: 1300, s: 1.25, expr: t > P ? 'shock' : 'zen', plq: t > P ? 1.6 : 1, armL: [200, 250], armR: [-20, -70] }, t) + eTub(790, 1250, t) +
+  draw: (t, d, T) => { const C = at(18, 'chaude'), P = at(18, 'proteste'); return bathE(t, { tub: false, shower: 1, steam: 1 }) + ecz({ x: 790, y: 1180, s: 1.25, expr: t > P ? 'shock' : 'zen', plq: t > P ? 1.6 : 1, armL: [200, 250], armR: [-20, -70] }, t) + eTub(790, 1250, t) +
     G(tr(220, 900), thermometer(0, 0, 1.1, lerp(.4, 1, seg(t, C - .3, C + .3)), '#ff5d4d')) + funTag(260, 520, 'TROP CHAUDE', t, C - .05, { size: 46, bg: '#ff5d4d' }) +
-    picket(640, 1010, .8, 'ENCORE ?!', t, P) + picket(950, 980, .8, 'GRÈVE', t, P + .15); },
+    picket(580, 980, .8, 'ENCORE ?!', t, P) + picket(1000, 960, .8, 'GRÈVE', t, P + .15); },
   sfx: [[0, 'waves', .4], [at(18, 'douche'), 'spray', .5], [at(18, 'chaude') - .05, 'sizzle', .6], [at(18, 'proteste'), 'pop', .6], [at(18, 'encore'), 'whistle', .4]] });
 
 // B019 — « Tu mets un pull qui gratte » : chambre, pull en laine plein de piquants, électrocuté de démangeaisons
@@ -346,8 +346,8 @@ B(20, { enter: 'none', trans: 'zoom', transD: .25, cam: (t, d) => ({ z: lerp(1.0
 // B021a — « Tu testes une crème adaptée » : salle de bain, gros tube CRÈME, la plaque s'apaise (étincelles)
 const O21 = at(21, 'evites') - .35;
 B(21, { enter: 'whip', cam: zin(1.02, 1.08, .4),
-  draw: (t, d, T) => { const C = at(21, 'creme'), k = seg(t, C, C + .8); return bathE(t) + ecz({ x: 420, y: 1490, s: 1.35, expr: t > C + .3 ? 'zen' : 'suspicious', plq: lerp(1.2, .6, k), armL: [70, -20], armR: [-20, -60] }, t) +
-    G(tr(760, 920, 1, -20 + Math.sin(t * 5) * 4), eTube(0, 0, 2, 0, '#fff', 'CRÈME')) + (t > C ? op(1 - seg(t, C + .8, C + 1.2), path(`M640 900Q${560} ${960} 480 ${1000}`, 'none', 22, '#fff')) : '') + popStars(380, 1000, t, C + .3, 6, 160) +
+  draw: (t, d, T) => { const C = at(21, 'creme'), k = seg(t, C, C + .8); return bathE(t) + ecz({ x: 360, y: 1490, s: 1.35, expr: t > C + .3 ? 'zen' : 'suspicious', plq: lerp(1.2, .6, k), armL: [70, -20], armR: [-20, -60] }, t) +
+    G(tr(800, 900, 1, 15 + Math.sin(t * 5) * 4), eTube(0, 0, 2, 0, '#fff', 'CRÈME')) + (t > C ? op(1 - seg(t, C + .8, C + 1.2), path('M790 960Q640 1040 470 1220', 'none', 22, '#fff')) : '') + popStars(330, 1150, t, C + .3, 6, 160) +
     funTag(CX, 450, 'CRÈME ADAPTÉE', t, C - .05, { size: 56, bg: '#fff', fg: SX.ink }); },
   sfx: [[at(21, 'testes'), 'pop_hi', .4], [at(21, 'creme') - .05, 'pop', .6], [at(21, 'creme') + .1, 'squeak', .5], [at(21, 'creme') + .3, 'sparkle', .5]] });
 // B021b — « tu évites tes déclencheurs » : cartes pull / eau brûlante / savon parfumé barrées, le héros esquive
@@ -381,7 +381,7 @@ B(23, { enter: 'none', trans: 'circle', transD: .3, cam: (t, d) => ({ z: lerp(1,
     const ecze = G(tr(0, -10), eczHead(0, 0, 80, { expr: 'sob', plq: 1.6 }, t) + flames(-70, -80, 140, 60, t, 2, '#ff5a4a', '#ffd23f') + ftext(0, 140, 'eczéma', { size: 30, fill: OL, stroke: 'none' }));
     return paper('#fdeef6') + gobo(T, .1) + unlock(CX, 880, t, N, { part: 'back', r: 460 }) + card(290, 880, 300, 330, dry, t, .15, { ry: 0, thick: 8, r: -6, bw: 6 }) + card(790, 880, 300, 330, ecze, t, .3, { ry: 0, thick: 8, r: 6, bw: 6 }) +
       kword('≠', CX, 880, t, N, { size: 160, fill: SX.acc }) + unlock(CX, 880, t, N, { part: 'front', r: 460 }) +
-      kthin("ce n'est pas simplement", CX, 400, t, at(23, 'pas') - .1, { size: 54 }) + kword('LA PEAU SÈCHE', CX, 530, t, Sc - .3, { size: 84, fill: SX.acc2 }) + cross(CX, 530, 1.1, t, Sc + .05); },
+      kthin("ce n'est pas simplement", CX, 400, t, at(23, 'pas') - .1, { size: 54 }) + kword('LA PEAU SÈCHE', CX, 530, t, Sc - .3, { size: 84, fill: SX.acc2 }) + (t > Sc + .05 ? path(`M${CX - 300} 545L${f1(CX - 300 + 600 * eOutCubic(seg(t, Sc + .05, Sc + .3)))} 520`, 'none', 26) + path(`M${CX - 300} 545L${f1(CX - 300 + 600 * eOutCubic(seg(t, Sc + .05, Sc + .3)))} 520`, 'none', 14, '#ff4d4d') : ''); },
   sfx: [[.15, 'pop_hi', .4], [.3, 'pop_hi', .4], [at(23, 'non'), 'boom', .6], [at(23, 'non') + .05, 'sparkle', .5], [at(23, 'seche') - .3, 'pop', .5], [at(23, 'seche') + .05, 'error_beep', .6]] });
 
 // B024 — « Un soir, tu refuses une piscine » : piscine au coucher de soleil, les potes appellent, le héros fait « stop »
