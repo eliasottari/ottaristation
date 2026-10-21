@@ -114,12 +114,12 @@ B(2, { enter: 'none', trans: 'wipe', transD: .2, cam: zin(1.02, 1.08, .3),
 // B003 — « À l'école, Kevin te tend un dessin » : salle de classe, Kevin tend fièrement son dessin
 B(3, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .4 }),
   draw: (t, d, T) => { const Ds = at(3, 'dessin'), Td = at(3, 'tend'), k = eOutBack(seg(t, Td - .1, Td + .3));
-    const board = ftext(540, 560, 'DESSIN LIBRE', { size: 70, fill: 'rgba(255,255,255,.85)', stroke: 'none' }) + ftext(540, 670, '☀ 🏠 ✿', { size: 56, fill: 'rgba(255,255,255,.7)', stroke: 'none' });
+    const board = ftext(540, 640, 'DESSIN LIBRE', { size: 70, fill: 'rgba(255,255,255,.85)', stroke: 'none' });
     return depth({ zoom: 1, x: Math.sin(t) * 10 }, [{ z: 1.3, svg: classroomT(t, board), haze: .06 },
       { z: 1, svg: heroP({ x: 300, y: 1490, s: 1.3, expr: 'happy', cane: 1, look: [1, 0] }, t) + avDog(120, 1560, .55, t, { flip: 0 }) + kevin({ x: 800, y: 1490, s: 1.3, expr: 'proud', flip: 1, armR: [-10, -20] }, t) +
         avDrawing(lerp(760, 590, k), 1020, .85, -6) },
       { z: .6, svg: blur(10, dBag(980, 1860, 1.4, '#ff8fb1', -10)) }]) +
-      funTag(CX, 460, "À L'ÉCOLE", t, at(3, 'ecole') - .1, { size: 56, bg: SX.acc2, fg: SX.ink }) + markerCircle(590, 1020, 150, 115, t, Ds, { col: SX.acc }) + markerText('mon dessin !', 820, 640, t, Ds, { size: 44 }); },
+      funTag(CX, 430, "À L'ÉCOLE", t, at(3, 'ecole') - .1, { size: 56, bg: SX.acc2, fg: SX.ink }) + markerCircle(590, 1020, 150, 115, t, Ds, { col: SX.acc }) + markerText('mon dessin !', 820, 640, t, Ds, { size: 44 }); },
   sfx: [[0, 'school_bell', .4], [at(3, 'ecole') - .1, 'pop', .5], [at(3, 'tend') - .1, 'flutter', .5], [at(3, 'dessin'), 'scratch', .5]] });
 
 // B004 — « Alors ? Il est beau ? » : crash zoom sur Kevin qui brandit son dessin, étincelles de fierté
@@ -145,7 +145,7 @@ B(6, { enter: 'whip', cam: camHand(1.05, .5),
 // B007 — « Il insiste. » : Kevin colle le dessin sur les lunettes du héros (qui reste de marbre)
 B(7, { enter: 'drop', cam: (t, d) => ({ z: 1.08, hand: .4, shake: t > .2 && t < .35 ? 5 : 0, r: 3 }),
   draw: (t, d, T) => { const k = eOutBack(seg(t, 0, .25));
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: classroomT(t), haze: .3 }, { z: 1, svg: heroHead(400, 960, 210, { expr: 'deadpan' }, t) + avDrawing(lerp(900, 520, k), 1000, 1.05, -8 + Math.sin(t * 25) * 3) +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: classroomT(t), haze: .3 }, { z: 1, svg: heroHead(400, 960, 210, { expr: 'deadpan' }, t) + avDrawing(lerp(900, 580, k), 1010, 1.0, -8 + Math.sin(t * 25) * 3) +
       G(tr(lerp(1000, 680, k), 1110), circ(0, 0, 40, SKIN, 6)) + G(tr(lerp(1000, 690, k), 880), circ(0, 0, 40, SKIN, 6)) }]) +
       funTag(CX, 470, 'IL INSISTE', t, at(7, 'insiste') - .1, { size: 64, bg: SX.acc2, fg: SX.ink, r: 4 }) + motionLines(960, 1000, 3, 80, 0); },
   sfx: [[0, 'whoosh', .5], [.22, 'squeak', .5], [at(7, 'insiste') - .1, 'pop', .6]] });
@@ -162,10 +162,10 @@ B(8, { enter: 'none', trans: 'wipe', transD: .2, cam: (t, d) => ({ z: lerp(1.02,
 const O9 = at(9, 'concept') - .15;
 B(9, { enter: 'none', trans: 'up', transD: .22, cam: zin(1.0, 1.06, .3),
   draw: (t, d, T) => { const Rv = at(9, 'revoir');
-    const board = ftext(540, 540, 'COURS N°1', { size: 64, fill: 'rgba(255,255,255,.85)', stroke: 'none' }) + ftext(540, 650, 'VOIR ≠ VOIR', { size: 56, fill: 'rgba(255,255,255,.7)', stroke: 'none' });
+    const board = ftext(540, 600, 'COURS N°1', { size: 64, fill: 'rgba(255,255,255,.85)', stroke: 'none' }) + ftext(540, 700, 'VOIR ≠ VOIR', { size: 56, fill: 'rgba(255,255,255,.7)', stroke: 'none' });
     return classroomT(t, board) + heroP({ x: 220, y: 1480, s: 1.25, expr: 'proud', armR: [-40, -60], holdR: avCane(60, -160), armL: [200, 240] }, t) + avDog(470, 1560, .5, t) +
       G(tr(800, 1560), rect(-150, -170, 300, 30, '#c58e55', 6, 6) + rect(-130, -140, 26, 140, '#8a5a3a', 0, 4) + rect(104, -140, 26, 140, '#8a5a3a', 0, 4)) + kevin({ x: 800, y: 1440, s: 1.15, expr: 'confused', flip: 1, armR: [-70, -100] }, t) +
-      funTag(CX, 420, 'RÉVISION', t, Rv - .1, { size: 60, bg: SX.acc, fg: '#fff' }) + qmark(930, 820, .5, SX.acc2, 10); },
+      funTag(CX, 430, 'RÉVISION', t, Rv - .1, { size: 60, bg: SX.acc, fg: '#fff' }) + qmark(930, 820, .5, SX.acc2, 10); },
   sfx: [[0, 'whoosh', .4], [at(9, 'revoir') - .1, 'pop', .6], [.2, 'tick', .4], [.5, 'tick', .4]] });
 // B009b — « …de la cécité. » : gros plan Kevin, l'ampoule s'allume, mot-clé CÉCITÉ
 B(9, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, eOutCubic(clamp(t / .4))), shake: 2 }),
@@ -218,10 +218,10 @@ B(13, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.02, 1.07, t / d), 
 B(14, { enter: 'none', trans: 'push', transD: .22, cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const Jm = at(14, 'jamais');
     let mob = line(0, -120, 0, 0, 5) + G(`rotate(${f1(t * 40)})`, line(-130, 0, 130, 0, 6) + [-130, 0, 130].map((x, i) => line(x, 0, x, 60, 4) + circ(x, 80, 26, DPAL[i * 2], 5)).join(''));
-    return bedroomN(t) + WASH('rgba(255,255,255,.08)') + G(tr(CX, 520), mob) + avNote(380 + Math.sin(t * 3) * 20, 700 - (t * 60 % 120), .8, SX.acc2, -10) + avNote(700, 660 - (t * 50 % 100), .7, SONAR, 10) +
+    return bedroomN(t) + WASH('rgba(255,255,255,.08)') + G(tr(800, 600), mob) + avNote(380 + Math.sin(t * 3) * 20, 700 - (t * 60 % 120), .8, SX.acc2, -10) + avNote(700, 660 - (t * 50 % 100), .7, SONAR, 10) +
       person({ age: 'baby', x: CX, y: 1180, s: 1.3, hairFn: heroHair, skin: HERO_SKIN, expr: 'joy', shirt: '#9dbcec' }, t) +
       G(tr(CX, 1250), rect(-360, -60, 720, 40, '#c58e55', 10, 7) + [-300, -200, -100, 0, 100, 200, 300].map(x => rect(x - 12, -20, 24, 220, '#e8c690', 6, 5)).join('') + rect(-380, 190, 760, 50, '#c58e55', 10, 7)) +
-      funTag(CX, 430, 'JAMAIS', t, Jm - .05, { size: 72, bg: SX.acc, fg: '#fff' }) + kthin('eu de vision', CX, 1060 - 400, t, at(14, 'vision') - .1, { size: 50 }); },
+      funTag(CX, 430, 'JAMAIS', t, Jm - .05, { size: 72, bg: SX.acc, fg: '#fff' }) + kthin('eu de vision', CX, 540, t, at(14, 'vision') - .1, { size: 50 }); },
   sfx: [[0, 'baby_coo', .5], [at(14, 'jamais') - .05, 'pop', .6], [.3, 'ding', .3], [at(14, 'vision'), 'magic', .4]] });
 
 // B015 — « tu n'as pas de souvenir visuel auquel comparer ton expérience » : dossier SOUVENIRS_VISUELS vide (0 fichier)
@@ -239,7 +239,7 @@ B(16, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0
     return depth({ zoom: 1, x: Math.sin(t) * 12 }, [{ z: 1.5, svg: streetT(t, 2) + avWaves(470, 850, t, SONAR, -90, 50, 3, 120) + avWaves(950, 1180, t + .4, SONAR, -90, 50, 3, 120) + dBird(300, 380, .9, t) + avWaves(300, 380, t, SX.acc2, 0, 40, 2, 100), haze: .06 },
       { z: 1, svg: heroP({ x: 350, y: 1490, s: 1.3, expr: 'joy', cane: 1, tap: 1, walk: 6 }, t) + avDog(720, 1500, .7, t, { walk: 1 }) },
       { z: .6, svg: blur(10, dFlowers(950, 1900, 5, 3, t)) }]) +
-      kthin('tu découvres le monde', CX, 410, t, at(16, 'decouvres') - .1, { size: 54 }) + kword('AUTREMENT', CX, 540, t, Au - .05, { size: 100, fill: SX.acc2 }) + (t > Au ? burst(CX, 540, 260, t, Au, SX.acc, 14) : ''); },
+      (t > Au ? burst(CX, 560, 200, t, Au, SX.acc, 14) : '') + kthin('tu découvres le monde', CX, 410, t, at(16, 'decouvres') - .1, { size: 54 }) + kword('AUTREMENT', CX, 540, t, Au - .05, { size: 100, fill: SX.acc2 }); },
   sfx: [[0, 'chirp', .5], [at(16, 'decouvres'), 'steps', .4], [at(16, 'autrement') - .05, 'boom', .5], [at(16, 'monde'), 'pop_hi', .4]] });
 
 // B017a — « Par les sons, les textures » : POV NOIR, le monde se dessine en ondes (oiseau, voiture), puis la main touche l'écorce
@@ -247,7 +247,7 @@ const O17 = at(17, 'odeurs') - .15;
 B(17, { enter: 'none', trans: 'black', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .5 }),
   draw: (t, d, T) => { const Sn = at(17, 'sons'), Tx = at(17, 'textures');
     const reveal = (t0) => clamp((t - t0) / .4) * (0.75 + .25 * Math.sin(t * 6));
-    return avPOV(T) + op(reveal(Sn), dBird(280, 760, 1.4, t) + avWaves(280, 760, t, SONAR, 0, 50, 3, 220)) + op(reveal(Sn + .2), dCar(800, 1130, 1.1, '#5ec4f0', 1) + avWaves(800, 1000, t + .5, SONAR, -90, 60, 3, 200)) +
+    return avPOV(T) + op(.5, avWaves2(CX, 950, t, SONAR, 80, 260)) + op(reveal(Sn), dBird(280, 760, 1.4, t) + avWaves(280, 760, t, SONAR, 0, 50, 3, 220)) + op(reveal(Sn + .2), dCar(800, 1130, 1.1, '#5ec4f0', 1) + avWaves(800, 1000, t + .5, SONAR, -90, 60, 3, 200)) +
       (t > Tx - .1 ? op(reveal(Tx - .1), G(tr(CX, 1000), rect(-220, -280, 160, 560, '#8a5a3a', 30, 7) + [0, 1, 2, 3, 4].map(i => path(`M${-200 + (i % 2) * 30} ${-240 + i * 110}q40 30 0 70`, 'none', 6, '#5a3a26')).join('') +
         G(tr(40 + Math.sin(t * 8) * 10, 0), ell(0, 0, 90, 70, HERO_SKIN, 7) + [0, 1, 2, 3].map(i => rect(-100, -60 + i * 34, 60, 28, HERO_SKIN, 14, 6)).join('')) + avWaves(-140, 0, t, SX.cool, 180, 50, 3, 160))) : '') +
       funTag(330, 470, 'LES SONS', t, Sn - .1, { size: 60, bg: SONAR, fg: SX.ink, r: -6 }) + funTag(760, 600, 'LES TEXTURES', t, Tx - .1, { size: 52, bg: SX.cool, fg: SX.ink, r: 5 }); },
@@ -339,7 +339,7 @@ B(25, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .3 })
       ftext(-170, 70, '🚗', { size: 40, stroke: 'none' }) + ftext(60, -80, '🛴', { size: 40, stroke: 'none' }) + ftext(-60, 150, 'PIÉTONS : ???', { size: 26, fill: SX.acc2, stroke: 'none' });
     return depth({ zoom: 1 }, [{ z: 1.4, svg: streetT(t, 3), haze: .12 },
       { z: 1, svg: heroP({ x: 250, y: 1490, s: 1.25, expr: 'confused', cane: 1, tap: 1 }, t) + avDog(120, 1560, .5, t) + adult(0, { x: 860, y: 1500, s: 1.05, expr: 'smug', shirt: '#ffb03a', flip: 1, armR: [-40, -70], holdR: G(tr(0, -20), rect(-14, -60, 28, 120, '#fff6a0', 4, 4)) }, t) }]) +
-      card(620, 880, 560, 380, plan, t, Vl - .1, { ry: 0, thick: 10, r: 3, bw: 6 }) + markerCircle(560, 1030, 110, 50, t, Ti, { col: SX.acc2 }) +
+      card(600, 760, 560, 380, plan, t, Vl - .1, { ry: 0, thick: 10, r: 3, bw: 6 }) + markerCircle(540, 910, 110, 50, t, Ti, { col: SX.acc2 }) +
       funTag(CX, 450, "N'A PAS PENSÉ À TOI", t, Ps - .1, { size: 50, bg: SX.acc, fg: '#fff' }); },
   sfx: [[0, 'whoosh', .4], [at(25, 'ville') - .1, 'printer', .4], [at(25, 'pense') - .1, 'pop', .6], [at(25, 'toi'), 'scratch', .5]] });
 
@@ -407,7 +407,7 @@ B(30, { enter: 'none', trans: 'up', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 
 // B031 — « Il veut boire quelque chose ? » : le serveur penché vers Kevin, Kevin gêné regarde le héros
 B(31, { enter: 'whip', cam: (t, d) => ({ z: 1.08, hand: .4, r: 3 }),
   draw: (t, d, T) => restoT(t, { diners: false }) + heroP({ x: 250, y: 1440, s: 1.25, expr: 'deadpan' }, t) + kevin({ x: 560, y: 1440, s: 1.25, expr: 'embarrassed', look: [-1, 0] }, t) + avTable(400, 1300, 760, t) +
-    avWaiter({ x: 860, y: 1500, s: 1.15, expr: 'talk', flip: 1, rot: -10, armR: [-30, -60] }, t) + chatBubble(700, 640, 520, 120, 'IL VEUT BOIRE QUELQUE CHOSE ?', t, at(31, 'veut') - .15, false, 34) +
+    avWaiter({ x: 900, y: 1500, s: 1.15, expr: 'talk', flip: 1, rot: -6, armR: [70, 80], armL: [200, 160] }, t) + chatBubble(620, 640, 680, 120, 'IL VEUT BOIRE QUELQUE CHOSE ?', t, at(31, 'veut') - .15, false, 34) +
     (t > at(31, 'chose') ? markerArrow(330, 840, 260, 990, t, at(31, 'chose'), { bend: -30, col: SX.acc2 }) + markerText('il ?', 360, 800, t, at(31, 'chose'), { size: 48 }) : ''),
   sfx: [[at(31, 'veut') - .15, 'pop', .6], [at(31, 'boire'), 'gulp', .4], [at(31, 'chose'), 'scratch', .4], [at(31, 'chose') + .2, 'crickets', .4]] });
 
@@ -416,7 +416,7 @@ B(32, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, eOutCubic
   draw: (t, d, T) => { const Bj = at(32, 'bonjour'), Js = at(32, 'juste');
     return restoT(t, { diners: false }) + WASH() + heroP({ x: 330, y: 1460, s: 1.35, expr: 'smug', armL: [-150 + Math.sin(t * 14) * 20, -120], armR: [70, 80] }, t) + avTable(500, 1320, 860, t) +
       avWaiter({ x: 860, y: 1500, s: 1.15, expr: t > Js ? 'jawdrop' : 'shock', flip: 1 }, t) + (t > Js ? sweat(920, 900, 1.2) : '') +
-      funTag(330, 470, 'BONJOUR !', t, Bj - .05, { size: 60, bg: SX.acc, fg: '#fff' }) + kword('JUSTE LÀ.', 640, 640, t, Js - .05, { size: 96, fill: SX.acc2, r: 3 }) +
+      funTag(330, 470, 'BONJOUR !', t, Bj - .05, { size: 60, bg: SX.acc, fg: '#fff' }) + kword('JUSTE LÀ.', CX + 60, 640, t, Js - .05, { size: 88, fill: SX.acc2, r: 3 }) +
       (t > Js ? G(tr(330, 830 + Math.sin(t * 10) * 12), path('M-40 -90L40 -90L40 -10L80 -10L0 60L-80 -10L-40 -10Z', SX.acc2, 7)) : ''); },
   sfx: [[0, 'flash_hit', .4], [at(32, 'bonjour') - .05, 'pop', .6], [at(32, 'juste') - .05, 'boom', .5], [at(32, 'la'), 'boing', .5], [at(32, 'la') + .1, 'gasp', .4]] });
 
@@ -435,7 +435,7 @@ B(33, { enter: 'drop', cam: () => ({ z: 1.06, shake: 2, r: -3 }),
     return streetT(t, 1) + WASH() + G(tr(560, 1380), circ(-170, 120, 60, '#2b2b33', 7) + circ(170, 120, 60, '#2b2b33', 7) + path('M-260 -100Q-260 80 0 80Q260 80 260 -100Z', '#ff8fb1', 7) + path('M-260 -100Q-200 -330 60 -320L60 -100Z', '#ff6fa0', 7) + line(260, -100, 360, -260, 12)) +
       heroHead(560, 1060, 130, { expr: 'deadpan' }, t) + G(tr(560, 1180), path('M-70 0Q0 60 70 0L60 70Q0 100 -60 70Z', '#fff', 5)) +
       adult(1, { x: 920, y: 1500, s: 1.05, expr: 'ecstatic', flip: 1, armR: [-20, -40] }, t) + chatBubble(820, 680, 300, 90, 'gouzi gouzi !', t, 0, false, 36) +
-      kword('NI UN BÉBÉ', CX, 470, t, Bb - .1, { size: 90, fill: SX.acc2 }) + cross(CX, 470, .6, t, Bb + .2); },
+      kword('NI UN BÉBÉ', CX, 470, t, Bb - .25, { size: 80, fill: SX.acc2 }) + cross(CX, 470, .6, t, Bb + .2); },
   sfx: [[0, 'thud', .4], [.05, 'baby_coo', .4], [at(33, 'bebe') - O33 - .1, 'boom', .5], [at(33, 'bebe') - O33 + .2, 'error_beep', .5]] }, O33);
 
 // B034 — « Tu demandes qu'on te parle normalement. » : le serveur parle enfin AU héros, tout le monde sourit
@@ -453,7 +453,7 @@ B(35, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .4 })
     return depth({ zoom: 1 }, [{ z: 1.4, svg: streetT(t, 2) + avTactile(-M, W + M, 1330), haze: .06 },
       { z: 1, svg: dCar(820, 1420, 1.3, '#ffd23f') + avScooter(560, 1460, 1.0, '#5ec4f0') + dBin(980, 1480, .9, '#36a85a') + cone(420) + cone(680) + G(tr(560, 1300), rect(-160, -40, 320, 50, '#fff', 6, 6) + [0, 1, 2, 3].map(i => path(`M${-150 + i * 80} -40L${-110 + i * 80} -40L${-150 + i * 80 + 40} 10L${-150 + i * 80} 10Z`, '#e2463a', 0)).join('') + line(-140, 10, -140, 160, 10) + line(140, 10, 140, 160, 10)) +
         heroP({ x: 190, y: 1500, s: 1.25, expr: 'annoyed', cane: 1, caneX: 20 }, t) },
-      { z: .6, svg: blur(10, dLampPost(60, 1950, 1.6)) }]) +
+      { z: .6, svg: blur(10, dLampPost(1040, 1950, 1.6)) }]) +
       kthin("ce qui t'empêche le plus souvent", CX, 420, t, Em - .15, { size: 46 }) + funTag(CX, 560, "D'AVANCER", t, Av - .05, { size: 68, bg: SX.acc, fg: '#fff' }) + (t > Av ? markerArrow(250, 760, 760, 760, t, Av, { col: SX.acc2 }) + cross(820, 760, .5, t, Av + .3) : ''); },
   sfx: [[0, 'whoosh', .4], [at(35, 'empeche'), 'thud', .5], [at(35, 'avancer') - .05, 'pop', .6], [at(35, 'avancer') + .3, 'error_beep', .5]] });
 
@@ -468,11 +468,11 @@ B(36, { enter: 'none', trans: 'circle', transD: .22, cam: zin(1.02, 1.08, .2),
 //          la pancarte « IL EST LÀ ↓ » ; au mot « là » tout le monde se retourne et salue enfin le héros (étoiles)
 B(37, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Mo = at(37, 'monde'), La = at(37, 'la'), seen = t > La;
-    return streetT(t, 2) + WASH() + unlock(330, 1050, t, La, { part: 'back', r: 460 }) +
-      [0, 1, 2].map(i => adult(i + 1, { x: 560 + i * 170, y: 1480 + (i % 2) * 15, s: 1.0, expr: seen ? 'joy' : 'deadpan', look: seen ? [-1, 0] : [0, 1], flip: seen ? 1 : 0, armR: seen ? [-120, -150] : [-60, -100], holdR: seen ? '' : phone(0, -20, .45, -10) }, t + i)).join('') +
+    return streetT(t, 2) + WASH() + unlock(330, 780, t, La, { part: 'back', r: 380 }) +
+      [0, 1, 2].map(i => adult(i + 1, { x: 500 + i * 140, y: 1480 + (i % 2) * 15, s: 1.0, expr: seen ? 'joy' : 'deadpan', look: seen ? [-1, 0] : [0, 1], flip: seen ? 1 : 0, armR: seen ? [-120, -150] : [-60, -100], holdR: seen ? '' : phone(0, -20, .45, -10) }, t + i)).join('') +
       heroP({ x: 300, y: 1490, s: 1.3, expr: seen ? 'joy' : 'calm', cane: 1, armL: seen ? [200, 230] : [110, 100] }, t) + avDog(120, 1560, .5, t) +
       kevin({ x: 960, y: 1490, s: 1.1, expr: 'angry', flip: 1, armR: [-80, -100], armL: [-100, -80] }, t) + G(tr(940, 880 + Math.sin(t * 8) * 10, 1, 6), rect(-130, -70, 260, 120, '#fff', 12, 7) + ftext(0, 10, 'IL EST LÀ ↓', { size: 34, fill: '#e2463a', stroke: 'none' }) + line(0, 50, 0, 140, 12, '#8a5a3a')) +
-      unlock(330, 1050, t, La, { part: 'front', r: 460 }) + (seen ? chatBubble(700, 760, 220, 90, 'SALUT !', t, La + .1, false, 40) : '') +
+      unlock(330, 780, t, La, { part: 'front', r: 300 }) + (seen ? chatBubble(700, 760, 220, 90, 'SALUT !', t, La + .1, false, 40) : '') +
       kthin("c'est que le monde oublie", CX, 400, t, Mo - .2, { size: 54 }) + kword('QUE TU ES LÀ.', CX, 540, t, La - .3, { size: 100, fill: SX.acc2 }); },
   sfx: [[0, 'flash_hit', .4], [at(37, 'monde'), 'pop_hi', .4], [at(37, 'oublie'), 'crickets', .4], [at(37, 'la') - .3, 'boom', .6], [at(37, 'la'), 'sparkle', .6], [at(37, 'la') + .2, 'tada', .5]] });
 
