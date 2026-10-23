@@ -20,10 +20,13 @@ const SX = {
 function sxFun(acc, font = 'fredoka') { SX.fun = 1; SX.display = SX.thin = SX.marker = font === 'komika' ? "Komika, Fredoka, sans-serif" : "Fredoka, sans-serif"; SX.weight = font === 'komika' ? 400 : 700; if (acc) SX.acc = acc; }
 const _sxid = p => p + (_gid++);
 
+// couleur foncée ? (#rgb / #rrggbb ; luminance < 0,35)
+function _dark(c) { if (typeof c !== 'string' || c[0] !== '#') return false; const h = c.length === 4 ? c.slice(1).split('').map(x => x + x).join('') : c.slice(1, 7); const [r, g, b] = [0, 2, 4].map(i => parseInt(h.slice(i, i + 2), 16) / 255); return .2126 * r + .7152 * g + .0722 * b < .35; }
 // texte « libre » (police au choix, sans contour cartoon)
 function ftext(x, y, str, o = {}) {
   const sz = o.size || 100, anchor = o.anchor || 'middle';
-  if (SX.fun && o.stroke === undefined && o.font !== 'Fredoka') o = Object.assign({}, o, { stroke: OL, sw: sz * .13 });
+  // contour cartoon : foncé autour d'un texte clair, BLANC autour d'un texte foncé (retour client : noir sur noir illisible)
+  if (SX.fun && o.stroke === undefined && o.font !== 'Fredoka') o = Object.assign({}, o, { stroke: _dark(o.fill || '#fff') ? '#fff' : OL, sw: sz * .13 });
   const st = o.stroke ? ` stroke="${o.stroke}" stroke-width="${o.sw || sz * .08}" paint-order="stroke" stroke-linejoin="round"` : '';
   const ls = o.ls != null ? ` letter-spacing="${f1(o.ls)}"` : '';
   return `<text x="${f1(x)}" y="${f1(y)}" font-family="${o.font || SX.display}" font-weight="${SX.fun ? (SX.weight || 700) : (o.weight || 400)}" font-size="${f1(sz)}" text-anchor="${anchor}" fill="${o.fill || '#fff'}"${st}${ls}${o.extra || ''}>${str}</text>`;

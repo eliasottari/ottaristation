@@ -83,6 +83,7 @@ B(12, { enter: 'crash', flash: 1,          // entrée cartoon : 'punch' (défaut
    kword('MOT-CLÉ ?', CX, 540, t, at(1, 'mot') - .05, {size: 66–80, fill: SX.acc2})
    ```
    Chaque ligne fait au plus ~760 px de large : Fredoka gras ≈ 0,6 × taille par caractère.
+   **Lisibilité (retour client)** : jamais de texte foncé avec contour foncé. Le moteur met automatiquement un contour blanc autour d'un texte foncé (`fill: SX.ink`) ; préfère un texte clair (blanc, `SX.acc2`) sur fond chargé.
 4. **Effet « débloqué » en ÉTOILES sur le mot-clé du titre.** Place `unlock(x, y, t, t0, {part: 'back', r: 480})` AVANT le perso (rayons) et `unlock(..., {part: 'front', r: 480})` APRÈS (flash + gerbe d'étoiles). Ressors-le sur **2 ou 3** moments de prise de conscience, pas plus. **`rings` est interdit partout.**
 5. **Après l'intro : de VRAIS DÉCORS RICHES et vivants.** Le client veut un MAX d'éléments : 15 à 30 par décor, 3 couches de profondeur, et 2 ou 3 éléments animés (nuages, oiseaux, vapeur de tasse, horloge, rideau, néon, figurants).
    - `engine/decor.js` en fournit de prêts à l'emploi : `streetT`, `schoolyard`, `classroomT`, `hallway`, `bedroomN`, `salonF`, `partyT`, `restoT`, `SKY`, `kidsBg` (figurants).
