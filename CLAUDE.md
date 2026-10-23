@@ -40,6 +40,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `fille/` | Pourquoi c'est horrible d'être une fille ? (SIZEX fun, 45 plans) | 63,6 s | ✅ livré (2 parties) |
 | `garcon/` | Pourquoi c'est horrible d'être un garçon ? (SIZEX fun, 42 plans) | 55,7 s | ✅ livré (2 parties) |
 | `tourette/` | Pourquoi c'est horrible d'avoir le syndrome de Gilles de la Tourette ? (SIZEX fun, 43 plans) | 73,2 s | ✅ livré (3 parties) |
+| `kevin/` | Pourquoi c'est horrible d'être Kevin ? (épisode méta, voix ElevenLabs Tenko v4 générée par nous, SIZEX fun, 47 plans) | 72,5 s | ✅ livré (3 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
