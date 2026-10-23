@@ -503,8 +503,8 @@ const O30 = at(30, 'tu') - .15;
 B(30, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: 6 }),
   draw: (t, d, T) => { const To = at(30, 'toi');
     return rays(t, CX, 950, '#8fd0a0', '#4f8f5e', 22) + unlock(CX, 1000, t, To, { part: 'back', r: 460 }) +
-      cutout(heroP({ x: CX, y: 1500, s: 1.3, expr: 'jawdrop' }, t), 12) + unlock(CX, 1000, t, To, { part: 'front', r: 460 }) +
-      miPoint(330, 1080, 0, BRO.shirt, eOutCubic(seg(t, 0, .2))) + miPoint(750, 1080, 180, MOM.shirt, eOutCubic(seg(t, .04, .24))) + miPoint(CX, 800, 90, DAD.shirt, eOutCubic(seg(t, .08, .28))) +
+      cutout(heroP({ x: CX, y: 1500, s: 1.3, expr: 'jawdrop' }, t), 12) + popStars(CX, 1250, t, To, 8, 380) +
+      miPoint(330, 1080, 0, BRO.shirt, eOutCubic(seg(t, 0, .2))) + miPoint(750, 1080, 180, MOM.shirt, eOutCubic(seg(t, .04, .24))) + miPoint(740, 900, 135, DAD.shirt, eOutCubic(seg(t, .08, .28)), 500) +
       kword('TOI.', CX, 500, t, To - .05, { size: 220, fill: '#fff' }); },
   sfx: [[0, 'flash_hit', .5], [0, 'whoosh', .5], [at(30, 'toi') - .05, 'boom', .7], [at(30, 'toi'), 'sparkle', .5]] });
 // B030b — « Tu es assez grand pour comprendre. » : la toise : coche « COMPRENDRE » à hauteur de ta tête
@@ -530,7 +530,7 @@ B(32, { enter: 'none', trans: 'black', transD: .2, cam: (t, d) => ({ z: lerp(1.0
   draw: (t, d, T) => { const Ap = at(32, 'apprends'), Db = at(32, 'debrouiller'), Se = at(32, 'seul'), n = Math.min(5, Math.floor(seg(t, Ap, Se) * 6));
     let sw = ''; const cols = ['#e8b88a', '#7be07b', '#ff6b6b', '#ffd23f', '#e8b88a']; for (let i = 0; i < n; i++) sw += rect(-90, -i * 26, 180, 24, cols[i], 10, 5);
     return depth({ zoom: 1 }, [{ z: 1.4, svg: miKitchen(t), haze: .08 }]) +
-      heroP({ x: 380, y: 1520, s: 1.22, expr: 'effort', armL: [-20, -40], armR: [200, 220], holdR: '' }, t) + G(tr(560, 1120), rect(-110, 10, 220, 24, '#fff', 12, 5) + sw) +
+      heroP({ x: 340, y: 1520, s: 1.22, expr: 'effort', armL: [110, 100], armR: [10, -10] }, t) + G(tr(640, 1200), rect(-110, 10, 220, 24, '#fff', 12, 5) + sw) +
       funTag(820, 820, 'SEUL', t, Se - .05, { size: 54, bg: SX.acc, r: 5 }) +
       kthin('alors tu apprends à te', CX, 420, t, Ap - .3, { size: 54 }) + kword('DÉBROUILLER', CX, 560, t, Db - .05, { size: 104, fill: SX.acc2 }); },
   sfx: [[at(32, 'apprends'), 'pop_hi', .3], [at(32, 'te'), 'tick', .3], [at(32, 'debrouiller') - .05, 'boom', .3], [at(32, 'debrouiller') + .2, 'tick', .3], [at(32, 'seul'), 'pop', .4]] });
@@ -549,8 +549,8 @@ B(33, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3 })
 B(34, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.04, t / d), hand: .2 }),
   draw: (t, d, T) => { const Tr = at(34, 'trop'), De = at(34, 'demander'), hand = t < De ? eOutCubic(seg(t, .1, .4)) : 1 - eOutCubic(seg(t, De, De + .3));
     return depth({ zoom: 1 }, [{ z: 1.4, svg: salonF(t, { noSofa: 1 }), haze: .08 },
-      { z: 1, svg: miMom({ x: 160, y: 1450, s: .95, expr: 'talk', look: [1, 0] }, t) + miDad({ x: 350, y: 1450, s: .95, expr: 'laugh', look: [1, 0] }, t + 1) + miBro({ x: 560, y: 1450, s: .95, expr: 'talk', look: [-1, 0] }, t) +
-        miPetit({ x: 750, y: 1360, s: .8, expr: 'ecstatic' }, t) + heroP({ x: 930, y: 1420, s: 1.05, expr: hand > .5 ? 'neutral' : 'sad', flip: 1, armL: [lerp(100, -100, hand), lerp(90, -95, hand)] }, t) + miTable(CX, 1450, .95, t) }]) +
+      { z: 1, svg: miMom({ x: 160, y: 1390, s: .95, expr: 'talk', look: [1, 0] }, t) + miDad({ x: 350, y: 1390, s: .95, expr: 'laugh', look: [1, 0] }, t + 1) + miBro({ x: 560, y: 1390, s: .95, expr: 'talk', look: [-1, 0] }, t) +
+        miPetit({ x: 750, y: 1300, s: .8, expr: 'ecstatic' }, t) + heroP({ x: 930, y: 1370, s: 1.05, expr: hand > .5 ? 'neutral' : 'sad', flip: 1, armL: [lerp(100, -100, hand), lerp(90, -95, hand)] }, t) + miTable(CX, 1450, .95, t) }]) +
       chatBubble(300, 760, 260, 90, 'bla bla', t, .05, false, 36) + chatBubble(560, 700, 220, 90, 'haha !', t, .25, false, 36) +
       kthin('à ne pas trop', CX, 420, t, Tr - .3, { size: 58 }) + kword('DEMANDER', CX, 560, t, De - .05, { size: 110, fill: SX.acc2 }); },
   sfx: [[.1, 'whoosh_up', .3], [at(34, 'trop'), 'pop_hi', .3], [at(34, 'demander') - .05, 'boom', .3], [at(34, 'demander') + .1, 'whoosh', .3]] });
