@@ -575,6 +575,6 @@ B(36, { enter: 'none', trans: 'circle', transD: .25, cam: (t, d) => ({ z: lerp(1
       heroP({ x: CX - 40, y: 1490, s: 1.35, expr: t > Qu ? 'proud' : 'happy', badge: t > Qu ? 'star' : undefined, armL: t > Qu ? [-140, -110] : [110, 100] }, t) +
       unlock(CX, 1000, t, Qu, { part: 'front', r: 480 }) +
       kthin("pour qu'on remarque", CX, 420, t, Rm - .3, { size: 62 }) + kword('QUI TU ES.', CX, 570, t, Qu - .05, { size: 130, fill: SX.acc2 }); },
-  sfx: [[0, 'whoosh', .5], [.1, 'boing', .4], [at(36, 'remarque') - O36, 'pop_hi', .4], [at(36, 'qui') - O36 - .05, 'tada', .6], [at(36, 'qui') - O36, 'sparkle', .6], [at(36, 'es', 2) - O36 + .4, 'baby_coo', .3]] }, O36);
+  sfx: [[0, 'whoosh', .5], [.1, 'boing', .4], [at(36, 'remarque') - O36, 'pop_hi', .4], [at(36, 'qui') - O36 - .05, 'tada', .6], [at(36, 'qui') - O36, 'sparkle', .6], [at(36, 'qui') - O36 + .6, 'baby_coo', .3]] }, O36);
 
 SCENES.sort((a, b) => a.s - b.s);

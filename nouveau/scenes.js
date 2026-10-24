@@ -121,7 +121,7 @@ function nvCantine(t, o = {}) { const yb = 1250;
   s += G(tr(540, 380, 1, -1), rect(-150, -130, 300, 260, '#8a5a3a', 14, 7) + rect(-134, -114, 268, 228, '#2f3a35', 6, 0) + ftext(0, -66, 'MENU', { size: 40, fill: '#fff', stroke: 'none' }) +
     ['PURÉE', 'POISSON', 'COMPOTE'].map((w, i) => ftext(0, -16 + i * 46, w, { size: 28, fill: i === 1 ? SX.acc2 : 'rgba(255,255,255,.85)', stroke: 'none' })).join(''));
   s += dPoster(950, 660, 150, 110, '#7be07b', 3, ftext(0, 10, '5 FRUITS', { size: 24, fill: '#fff', stroke: 'none' }), t);
-  if (o.counter !== false) { s += G(tr(330, 820), rect(-330, -150, 560, 150, '#c9d3dc', 12, 7) + rect(-330, -150, 560, 26, '#9aa3ad', 8, 5) + op(.5, rect(-310, -280, 520, 110, '#e6f6ff', 8, 4));
+  if (o.counter !== false) { s += G(tr(330, 820), rect(-330, -150, 560, 150, '#c9d3dc', 12, 7) + rect(-330, -150, 560, 26, '#9aa3ad', 8, 5) + op(.5, rect(-310, -280, 520, 110, '#e6f6ff', 8, 4)));
     [-240, -110, 20, 150].forEach((x, i) => s += G(tr(330 + x, 680), rect(-55, -16, 110, 30, '#7d848c', 6, 5) + ell(0, -16, 50, 12, ['#ffe9a0', '#ff9a4d', '#7be07b', '#e2463a'][i], 4)) + steam(330 + x, 640, t + i * .3, .45)); }
   s += dTileFloor(yb, '#f2e6d0', '#d9c9a8') + dPot(60, 1290, 1, t, 0) + dPot(1030, 1290, .9, t, 2);
   return s; }
