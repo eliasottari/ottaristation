@@ -118,9 +118,9 @@ function nvCantine(t, o = {}) { const yb = 1250;
   for (let i = 0; i < 32; i++) s += rect(-M + i * 60, 820, 60, 60, i % 2 ? '#ffffff' : '#ffd9a0', 0, 2, '#e8b878');
   s += dWindowView(40, 230, 280, 320, t) + dWindowView(760, 230, 280, 320, t) + dCurtain(10, 220, 60, 360, '#ff8a65', t, 1) + dCurtain(1000, 220, 60, 360, '#ff8a65', t, -1);
   s += dNeon(540, 150, 'SELF', '#ff5c8a', t, 70) + nvClock(360, 150, 44, o.h ?? 12, o.m ?? 0, null, { rim: '#36a85a' });
-  s += G(tr(540, 380, 1, -1), rect(-150, -130, 300, 260, '#8a5a3a', 14, 7) + rect(-134, -114, 268, 228, '#2f3a35', 6, 0) + ftext(0, -66, 'MENU', { size: 40, fill: '#fff', stroke: 'none' }) +
+  s += G(tr(900, 690, .62, -1), rect(-150, -130, 300, 260, '#8a5a3a', 14, 7) + rect(-134, -114, 268, 228, '#2f3a35', 6, 0) + ftext(0, -66, 'MENU', { size: 40, fill: '#fff', stroke: 'none' }) +
     ['PURÉE', 'POISSON', 'COMPOTE'].map((w, i) => ftext(0, -16 + i * 46, w, { size: 28, fill: i === 1 ? SX.acc2 : 'rgba(255,255,255,.85)', stroke: 'none' })).join(''));
-  s += dPoster(950, 660, 150, 110, '#7be07b', 3, ftext(0, 10, '5 FRUITS', { size: 24, fill: '#fff', stroke: 'none' }), t);
+  s += dPoster(650, 660, 150, 110, '#7be07b', 3, ftext(0, 10, '5 FRUITS', { size: 24, fill: '#fff', stroke: 'none' }), t);
   if (o.counter !== false) { s += G(tr(330, 820), rect(-330, -150, 560, 150, '#c9d3dc', 12, 7) + rect(-330, -150, 560, 26, '#9aa3ad', 8, 5) + op(.5, rect(-310, -280, 520, 110, '#e6f6ff', 8, 4)));
     [-240, -110, 20, 150].forEach((x, i) => s += G(tr(330 + x, 680), rect(-55, -16, 110, 30, '#7d848c', 6, 5) + ell(0, -16, 50, 12, ['#ffe9a0', '#ff9a4d', '#7be07b', '#e2463a'][i], 4)) + steam(330 + x, 640, t + i * .3, .45)); }
   s += dTileFloor(yb, '#f2e6d0', '#d9c9a8') + dPot(60, 1290, 1, t, 0) + dPot(1030, 1290, .9, t, 2);
@@ -192,7 +192,7 @@ B(2, { enter: 'none', trans: 'circle', transD: .25, cam: zin(1.0, 1.08, .2),
     const door = G(`translate(460 920) scale(${f1(1 - .82 * k)} 1)`, rect(0, -340, 360, 700, '#5ec4f0', 10, 7) + rect(60, -280, 240, 170, '#cfefff', 10, 6) + G(tr(180, 60), rect(-80, -34, 160, 68, '#fff', 10, 5) + ftext(0, 14, '5e B', { size: 40, fill: OL, stroke: 'none' })) + circ(320, 30, 18, '#ffd23f', 5));
     return paper('#e8f4ff') + gobo(T, .1) + blob(640, 900, 330, t, '#cfe8ff', 2) + rect(430, 550, 420, 740, '#8a5a3a', 12, 7) + G(tr(640, 920), rect(-180, -340, 360, 700, '#241d44', 0, 0) + eyes) + door +
       cutout(heroP({ x: lerp(110, 300, eOutCubic(seg(t, 0, En + .3))), y: 1440, s: 1.05, expr: t > Nv ? 'worried' : 'calm', look: [1, 0], legL: [95 + Math.sin(t * 12) * 14, 90], legR: [85 - Math.sin(t * 12) * 14, 90] }, t), 10) +
-      kthin('tu entres dans ta', CX, 380, t, 0, { size: 56 }) + funTag('NOUVELLE CLASSE', CX, 480, t, Nv - .1, { size: 52, bg: SX.acc, r: -3 }); },
+      kthin('tu entres dans ta', CX, 380, t, 0, { size: 56 }) + funTag(CX, 480, 'NOUVELLE CLASSE', t, Nv - .1, { size: 52, bg: SX.acc, r: -3 }); },
   sfx: [[0, 'whoosh', .4], [.05, 'steps', .4], [at(2, 'entres'), 'squeak', .5], [at(2, 'nouvelle') - .1, 'pop', .5], [at(2, 'classe'), 'gulp', .4]] });
 
 // B003 — « Trente élèves te regardent. » : POV, toute la classe, les têtes pivotent d'un coup, un projecteur s'allume sur toi
@@ -200,7 +200,7 @@ B(3, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.04, 1.12, t / d), hand: .3 }),
   draw: (t, d, T) => { const Tr = at(3, '30'), Rg = at(3, 'regardent'), snap = t > Rg;
     return nvClassBack(t) + nvPupils(t, { expr: k => snap ? (k % 3 ? 'suspicious' : 'shock') : ['happy', 'talk', 'neutral', 'laugh'][k % 4], look: k => snap ? [0, 0] : [k % 2 ? 1.3 : -1.3, .3] }) +
       nvSpot(140, 60, CX, 1500, 330, seg(t, Rg, Rg + .08)) +
-      funTag(counter(1, 30, t, Tr, .35) + ' ÉLÈVES', CX, 430, t, Tr - .05, { size: 62, bg: SX.acc }) + (snap ? kword('TE REGARDENT', CX, 580, t, Rg - .05, { size: 80, fill: SX.acc2 }) : ''); },
+      funTag(CX, 430, counter(1, 30, t, Tr, .35) + ' ÉLÈVES', t, Tr - .05, { size: 62, bg: SX.acc }) + (snap ? kword('TE REGARDENT', CX, 580, t, Rg - .05, { size: 80, fill: SX.acc2 }) : ''); },
   sfx: [[0, 'whoosh', .4], [at(3, '30') - .05, 'pop', .5], [at(3, '30') + .05, 'slot', .3], [at(3, 'regardent'), 'zap', .5], [at(3, 'regardent') + .05, 'flash_hit', .4]] });
 
 // B004 — « Le professeur sourit. » : tableau, la prof sourit… beaucoup trop (éclat sur les dents)
@@ -231,11 +231,11 @@ B(6, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .4, sha
   draw: (t, d, T) => { const Vi = at(6, 'viens') - O6, Fa = at(6, 'fasse') - O6, Co = at(6, 'conference') - O6;
     let flashes = ''; for (let i = 0; i < 6; i++) { const ph = (t * 2.4 + i * .37) % 1; if (t > Fa && ph < .12) flashes += op(1 - ph / .12, G(tr([140, 960, 200, 900, 110, 980][i], [820, 780, 1080, 1040, 660, 640][i]), circ(0, 0, 56, '#fff', 0) + impactStar(0, 0, .45))); }
     const podium = G(tr(CX, 1520), path('M-190 -370L190 -370L160 0L-160 0Z', '#3a3f5a', 7) + rect(-210, -390, 420, 40, '#2b2f45', 10, 6) + circ(0, -200, 70, SX.acc, 6) + ftext(0, -178, '?', { size: 80, fill: '#fff' }));
-    const mic = path(`M${CX + 60} 1140Q${CX + 70} 1190 ${CX + 40} 1130`, 'none', 8) + G(tr(CX + 40, 1122, 1, -30), rect(-14, -30, 28, 46, '#2b2b33', 12, 5));
+    const mic = path(`M${CX + 150} 1140Q${CX + 170} 1080 ${CX + 120} 1050`, 'none', 8) + G(tr(CX + 116, 1040, 1, -50), rect(-14, -30, 28, 46, '#2b2b33', 12, 5));
     const banner = G(tr(CX, 735), path('M-420 -46L420 -46L400 46L-400 46Z', '#e2463a', 7) + ftext(0, 16, 'CONFÉRENCE DU NOUVEAU', { size: 40, fill: '#fff' }));
     let crowd = ''; for (let i = 0; i < 7; i++) { const bx = 70 + i * 160, by = 1760 + wave(t, .7, 6, i * .3); crowd += circ(bx, by, 110, '#1c1830', 0) + ell(bx, 1920, 150, 110, '#1c1830', 0); }
     return depth({ zoom: 1 }, [{ z: 1.4, svg: classroomT(t), haze: .3 }]) + op(.35, rect(-M, -M, W + 2 * M, H + 2 * M, '#1c1830', 0, 0)) + nvSpot(CX, 120, CX, 1480, 300, 1) + (t > Fa ? banner : '') +
-      heroP({ x: CX, y: 1460, s: 1.3, expr: t > Co ? 'terror' : 'panic', armL: [60, -10], armR: [120, 190] }, t) + (t > Fa ? podium + mic : '') + sweatSpray(CX, 1000, t, 4) + flashes + crowd +
+      heroP({ x: CX, y: 1370, s: 1.3, expr: t > Co ? 'terror' : 'panic', armL: [60, -10], armR: [120, 190] }, t) + (t > Fa ? podium + mic : '') + sweatSpray(CX, 1000, t, 4) + flashes + crowd +
       kthin("je viens d'arriver…", CX, 390, t, Vi - .15, { size: 58, out: Co - .2 }) + kthin('et tu veux déjà que je fasse', CX, 480, t, at(6, 'veux') - O6 - .1, { size: 46, out: Co - .2 }) +
       kword('UNE CONFÉRENCE ?!', CX, 440, t, Co - .05, { size: 76, fill: SX.acc2 }) + nvFlash(t, Co, .45); },
   sfx: [[0, 'whoosh', .4], [at(6, 'viens') - O6, 'pop_hi', .3], [at(6, 'fasse') - O6, 'shutter', .5], [at(6, 'fasse') - O6 + .3, 'shutter', .4], [at(6, 'conference') - O6 - .05, 'boom', .6], [at(6, 'conference') - O6, 'squeak', .5]] }, O6);
@@ -245,7 +245,7 @@ B(7, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0,
   draw: (t, d, T) => { const Bv = at(7, 'bienvenue'), Nv = at(7, 'nouveau'), blow = seg(t, Bv, Bv + .3);
     const horn = G(tr(0, -20, 1, 0), rect(0, -8, 30, 16, '#ff8fb1', 4, 4) + path(`M30 0Q${30 + 120 * blow} ${-10 + 60 * blow * blow} ${30 + 140 * blow} ${80 * blow * blow}`, 'none', 18, '#ffd23f'));
     let gar = path('M60 880Q540 980 1020 880', 'none', 5); 'BIENVENUE'.split('').forEach((c, i) => { const x = 110 + i * 108, y = 900 + Math.sin(i / 8 * 3.14) * 70 + wave(t, .6, 4, i); gar += G(tr(x, y, 1, wave(t, .6, 5, i)), path('M-44 0L44 0L0 90Z', DPAL[i % 8], 5) + ftext(0, 40, c, { size: 34, fill: '#fff' })); });
-    return classroomT(t) + WASH() + gar + nvProf({ x: 880, y: 1500, s: 1.15, expr: 'happy', armL: [-60 + Math.sin(t * 14) * 20, -40], armR: [-120 - Math.sin(t * 14) * 20, -140] }, t) +
+    return classroomT(t) + WASH() + gar + nvProf({ x: 880, y: 1500, s: 1.15, expr: 'happy', armL: [60, -20 + Math.sin(t * 14) * 20], armR: [120, 200 - Math.sin(t * 14) * 20] }, t) +
       heroP({ x: 300, y: 1490, s: 1.3, expr: t > Nv ? 'deadpan' : 'worried' }, t) + kid(4, { x: 600, y: 1500, s: .95, expr: 'deadpan', armR: [-20, 0], holdR: horn }, t) + confetti(t, Bv, 10) +
       kthin('bienvenue dans', CX, 400, t, Bv - .1, { size: 58 }) + kword('LA VIE DU NOUVEAU', CX, 540, t, Nv - .1, { size: 70, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(7, 'bienvenue'), 'whistle', .4], [at(7, 'vie'), 'pop_hi', .3], [at(7, 'nouveau') - .1, 'boom', .4], [at(7, 'nouveau') + .2, 'crickets', .3]] });
@@ -311,7 +311,7 @@ B(14, { enter: 'none', trans: 'circle', transD: .25, cam: (t, d) => ({ z: lerp(1
       kid(3, { x: 800, y: 1470, s: 1.0, expr: hug ? 'laugh' : 'happy', armR: hug ? [-60, -80] : [70, 80] }, t + 2) + kid(5, { x: 960, y: 1470, s: 1.0, expr: hug ? 'laugh' : 'happy', flip: 1, armR: hug ? [-60, -80] : [70, 80] }, t + 3) +
       (hug ? heartsUp(t, 210, 1000, 4) + impactStar(880, 1010, .5 + .1 * Math.sin(t * 20)) : '') +
       heroP({ x: CX, y: 1500, s: 1.15, expr: hug ? 'sad' : 'worried' }, t) + (t > Am ? G(tr(CX, 900), cloud(0, 0, .9, '#c9d3dc', 6) + [0, 1, 2].map(i => line(-40 + i * 40, 60 + ((t * 300 + i * 40) % 80), -46 + i * 40, 80 + ((t * 300 + i * 40) % 80), 5, '#5ec4f0')).join('')) : '') +
-      funTag('RÉCRÉ !', CX, 410, t, Rc - .1, { size: 70, bg: SX.acc2, fg: SX.ink }) + kthin('tout le monde retrouve', CX, 550, t, at(14, 'tout') - .1, { size: 52 }) + kword('SES AMIS', CX, 650, t, Am - .05, { size: 80, fill: '#fff' }); },
+      funTag(CX, 410, 'RÉCRÉ !', t, Rc - .1, { size: 70, bg: SX.acc2, fg: SX.ink }) + kthin('tout le monde retrouve', CX, 550, t, at(14, 'tout') - .1, { size: 52 }) + kword('SES AMIS', CX, 650, t, Am - .05, { size: 80, fill: '#fff' }); },
   sfx: [[0, 'school_bell', .5], [at(14, 'recreation') - .1, 'pop', .5], [at(14, 'retrouve'), 'kiss', .3], [at(14, 'amis') - .05, 'boom', .3], [at(14, 'amis') + .2, 'chirp', .3]] });
 
 // B015 — « Toi, tu fais semblant d'être passionné par les affiches du couloir. » : couloir, faux intérêt total pour « LAVEZ-VOUS LES MAINS »
@@ -322,7 +322,7 @@ B(15, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .3 }),
     return hallway(t) + WASH() + kidsBg(t, 1230, 3, .5) + poster + (t > Af ? markerCircle(300, 830, 190, 220, t, Af, { col: '#e2463a' }) : '') +
       heroP({ x: 720, y: 1490, s: 1.3, flip: 1, expr: t > Pa ? 'wow' : 'neutral', look: [1, -.3], armR: [-80, -40], holdR: magnifier(0, -10, .35, 20) }, t) + (t > Pa ? sparkle(640, 960, .5 + .2 * Math.sin(t * 9), '#fff') : '') +
       kthin('toi, tu fais semblant', CX, 400, t, Toi - .1, { size: 54 }) + kword('PASSIONNÉ', CX, 520, t, Pa - .05, { size: 100, fill: SX.acc2 }) + markerText('fascinant.', 800, 680, t, Pa + .4, { size: 48, col: '#fff' }) +
-      funTag('FAUX INTÉRÊT', 300, 1090, t, Af, { size: 34, bg: '#e2463a', r: 4 }); },
+      funTag(300, 1090, 'FAUX INTÉRÊT', t, Af, { size: 34, bg: '#e2463a', r: 4 }); },
   sfx: [[0, 'whoosh', .4], [at(15, 'semblant'), 'hmm', .4], [at(15, 'passionne') - .05, 'boom', .4], [at(15, 'passionne') + .1, 'glint', .5], [at(15, 'affiches'), 'scratch', .5]] });
 
 // B016 — « Tu sors ton téléphone. » : couloir flou, le téléphone jaillit de la poche
@@ -337,7 +337,7 @@ B(16, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0,
 B(17, { enter: 'punch', cam: (t, d) => ({ z: lerp(1.05, 1.12, t / d) }),
   draw: (t, d, T) => { const Ou = at(17, 'ouvres');
     return depth({ zoom: 1 }, [{ z: 1.4, svg: hallway(t), haze: .45 }]) + G(tr(CX, 900, 1, -4), phone(0, 0, 2.2, 0, nvScreen(t > Ou ? 'home' : 'lock', t)) + circ(-150, 300, 60, NV.skin, 6) + circ(150, 290, 56, NV.skin, 6)) +
-      (t > Ou ? funTag('0 MESSAGE', CX, 420, t, Ou + .1, { size: 60, bg: '#fff', fg: SX.ink }) : kthin("tu l'ouvres", CX, 420, t, 0, { size: 60 })); },
+      (t > Ou ? funTag(CX, 420, '0 MESSAGE', t, Ou + .1, { size: 60, bg: '#fff', fg: SX.ink }) : kthin("tu l'ouvres", CX, 420, t, 0, { size: 60 })); },
   sfx: [[0, 'whoosh', .3], [at(17, 'ouvres'), 'pop_hi', .5], [at(17, 'ouvres') + .1, 'pop', .4]] });
 
 // B018 — « Tu le refermes. » : écran noir… le reflet du nouveau, impassible
@@ -351,8 +351,8 @@ B(18, { enter: 'none', cam: (t, d) => ({ z: lerp(1.12, 1.16, t / d) }),
 // B019 — « Tu regardes l'heure. » : il lève les yeux vers la grosse horloge du couloir (10:00)
 B(19, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), cy: 900 }),
   draw: (t, d, T) => { const Rg = at(19, 'regardes'), He = at(19, 'heure');
-    return depth({ zoom: 1 }, [{ z: 1.3, svg: hallway(t), haze: .3 }]) + nvClock(CX, 760, 200, 10, 0, 0) + heroBust(250, 1080, 160, { expr: 'neutral', look: [1, -1.4], tilt: -8 }, t) +
-      kthin("tu regardes l'heure", CX, 430, t, Rg - .15, { size: 58 }) + (t > He ? funTag('10:00', 880, 1000, t, He, { size: 50, bg: SX.acc }) : ''); },
+    return depth({ zoom: 1 }, [{ z: 1.3, svg: hallway(t), haze: .3 }]) + nvClock(CX, 820, 200, 10, 0, 0) + heroBust(250, 1090, 160, { expr: 'neutral', look: [1, -1.4], tilt: -8 }, t) +
+      kthin("tu regardes l'heure", CX, 430, t, Rg - .15, { size: 58 }) + (t > He ? funTag(880, 1000, '10:00', t, He, { size: 50, bg: SX.acc }) : ''); },
   sfx: [[0, 'whoosh', .3], [at(19, 'regardes'), 'tick', .5], [at(19, 'heure'), 'tick', .5], [at(19, 'heure') + .1, 'pop_hi', .3]] });
 
 // B020 — « Il s'est passé onze secondes. » : crash zoom, la trotteuse à 11 s, un escargot sur l'aiguille, toiles d'araignée
@@ -360,7 +360,7 @@ B(20, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > 
   draw: (t, d, T) => { const Pa = at(20, 'passe'), E = at(20, '11'), sec = Math.min(11, Math.floor(seg(t, 0, E) * 11));
     const web = path('M120 620L300 620M120 620L120 800M120 620L260 760M150 650Q190 640 190 620M120 680Q180 690 200 700', 'none', 4, 'rgba(255,255,255,.8)');
     return depth({ zoom: 1 }, [{ z: 1.3, svg: hallway(t), haze: .4 }]) + nvClock(CX, 860, 260, 10, 0, sec) + nvSnail(CX + 20, 860 - 140, .7, -90) + web + G(`translate(1080 0) scale(-1 1)`, web) +
-      kthin("il s'est passé", CX, 400, t, Pa - .2, { size: 58 }) + kword('11 SECONDES', CX, 520, t, E - .05, { size: 96, fill: SX.acc2 }) + funTag('+11 s', 870, 1130, t, E + .1, { size: 44, bg: '#e2463a' }); },
+      kthin("il s'est passé", CX, 400, t, Pa - .2, { size: 58 }) + kword('11 SECONDES', CX, 520, t, E - .05, { size: 96, fill: SX.acc2 }) + funTag(870, 1130, '+11 s', t, E + .1, { size: 44, bg: '#e2463a' }); },
   sfx: [[0, 'whoosh', .3], [at(20, 'passe'), 'tick', .5], [at(20, '11') - .05, 'boom', .4], [at(20, 'secondes'), 'tick', .4], [at(20, 'secondes') + .3, 'wind', .3]] });
 
 // B021 — « PLUS QUE QUATORZE MINUTES ET QUARANTE-NEUF SECONDES. » : rayons rouges, compte à rebours géant 14:49, fontaine de larmes
@@ -380,7 +380,7 @@ B(22, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0
     let rush = ''; for (let i = 0; i < 5; i++) { const x = ((t * 900 + i * 260) % 1500) - 200; rush += kid(i + 1, { x, y: 1300 + (i % 2) * 40, s: .75, expr: 'ecstatic', armL: [-140, -120], armR: [-40, -60] }, t + i); }
     return nvCantine(t) + (al ? op(.25, rect(-M, -M, W + 2 * M, H + 2 * M, '#ff3b30', 0, 0)) : '') + rush + G(tr(950, 760), rect(-30, -10, 60, 30, '#555', 6, 4) + ell(0, -30, 34, 40, al ? '#ff3b30' : '#a8323a', 5)) +
       heroP({ x: 250, y: 1500, s: 1.25, expr: t > Ca ? 'scared' : 'worried' }, t) +
-      funTag('MIDI', CX, 410, t, Mi - .1, { size: 64, bg: SX.acc }) + kword('CATASTROPHE', CX, 560, t, Ca - .05, { size: 100, fill: '#ff5c5c' }); },
+      funTag(CX, 410, 'MIDI', t, Mi - .1, { size: 64, bg: SX.acc }) + kword('CATASTROPHE', CX, 560, t, Ca - .05, { size: 100, fill: '#ff5c5c' }); },
   sfx: [[0, 'whoosh', .4], [at(22, 'midi'), 'ding', .5], [at(22, 'catastrophe') - .05, 'boom', .5], [at(22, 'catastrophe'), 'siren', .4], [.2, 'steps', .4]] });
 
 // B023 — « Tu arrives au self. » : comptoir, la dame de cantine claque une louche de purée sur le plateau
@@ -407,14 +407,14 @@ B(25, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0,
   draw: (t, d, T) => { const Rp = at(25, 'reperes'), K = at(25, 'kevin'), kx = 745, ky = 1220 - 292 * .62;
     return nvCantine(t, { counter: false }) + nvFull(t, { expr: 'happy' }) + op(.25, rect(-M, -M, W + 2 * M, H + 2 * M, '#1d2026', 0, 0)) + op(.25, glow(kx, ky, 200, '#fff6a0', .9)) +
       G(tr(kx, ky, 1, t * 40), circ(0, 0, 120, 'none', 7, '#ff3b30') + line(-150, 0, -80, 0, 7, '#ff3b30') + line(80, 0, 150, 0, 7, '#ff3b30') + line(0, -150, 0, -80, 7, '#ff3b30') + line(0, 80, 0, 150, 7, '#ff3b30')) +
-      kthin('tu repères', CX, 430, t, Rp - .15, { size: 56 }) + funTag('KEVIN', kx, 800, t, K - .05, { size: 60, bg: KGREEN }); },
+      kthin('tu repères', CX, 430, t, Rp - .15, { size: 56 }) + funTag(kx, 800, 'KEVIN', t, K - .05, { size: 60, bg: KGREEN }); },
   sfx: [[0, 'whoosh', .3], [at(25, 'reperes'), 'zap', .4], [at(25, 'kevin') - .05, 'pop', .6], [at(25, 'kevin') + .1, 'glint', .4]] });
 
 // B026 — « Il te fait signe. » : par-dessus l'épaule du nouveau (sac à dos), Kevin fait coucou
 B(26, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Fa = at(26, 'fait'), Si = at(26, 'signe'), wv = Math.sin(t * 16) * 22;
     return nvCantine(t, { counter: false }) + WASH() + nvTable(t, 1260, 1.0, [[700, (x, yb, s) => kevin({ x, y: yb, s: 1.25, expr: 'happy', armR: [-70 + wv, -100 + wv], armL: [110, 100] }, t)]], { x0: 300, x1: 1100 }) +
-      nvHeroBack(220, 1700, 1.3) + (t > Si ? funTag('COUCOU !', 900, 760, t, Si, { size: 44, bg: KGREEN, r: 6 }) : '') +
+      nvHeroBack(220, 1700, 1.3) + (t > Si ? funTag(900, 760, 'COUCOU !', t, Si, { size: 44, bg: KGREEN, r: 6 }) : '') +
       kthin('il te fait', CX, 400, t, Fa - .15, { size: 58 }) + kword('SIGNE', CX, 540, t, Si - .05, { size: 120, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .3], [at(26, 'fait'), 'pop_hi', .4], [at(26, 'signe') - .05, 'boom', .3], [at(26, 'signe'), 'ding', .5]] });
 
@@ -446,8 +446,8 @@ B(29, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), s
   draw: (t, d, T) => { const No = at(29, 'non') - O29, Pa = at(29, 'parlais') - O29, Po = at(29, 'pote') - O29, De = at(29, 'derriere') - O29, wv = Math.sin(t * 16) * 22;
     return nvCantine(t, { counter: false }) + nvTable(t, 1150, .6, [[150, nvSeat(4, { expr: 'joy', armL: [-140 + wv, -120], tt: t })]], { x0: 20, x1: 330 }) +
       heroP({ x: 420, y: 1490, s: 1.3, tray: 1, expr: t > De ? 'shock' : 'happy' }, t) +
-      kevin({ x: 850, y: 1500, s: 1.35, flip: 1, expr: 'angry', face: { mouth: 'scream' }, armR: [-170, -175], armL: [110, 100] }, t) +
-      (t > Po ? funTag('LE POTE', 160, 760, t, Po, { size: 40, bg: KGREEN, r: -6 }) + markerArrow(560, 700, 230, 840, t, Po, { bend: -40 }) : '') +
+      kevin({ x: 850, y: 1500, s: 1.35, expr: 'angry', look: [-1, 0], face: { mouth: 'scream' }, armL: [185, 175], armR: [70, 80] }, t) +
+      (t > Po ? funTag(160, 760, 'LE POTE', t, Po, { size: 40, bg: KGREEN, r: -6 }) + markerArrow(560, 700, 230, 840, t, Po, { bend: -40 }) : '') +
       kword('NON !', CX, 440, t, No - .05, { size: 150, fill: '#fff', op: t > Pa ? 0 : 1 }) + kthin('je parlais à mon pote', CX, 410, t, Pa - .1, { size: 56 }) +
       kword('DERRIÈRE !', CX, 540, t, De - .05, { size: 100, fill: SX.acc2 }) + nvFlash(t, No, .5); },
   sfx: [[0, 'flash_hit', .5], [at(29, 'non') - O29 - .05, 'boom', .6], [at(29, 'pote') - O29, 'pop_hi', .4], [at(29, 'derriere') - O29 - .05, 'boom', .5], [at(29, 'derriere') - O29 + .1, 'scratch', .5]] }, O29);
@@ -465,7 +465,7 @@ B(30, { enter: 'none', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
     const h = heroP({ x: 0, y: 0, s: 1.3, tray: 1, expr: 'embarrassed', flip: k > .5 ? 1 : 0, legL: [95 + Math.sin(t * 9) * 14 * (k >= 1), 90], legR: [85 - Math.sin(t * 9) * 14 * (k >= 1), 90] }, t);
     return nvCantine(t, { counter: false }) + nvFull(t, { expr: 'laugh' }) + G(`translate(${f1(x)} 1530) scale(${f1(Math.max(.08, Math.abs(sx)))} 1)`, h) +
       (k > 0 && k < 1 ? path('M380 1000A170 60 0 1 0 700 1000', 'none', 10, '#fff') : '') +
-      kthin('tu fais', CX, 400, t, 0, { size: 58 }) + kword('DEMI-TOUR', CX, 530, t, Dm - .05, { size: 110, fill: SX.acc2 }) + (t > Pl ? funTag('avec ton plateau', 760, 760, t, Pl, { size: 36, bg: '#8fd0ff', fg: SX.ink, r: 5 }) : ''); },
+      kthin('tu fais', CX, 400, t, 0, { size: 58 }) + kword('DEMI-TOUR', CX, 530, t, Dm - .05, { size: 110, fill: SX.acc2 }) + (t > Pl ? funTag(760, 760, 'avec ton plateau', t, Pl, { size: 36, bg: '#8fd0ff', fg: SX.ink, r: 5 }) : ''); },
   sfx: [[0, 'whoosh', .3], [at(30, 'demi') - O30, 'whoosh', .6], [at(30, 'demi') - O30 + .2, 'squeak', .3], [at(30, 'plateau') - O30, 'pop', .4], [at(30, 'plateau') - O30 + .2, 'steps', .3]] }, O30);
 
 // B031 — « Comme un serveur qui vient de se faire licencier. » : restaurant, nœud pap', serviette, plateau en l'air, nuage de pluie, VIRÉ
@@ -484,7 +484,7 @@ B(31, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0
 B(32, { enter: 'none', trans: 'circle', transD: .25, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Ar = at(32, 'arrive'), Sp = at(32, 'sport'), blow = t > Sp;
     let row = ''; [[330, 2], [470, 4], [610, 6], [750, 1]].forEach(([x, i]) => row += kid(i, { x, y: 1260, s: .7, expr: 'neutral', shirt: '#fff' }, t + i));
-    return nvGym(t) + row + nvCoach({ x: 860, y: 1500, s: 1.15, flip: 1, expr: blow ? 'angry' : 'neutral', face: blow ? { mouth: 'o', blush: 1 } : {}, armR: [-120, -150], holdR: nvWhistle() }, t) +
+    return nvGym(t) + row + nvCoach({ x: 860, y: 1500, s: 1.15, flip: 1, expr: blow ? 'angry' : 'neutral', face: blow ? { mouth: 'o', blush: 1 } : {} }, t) + G(`translate(830 1085) scale(-1.2 1.2)`, nvWhistle()) +
       heroP({ x: 230, y: 1500, s: 1.25, expr: 'worried', shirt: '#fff' }, t) + (blow ? G(tr(720, 960), speedLines(t, 0, 0, 10, 'rgba(255,255,255,.8)')) : '') +
       kthin('puis arrive le cours de', CX, 400, t, Ar - .2, { size: 54 }) + kword('SPORT', CX, 540, t, Sp - .05, { size: 130, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(32, 'arrive'), 'steps', .3], [at(32, 'sport') - .05, 'boom', .4], [at(32, 'sport'), 'whistle', .6]] });
@@ -495,7 +495,7 @@ B(33, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
     const bibs = G(tr(0, -30), rect(-40, -40, 80, 70, '#e2463a', 10, 5) + rect(-40, -40, 80, 70, '#5b8fd8', 10, 5).replace('<rect', '<rect transform="translate(30 20)"'));
     return nvGym(t) + nvCoach({ x: CX, y: 1500, s: 1.25, expr: 'smug', face: t > De && t < Eq ? { mouth: 'talk' } : {}, armR: [-60, -100], holdR: bibs, armL: [110, 100] }, t) +
       cutout(heroP({ x: 200, y: 1480, s: 1.0, expr: 'worried', shirt: '#fff' }, t), 0) +
-      funTag('ÉQUIPE A', 250, 860, t, Fo, { size: 46, bg: '#e2463a', r: -6 }) + funTag('ÉQUIPE B', 830, 860, t, Eq, { size: 46, bg: '#5b8fd8', r: 6 }) +
+      funTag(250, 860, 'ÉQUIPE A', t, Fo, { size: 46, bg: '#e2463a', r: -6 }) + funTag(830, 860, 'ÉQUIPE B', t, Eq, { size: 46, bg: '#5b8fd8', r: 6 }) +
       kthin('former des', CX, 400, t, Fo - .15, { size: 58 }) + kword('ÉQUIPES', CX, 540, t, Eq - .05, { size: 120, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .3], [at(33, 'professeur'), 'whistle', .3], [at(33, 'former'), 'pop', .5], [at(33, 'equipes') - .05, 'boom', .4], [at(33, 'equipes'), 'pop', .5]] });
 
@@ -523,7 +523,7 @@ B(36, { enter: 'none', trans: 'glitch', transD: .2, cam: (t, d) => ({ z: lerp(1.
     const cur = t < Dr ? Math.min(7, Math.floor(seg(t, .15, Dr) * 8)) : 8;
     return nvSelect(t, cur, { pulse: t > Dr, heroExpr: t > Mn ? 'embarrassed' : 'worried' }) +
       kthin('tu es littéralement', CX, 380, t, Li - .2, { size: 56, out: Dr - .15 }) + kword('DERNIER PERSO DISPO', CX, 380, t, Dr - .05, { size: 64, fill: SX.acc2 }) +
-      (t > Mn ? funTag('DISPO ✓', 850, 1170, t, Mn, { size: 40, bg: KGREEN }) : '') + (t > Dr ? popStars(850, 1040, t, Dr + .05, 8, 200) : ''); },
+      (t > Mn ? funTag(850, 1170, 'DISPO ✓', t, Mn, { size: 40, bg: KGREEN }) : '') + (t > Dr ? popStars(850, 1040, t, Dr + .05, 8, 200) : ''); },
   sfx: [[0, 'whoosh', .4], [.4, 'tick', .4], [.8, 'tick', .4], [at(36, 'dernier') - .05, 'boom', .5], [at(36, 'dernier') + .05, 'ding', .5], [at(36, 'menu'), 'pop_hi', .4]] });
 
 // B037a — « Mais un jour, à la cantine, » : lumière dorée, cantine plus douce
@@ -569,10 +569,10 @@ B(40, { enter: 'none', cam: (t, d) => ({ z: lerp(1.1, 1.14, t / d) }),
 B(41, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .2 }),
   draw: (t, d, T) => { const Pf = at(41, 'parfois'), Se = at(41, 'semaines'), Pl = at(41, 'place'), wk = 1 + Math.min(5, Math.floor(seg(t, Se, Pl) * 6));
     let pages = ''; for (let i = 0; i < 2; i++) pages += calendarPage(860, 800 - i * 6, .8, 4 - i * 6, 'S' + Math.max(1, wk - i));
-    const fly = t > Se && t < Pl ? G(tr(860 + ((t * 4) % 1) * 200, 800 - ((t * 4) % 1) * 300, .8, ((t * 4) % 1) * 90), calendarPage(0, 0, 1, 0, 'S' + wk)) : '';
+    const fly = t > Se && t < Pl ? G(tr(840 - ((t * 4) % 1) * 120, 800 - ((t * 4) % 1) * 260, .8, ((t * 4) % 1) * 90), calendarPage(0, 0, 1, 0, 'S' + wk)) : '';
     return nvCantine(t, { counter: false }) + WASH('rgba(255,236,200,.25)') + pages + fly +
       nvTable(t, 1450, 1.1, [[230, nvSeat(5, { expr: 'laugh', tt: t + 1 })], [520, (x, yb, s) => heroP({ x, y: yb, s, expr: 'laugh', bag: false }, t)], [810, nvSeat(3, { expr: 'joy', flip: 1, tt: t })]], { x0: 40, x1: 1060 }) +
-      kthin("parce qu'il faut parfois", CX, 400, t, Pf - .2, { size: 54 }) + kword('DES SEMAINES', CX, 520, t, Se - .05, { size: 96, fill: '#fff' }) + funTag('SA PLACE', 300, 760, t, Pl - .05, { size: 54, bg: SX.acc }); },
+      kthin("parce qu'il faut parfois", CX, 400, t, Pf - .2, { size: 54 }) + kword('DES SEMAINES', CX, 520, t, Se - .05, { size: 96, fill: '#fff' }) + funTag(300, 760, 'SA PLACE', t, Pl - .05, { size: 54, bg: SX.acc }); },
   sfx: [[0, 'whoosh', .4], [at(41, 'parfois'), 'pop_hi', .3], [at(41, 'semaines') - .05, 'boom', .4], [at(41, 'semaines') + .1, 'clock_fast', .3], [at(41, 'place') - .05, 'ding', .5]] });
 
 // B042a — « ET UNE SIMPLE CHAISE LIBRE » : la chaise libre brille, débloqué (3/3)
