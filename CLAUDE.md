@@ -41,6 +41,11 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `garcon/` | Pourquoi c'est horrible d'être un garçon ? (SIZEX fun, 42 plans) | 55,7 s | ✅ livré (2 parties) |
 | `tourette/` | Pourquoi c'est horrible d'avoir le syndrome de Gilles de la Tourette ? (SIZEX fun, 43 plans) | 73,2 s | ✅ livré (3 parties) |
 | `kevin/` | Pourquoi c'est horrible d'être Kevin ? (épisode méta, voix ElevenLabs Tenko v4 générée par nous, SIZEX fun, 47 plans) | 72,5 s | ✅ livré (3 parties) |
+| `milieu/` | Pourquoi c'est horrible d'être l'enfant du milieu ? (voix ElevenLabs Tenko v4, SIZEX fun, 46 plans) | 62,2 s | ✅ livré (3 parties) |
+| `noel/` | Pourquoi c'est horrible de naître le 25 décembre ? (voix ElevenLabs, 48 plans) | 66,1 s | ✅ livré (3 parties) |
+| `compare/` | Pourquoi c'est horrible d'être toujours comparé à son frère ou sa sœur ? (voix ElevenLabs, 44 plans) | 63,5 s | ✅ livré (3 parties) |
+| `nouveau/` | Pourquoi c'est horrible d'être le nouveau de la classe ? (voix ElevenLabs, 48 plans) | 62,7 s | ✅ livré (3 parties) |
+| `loin/` | Pourquoi c'est horrible d'habiter loin de tous ses potes ? (voix ElevenLabs, 44 plans) | 64,7 s | ✅ livré (3 parties) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
@@ -53,6 +58,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 - `tools/build_kit.sh` → `dist/video-pourquoi-kit.zip` (exemples gentil/pauvres/secours/aine, sans voix ni clé API). Le refaire après chaque amélioration du moteur.
 
 ## Voix (retours client)
+- **Voix générée par nous** (script fourni) : `python3 tools/tts.py <ep>/assets/script.txt /tmp/x.mp3` (ElevenLabs Tenko v4, vitesse 1, stabilité .5, similarité 1 ; clé dans engine/.env), puis `tools/new_episode.sh <ep> /tmp/x.mp3`, puis blocks.txt = lignes du script (sans « »), `prep.py --realign`.
 - **Silences supprimés** (TikTok) : `python3 tools/tighten.py brut.mp3 assets/src.mp3 --keep .06 --min .12` AVANT la transcription (phrases bord à bord).
 - **Voix +10 dB** : après prep, `ffmpeg -i assets/src.mp3 -af "volume=10dB,alimiter=limit=0.89:level=false" assets/voix.mp3` (le client montait la voix de +10 dB dans CapCut).
 
