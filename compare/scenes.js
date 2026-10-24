@@ -91,7 +91,7 @@ const cmpPianoBack = (x, yb, s = 1) => G(tr(x, yb, s), path('M-330 -420L-180 -76
 const cmpPianoFront = (x, yb, s = 1, t = 0, play = 0) => { let keys = ''; for (let i = 0; i < 20; i++) { const dn = play && Math.sin(t * 22 + i * 1.7) > .6 ? 6 : 0; keys += rect(-320 + i * 32, -300 + dn, 32, 60, '#fff', 3, 4); }
   for (let i = 0; i < 20; i++) if (i % 7 !== 2 && i % 7 !== 6) keys += rect(-298 + i * 32, -300, 20, 34, OL, 3, 0);
   return G(tr(x, yb, s), rect(-310, -250, 40, 250, '#1d1d24', 8, 6) + rect(270, -250, 40, 250, '#1d1d24', 8, 6) + rect(-30, -150, 60, 20, '#c9a24a', 4, 4) + rect(-350, -430, 700, 140, '#1d1d24', 22, 7) + keys + rect(-350, -240, 700, 30, '#1d1d24', 10, 6) + op(.25, line(-300, -400, 200, -400, 8, '#fff')) +
-    rect(-120, -520, 240, 90, '#2b2b33', 6, 5) + [0, 1, 2].map(i => line(-100, -500 + i * 22, 100, -500 + i * 22, 3, '#9aa3ad')).join('')); };
+    (play ? '' : rect(-120, -520, 240, 90, '#2b2b33', 6, 5) + [0, 1, 2].map(i => line(-100, -500 + i * 22, 100, -500 + i * 22, 3, '#9aa3ad')).join(''))); };
 const cmpNotes = (x, y, t, n = 5, col = '#fff') => { let s = ''; for (let i = 0; i < n; i++) { const k = (t * .7 + i / n) % 1; s += op(Math.sin(k * 3.14), ftext(x + Math.sin(k * 7 + i) * 80 + (i - n / 2) * 50, y - k * 360, i % 2 ? '♪' : '♫', { size: 64, fill: col })); } return s; };
 // carnet de dessin (dragon gribouillé)
 const cmpSketch = (x, y, s = 1, r = 0, k = 1) => G(tr(x, y, s, r), rect(-170, -130, 340, 260, '#fff', 8, 6) + rect(-170, -150, 340, 26, '#5b8fd8', 8, 5) +
@@ -239,14 +239,14 @@ B(5, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 
   draw: (t, d, T) => { const Ta = at(5, 'ta'), Cb = at(5, 'combien'), Ag = at(5, 'age'), kb = pop(t, Ta + .1, .35);
     const bub = kb <= 0 ? '' : G(tr(780, 720, kb), cloud(0, 0, 2.0, '#fff', 7) + circ(-200, 180, 24, '#fff', 6) + circ(-250, 240, 14, '#fff', 5) + sisHead(0, 30, 80, { expr: 'smugger' }, t));
     return depth({ zoom: 1 }, [{ z: 1.4, svg: cmpKitchen(t), haze: .3 }, { z: 1, svg: momHead(360, 980, 200, { expr: t > Cb ? 'smug' : 'suspicious', look: [1, -.4], face: { mouth: 'talk' } }, t) }]) + bub +
-      heroHead(930, 1180, 110, { expr: t > Ag ? 'panic' : t > Cb ? 'worried' : 'happy', tilt: 8 }, t) +
+      heroHead(930, 1080, 100, { expr: t > Ag ? 'panic' : t > Cb ? 'worried' : 'happy', tilt: 8 }, t) +
       kthin('et ta sœur, elle avait eu', CX, 410, t, Ta - .1, { size: 52 }) + kword('COMBIEN ?', CX, 540, t, Cb - .05, { size: 110, fill: SX.acc2 }) + (t > Ag ? funTag(780, 920, 'À TON ÂGE', t, Ag - .05, { size: 34, bg: TEAL, r: 4 }) : ''); },
   sfx: [[at(5, 'ta'), 'pop_hi', .4], [at(5, 'ta') + .1, 'angel', .4], [at(5, 'combien') - .05, 'boom', .5], [at(5, 'age'), 'gulp', .5]] });
 
 // B006 — « 19. Silence. » : la balance : la copie 18 monte, la 19 auréolée l'écrase ; puis grisaille + grillons
 B(6, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(6, '19') && t < at(6, '19') + .35 ? 8 : 0 }),
   draw: (t, d, T) => { const N = at(6, '19'), Si = at(6, 'silence'), a = lerp(-14, 18, eOutBack(seg(t, N, N + .3)));
-    const L = G(tr(0, -110, .42, -6), cmpCopy('18/20')), Rr = t > N - .1 ? G(tr(0, -110 - 200 * (1 - eOutCubic(seg(t, N - .1, N + .12))), .42, 6), cmpCopy('19/20', '#e2463a', 1) + G(tr(0, -260), cmpHalo(180, t))) : '';
+    const L = G(tr(0, -140, .6, -6), cmpCopy('18/20')), Rr = t > N - .1 ? G(tr(0, -140 - 200 * (1 - eOutCubic(seg(t, N - .1, N + .12))), .6, 6), cmpCopy('19/20', '#e2463a', 1) + G(tr(0, -260), cmpHalo(180, t))) : '';
     return depth({ zoom: 1 }, [{ z: 1.4, svg: cmpKitchen(t), haze: .4 }]) + cmpScale(CX, 640, .95, a, L, Rr) + heroHead(170, 1080, 110, { expr: t > Si ? 'deadpan' : t > N ? 'jawdrop' : 'happy', tilt: -8 }, t) +
       momHead(910, 1090, 100, { expr: 'smug', look: [-1, 0] }, t) +
       kword('19/20', CX, 440, t, N - .05, { size: 130, fill: '#fff' }) + (t > Si ? op(.4, rect(-M, -M, W + 2 * M, H + 2 * M, '#6a6f7a', 0, 0)) + funTag(CX, 1130, 'SILENCE…', t, Si, { size: 44, bg: '#fff', fg: SX.ink }) : ''); },
@@ -263,7 +263,7 @@ B(7, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), sh
 B(7, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .4 }),
   draw: (t, d, T) => { const Pe = at(7, 'perdre') - O7b, Co = at(7, 'concours') - O7b, k = seg(t, Pe - .2, Pe + .3), sx = lerp(-200, 560, eOutCubic(k));
     return depth({ zoom: 1, x: Math.sin(t) * 8 }, [{ z: 1.5, svg: streetT(t, 2), haze: .1 },
-      { z: 1, svg: cmpFinish(560, 1320, 760, t, seg(t, Pe, Pe + .2)) +
+      { z: 1, svg: cmpFinish(560, 1400, 760, t, seg(t, Pe, Pe + .2)) +
         sisP(Object.assign({ x: sx, y: 1490, s: 1.15, expr: 'ecstatic' }, cmpRun(t, 1 - seg(t, Pe + .3, Pe + .5), 16), t > Pe + .3 ? { armL: [-140, -110], armR: [-40, -70] } : {}), t) + (t > Pe ? confetti(t, Pe, 24) : '') +
         heroP({ x: 900, y: 1490, s: 1.15, expr: t > Pe ? 'jawdrop' : 'confused', badge: 'bib', flip: 1 }, t) },
       { z: .6, svg: blur(10, dBush(80, 1900, 1.6)) }]) +
@@ -274,7 +274,7 @@ B(7, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 
   draw: (t, d, T) => { const Me = at(7, 'meme') - O7c, In = at(7, 'inscrit') - O7c;
     const list = ftext(0, -150, 'INSCRITS', { size: 40, fill: OL, stroke: 'none' }) + line(-130, -125, 130, -125, 4, TEAL) + G(tr(-70, -60), sisHead(0, 0, 34, { expr: 'happy' }, t)) + ftext(-20, -48, 'TA SŒUR ✓', { size: 30, fill: '#36a85a', stroke: 'none', anchor: 'start' }) +
       [0, 1, 2].map(i => line(-130, 20 + i * 50, 130, 20 + i * 50, 4, '#c9d3dc')).join('') + ftext(0, 180, '(toi : nulle part)', { size: 24, fill: '#9aa3ad', stroke: 'none' });
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: streetT(t, 2), haze: .35 }]) + cmpFinish(560, 1320, 760, t, 1).replace('<g', '<g opacity=".35"') +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: streetT(t, 2), haze: .35 }]) +
       card(720, 860, 340, 440, list, t, .02, { ry: 0, thick: 10, r: 4, bw: 6 }) + stamp(720, 920, 'PAS INSCRIT', t, In - .05, '#e2463a', -14, 54) +
       heroP({ x: 250, y: 1490, s: 1.25, expr: t > In ? 'dizzy' : 'confused', badge: 'bib' }, t) +
       kthin("auquel tu n'étais", CX, 420, t, 0, { size: 58 }) + kword('MÊME PAS INSCRIT', CX, 560, t, Me - .05, { size: 76, fill: '#fff' }); },
@@ -294,7 +294,7 @@ B(9, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .3 }),
   draw: (t, d, T) => { const A8 = at(9, '8'), Ra = at(9, 'range');
     const stack = G(tr(0, -20), [0, 1, 2].map(i => rect(-60, -i * 24, 120, 24, DPAL[(i + 4) % 8], 6, 4)).join(''));
     return depth({ zoom: 1, x: Math.sin(t) * 8 }, [{ z: 1.4, svg: cmpRoom(t), haze: .06 },
-      { z: 1, svg: sisP({ x: 430, y: 1480, s: 1.2, expr: 'proud', armL: [-30, -10], armR: [-150, -170], holdL: stack }, t) + (t > Ra ? sparkle(600, 1020, .8 + .3 * Math.sin(t * 12), '#fff') + sparkle(300, 900, .5, '#fff') : '') },
+      { z: 1, svg: sisP({ x: 430, y: 1480, s: 1.2, expr: 'proud', armL: [100, 10], armR: [80, 170], holdL: stack }, t) + (t > Ra ? sparkle(600, 1020, .8 + .3 * Math.sin(t * 12), '#fff') + sparkle(300, 900, .5, '#fff') : '') },
       { z: .6, svg: blur(10, dPot(60, 1950, 1.6, t, 0)) }]) +
       funTag(CX, 430, '8 ANS', t, A8 - .1, { size: 80, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 430, t, A8, 6, 180) + kthin('ta sœur range sa chambre', CX, 600, t, Ra - .2, { size: 56 }); },
   sfx: [[0, 'whoosh', .4], [at(9, '8') - .1, 'pop', .7], [at(9, 'range'), 'sparkle', .6], [at(9, 'chambre'), 'glint', .5], [at(9, 'chambre') + .2, 'angel', .3]] });
@@ -311,8 +311,8 @@ B(10, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.0,
 // B011 — « À douze ans, elle joue du piano. » : piano à queue, la sœur virtuose auréolée, notes qui s'envolent
 B(11, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const A12 = at(11, '12'), Pi = at(11, 'piano'), pl = t > at(11, 'joue');
-    return salonF(t) + WASH() + op(.3, path('M540 100L220 1300L860 1300Z', '#fff6c8', 0)) + cmpPianoBack(CX, 1460) +
-      sisP({ x: CX, y: 1500, s: 1.2, expr: pl ? 'zen' : 'proud', armL: [60 + (pl ? Math.sin(t * 20) * 10 : 0), 40], armR: [120 + (pl ? Math.sin(t * 20 + 2) * 10 : 0), 140] }, t) + cmpPianoFront(CX, 1460, 1, t, pl) + (pl ? cmpNotes(CX + 250, 900, t, 5) : '') +
+    return salonF(t) + WASH() + op(.3, path('M540 100L220 1300L860 1300Z', '#fff6c8', 0)) + cmpPianoBack(CX, 1540) +
+      sisP({ x: CX, y: 1330, s: 1.2, expr: pl ? 'zen' : 'proud', armL: [60 + (pl ? Math.sin(t * 20) * 10 : 0), 40], armR: [120 + (pl ? Math.sin(t * 20 + 2) * 10 : 0), 140] }, t) + cmpPianoFront(CX, 1540, 1, t, pl) + (pl ? cmpNotes(CX + 250, 900, t, 5) : '') +
       funTag(CX, 430, '12 ANS', t, A12 - .1, { size: 80, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 430, t, A12, 6, 180) + kthin('elle joue du', 400, 600, t, at(11, 'joue') - .15, { size: 56 }) + kword('PIANO', 780, 600, t, Pi - .05, { size: 90, fill: '#fff' }); },
   sfx: [[0, 'whoosh', .4], [at(11, '12') - .1, 'pop', .7], [at(11, 'joue'), 'magic', .5], [at(11, 'piano') - .05, 'ding', .5], [at(11, 'piano') + .1, 'sparkle', .4]] });
 
@@ -345,7 +345,7 @@ B(14, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), s
 B(15, { enter: 'none', trans: 'up', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const A15 = at(15, '15'), Dc = at(15, 'decroches'), No = at(15, 'note'), jump = Math.sin(clamp(seg(t, Dc - .2, Dc + .4)) * Math.PI) * 120, got = t > Dc + .1;
     const star = (x, y) => G(tr(x, y, 1, Math.sin(t * 3) * 6), path('M0 -70L20 -24L70 -20L32 12L44 64L0 36L-44 64L-32 12L-70 -20L-20 -24Z', GOLD, 7) + ftext(0, 22, '17', { size: 44, fill: '#e2463a', stroke: 'none' }));
-    return classroomT(t, ftext(540, 640, 'E = mc²', { size: 70, fill: 'rgba(255,255,255,.85)', stroke: 'none' })) + WASH() + kid(1, { x: 900, y: 1300, s: .72, expr: 'wow' }, t) + desk(900, 1220, .62) +
+    return classroomT(t) + WASH() + kid(1, { x: 900, y: 1300, s: .72, expr: 'wow' }, t) + desk(900, 1220, .62) +
       (got ? '' : line(560, -100, 560, 820, 5) + star(560, 880)) +
       heroP({ x: 430, y: 1490 - jump, s: 1.4, expr: got ? 'ecstatic' : 'effort', armR: [-60, -80], holdR: got ? G(tr(0, -40, .9), star(0, 0)) : '' }, t) +
       funTag(CX, 430, '15 ANS', t, A15 - .1, { size: 80, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 430, t, A15, 6, 180) + kthin('tu décroches', 300, 600, t, Dc - .15, { size: 52 }) + kword('UNE BONNE NOTE', 700, 600, t, No - .2, { size: 54, fill: '#fff' }); },
@@ -355,7 +355,7 @@ B(15, { enter: 'none', trans: 'up', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 
 B(16, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(16, 'mieux') ? 4 : 0 }),
   draw: (t, d, T) => { const Fa = at(16, 'faisait'), Mi = at(16, 'mieux'), sag = seg(t, Mi, Mi + .4);
     const frame = G(tr(0, -30, 1, -4), op(.6, glow(0, 0, 220, '#fff3a0', .8)) + rect(-130, -160, 260, 320, '#e8b923', 12, 7) + G(tr(0, 0, .62), cmpCopy('20/20')) + cmpHalo(140, t));
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: cmpKitchen(t), haze: .25 }, { z: 1, svg: momP({ x: 760, y: 1480, s: 1.1, expr: 'smugger', armL: [-120, -100], holdL: G(tr(0, 0, .8), frame) }, t) +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: cmpKitchen(t), haze: .25 }, { z: 1, svg: momP({ x: 760, y: 1480, s: 1.1, expr: 'smugger', armL: [190, 170], holdL: G(tr(0, 0, .8), frame) }, t) +
       heroP({ x: 270, y: 1490, s: 1.3, expr: t > Mi ? 'sob' : 'happy', armR: [-60 + 100 * sag, -80 + 120 * sag], holdR: G(tr(0, -40, .7 - .3 * sag, 40 * sag), path('M0 -70L20 -24L70 -20L32 12L44 64L0 36L-44 64L-32 12L-70 -20L-20 -24Z', mixC(GOLD, '#9aa3ad', sag), 7)) }, t) }]) +
       kthin('ta sœur faisait', CX, 420, t, 0, { size: 60 }) + kword('MIEUX', CX, 570, t, Mi - .05, { size: 130, fill: SX.acc2 }); },
   sfx: [[0, 'flash_hit', .4], [at(16, 'faisait'), 'angel', .5], [at(16, 'mieux') - .05, 'boom', .6], [at(16, 'mieux') + .1, 'whoosh', .4]] });
@@ -406,7 +406,7 @@ B(20, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .2 })
 const O21 = at(21, 'et') - .12;
 B(21, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), shake: 6 }),
   draw: (t, d, T) => { const Mo = at(21, 'moi'), N = at(21, '18');
-    return rays(t, CX, 950, '#2cc0c0', '#0f7f86', 22) + cutout(heroP({ x: 380, y: 1480, s: 1.35, expr: 'rage', face: { mouth: 'scream' }, armR: [-70, -90], holdR: G(tr(10, -80, .5, 8), cmpCopy('18/20')) }, t), 12) +
+    return rays(t, CX, 950, '#2cc0c0', '#0f7f86', 22) + cutout(heroP({ x: 380, y: 1480, s: 1.35, expr: 'rage', face: { mouth: 'scream' }, armR: [-30, -50], holdR: G(tr(90, -90, .5, 8), cmpCopy('18/20')) }, t), 12) +
       kword('MOI,', CX, 440, t, Mo - .05, { size: 110, fill: '#fff' }) + kword("J'AI 18", CX, 610, t, N - .05, { size: 130, fill: SX.acc2 }) + cmpFlash(t, N, .5); },
   sfx: [[0, 'flash_hit', .5], [at(21, 'moi') - .05, 'boom', .6], [at(21, '18') - .05, 'boom', .6], [at(21, '18'), 'growl', .4]] });
 // B021b — « …ET JE DOIS PRÉSENTER DES EXCUSES ? » : à genoux devant maman et la sœur (bras croisés), pancarte PARDON
@@ -415,7 +415,7 @@ B(21, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
     const sign = G(tr(0, -120, 1, -6), line(0, 120, 0, 0, 9, '#8a5a3a') + rect(-110, -70, 220, 100, '#fff', 12, 6) + ftext(0, 0, 'PARDON…', { size: 40, fill: '#3a5bff', stroke: 'none' }));
     return depth({ zoom: 1, x: Math.sin(t) * 6 }, [{ z: 1.4, svg: cmpKitchen(t), haze: .12 },
       { z: 1, svg: momP({ x: 660, y: 1470, s: 1.05, expr: 'deadpan', armL: [30, 170], armR: [150, 10] }, t) + sisP({ x: 900, y: 1480, s: 1.0, expr: 'smugger', armL: [30, 170], armR: [150, 10] }, t) +
-        heroP({ x: 270, y: 1530, s: 1.25, expr: 'sob', legL: [150, 90], legR: [30, 90], armR: [-80, -95], holdR: sign }, t) }]) +
+        heroP({ x: 360, y: 1530, s: 1.25, expr: 'sob', legL: [150, 90], legR: [30, 90], armL: [-150, -130], holdL: G(tr(40, -20), sign) }, t) }]) +
       kthin('et je dois présenter', CX, 420, t, Do - .2, { size: 56 }) + kword('DES EXCUSES ?', CX, 560, t, Ex - .2, { size: 96, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(21, 'dois') - O21, 'thud', .5], [at(21, 'presenter') - O21, 'pop', .5], [at(21, 'excuses') - O21 - .2, 'boom', .5], [at(21, 'excuses') - O21 + .2, 'crickets', .3]] }, O21);
 
@@ -423,7 +423,7 @@ B(21, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
 B(22, { enter: 'none', trans: 'black', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const Tr = at(22, 'travailles'), Da = at(22, 'davantage'), n = Math.floor(seg(t, 0, d) * 9) + 2;
     let books = ''; for (let i = 0; i < n; i++) books += rect(780 - 90 + (i % 2) * 14, 1250 - 36 - i * 36, 180, 36, DPAL[i % 8], 6, 5);
-    return bedroomN(t) + WASH('rgba(10,10,40,.2)') + dDeskLamp(140, 1250, 1.2, t) + heroP({ x: 420, y: 1490, s: 1.3, expr: 'effort', face: { sweat: 1 }, armR: [-10, -30], holdR: cmpPencil(0, -20, 1, 30 + Math.sin(t * 30) * 20) }, t) + desk(450, 1330, 1.1) +
+    return bedroomN(t) + WASH('rgba(10,10,40,.2)') + dDeskLamp(140, 1250, 1.2, t) + heroP({ x: 420, y: 1430, s: 1.3, expr: 'effort', face: { sweat: 1 }, armR: [-10, -30], holdR: cmpPencil(0, -20, 1, 30 + Math.sin(t * 30) * 20) }, t) + desk(450, 1330, 1.1) +
       books + G(tr(860, 520), rect(-120, -70, 240, 140, '#2b2b33', 20, 6) + ftext(0, 30, counter(20, 3, t, 0, d).toString().padStart(2, '0') + ':' + (Math.floor(t * 300) % 60).toString().padStart(2, '0'), { size: 70, fill: '#ff5c5c', stroke: 'none' })) +
       kthin('alors tu travailles', CX, 420, t, Tr - .2, { size: 58 }) + kword('DAVANTAGE', CX, 640, t, Da - .05, { size: 100, fill: SX.acc2 }); },
   sfx: [[0, 'clock_fast', .4], [at(22, 'travailles'), 'typing', .5], [at(22, 'travailles') + .3, 'scratch', .4], [at(22, 'davantage') - .05, 'boom', .5]] });
@@ -457,7 +457,7 @@ B(25, { enter: 'drop', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
 B(26, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Ga = at(26, 'gagne'), Tp = at(26, 'trophee');
     let flashes = ''; for (let i = 0; i < 5; i++) { const ph = (t * 2.3 + i * .37) % 1; if (ph < .12) flashes += op(1 - ph / .12, G(tr([140, 960, 200, 900, 540][i], [820, 760, 1080, 1040, 700][i]), circ(0, 0, 60, '#fff', 0) + impactStar(0, 0, .5))); }
-    return cmpGym(t, { cheer: 1 }) + cmpPodium(CX, 1330) + sisP({ x: CX, y: 1030, s: 1.0, expr: 'ecstatic', armR: [-70, -100], holdR: t > Tp - .1 ? G(tr(0, 40, pop(t, Tp - .1, .35)), cmpTrophy(0, 0, .75, t)) : '' }, t) +
+    return cmpGym(t, { cheer: 1 }) + cmpPodium(CX, 1330) + sisP({ x: CX, y: 1030, s: 1.0, expr: 'ecstatic', armR: [-20, -40], holdR: t > Tp - .1 ? G(tr(60, 40, pop(t, Tp - .1, .35)), cmpTrophy(0, 0, .75, t)) : '' }, t) +
       flashes + (t > Ga ? confetti(t, Ga, 30) : '') +
       kthin('ta sœur gagne', CX, 420, t, Ga - .2, { size: 58 }) + kword('UN TROPHÉE', CX, 540, t, Tp - .05, { size: 96, fill: SX.acc2 }); },
   sfx: [[at(26, 'gagne'), 'tada', .5], [at(26, 'gagne') + .1, 'shutter', .5], [at(26, 'trophee') - .05, 'boom', .5], [at(26, 'trophee'), 'jackpot', .4]] });
@@ -466,7 +466,7 @@ B(26, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0,
 B(27, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const To = at(27, 'toi'), De = at(27, 'deuxieme'), Ca = at(27, 'categorie');
     return cmpGym(t) + cmpPodium(CX, 1330) + op(.3, path('M560 900L330 1130L120 1130L330 900Z', '#000', 0)) +
-      sisP({ x: CX, y: 1030, s: 1.0, expr: 'proud', armR: [-70, -100], holdR: G(tr(0, 40), cmpTrophy(0, 0, .75, t)), armL: [150, 140] }, t) +
+      sisP({ x: CX, y: 1030, s: 1.0, expr: 'proud', armR: [-20, -40], holdR: G(tr(60, 40), cmpTrophy(0, 0, .75, t)) }, t) +
       heroP({ x: CX - 220, y: 1130, s: 1.0, expr: t > De ? 'sad' : 'neutral', badge: 'bib' }, t) + (t > De ? cmpMedal(CX - 220, 1130 - 150, .7 * pop(t, De, .3), '2') : '') +
       kthin('toi, tu termines', CX, 420, t, To - .1, { size: 58 }) + kword('DEUXIÈME', CX, 550, t, De - .05, { size: 110, fill: '#fff' }) + funTag(800, 690, 'DANS TA CATÉGORIE', t, Ca - .1, { size: 34, bg: TEAL, r: 4 }); },
   sfx: [[0, 'whoosh', .4], [at(27, 'toi'), 'pop_hi', .4], [at(27, 'deuxieme') - .05, 'thud', .6], [at(27, 'deuxieme') + .1, 'ding', .4], [at(27, 'categorie') - .1, 'pop', .4]] });
@@ -550,8 +550,8 @@ B(35, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), s
 B(35, { enter: 'none', trans: 'wipe', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .2 }),
   draw: (t, d, T) => { const Fr = at(35, 'frere') - O35, Un = at(35, 'une') - O35, Pl = at(35, 'plus') - O35;
     return hallway(t) + WASH() + cmpToise(540, 1250, 560) +
-      (t > Fr - .1 ? G(tr(0, (1 - eOutBack(seg(t, Fr - .1, Fr + .2))) * 600), broP({ x: 860, y: 1490, s: 1.2, expr: 'cool', armL: [-150, -120], armR: [-30, -60] }, t)) : '') +
-      (t > Un - .1 ? G(tr(0, (1 - eOutBack(seg(t, Un - .1, Un + .2))) * 600), sisP({ x: 640, y: 1490, s: 1.2, expr: 'smugger' }, t)) : '') +
+      (t > Fr - .1 ? G(tr(0, (1 - eOutBack(seg(t, Fr - .1, Fr + .2))) * 600), broP({ x: 900, y: 1490, s: 1.2, expr: 'cool', armL: [-150, -120], armR: [-30, -60] }, t)) : '') +
+      (t > Un - .1 ? G(tr(0, (1 - eOutBack(seg(t, Un - .1, Un + .2))) * 600), sisP({ x: 610, y: 1490, s: 1.2, expr: 'smugger' }, t)) : '') +
       heroP({ x: 260, y: 1490, s: 1.15, expr: t > Pl ? 'chill' : 'neutral', look: [1, -1] }, t) +
       kthin("ce n'est pas d'avoir", CX, 400, t, 0, { size: 56 }) + kthin('un frère ou une sœur', CX, 490, t, Fr - .1, { size: 56 }) + kword('PLUS FORT QUE TOI', CX, 610, t, Pl - .05, { size: 72, fill: SX.acc2 }) +
       (t > Pl ? funTag(260, 900, 'ÇA, ÇA VA', t, Pl + .3, { size: 36, bg: '#7be07b', fg: SX.ink, r: -6 }) : ''); },
