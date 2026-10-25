@@ -5,6 +5,8 @@ par l'utilisateur, avec bruitages. Formats : **9:16 TikTok** (courts) et **16:9 
 Bande-son « film » : musiques + ambiances + SFX générés avec **ElevenLabs** (voir plus bas) + SFX synthétisés.
 L'utilisateur parle français : répondre en français, ton direct et concis.
 
+**Nouvel agent : lis d'abord `PASSATION.md` (QCM de départ + méthode complète).**
+
 ## Épisodes faits
 | Dossier | Épisode | Durée | Statut |
 |---|---|---|---|
