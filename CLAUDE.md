@@ -49,6 +49,9 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `nouveau/` | Pourquoi c'est horrible d'être le nouveau de la classe ? (voix ElevenLabs, 48 plans) | 62,7 s | ✅ livré (3 parties) |
 | `loin/` | Pourquoi c'est horrible d'habiter loin de tous ses potes ? (voix ElevenLabs, 44 plans) | 64,7 s | ✅ livré (3 parties) |
 | `mbappe/` | Pourquoi c'est horrible d'être Kylian Mbappé ? (intro machine à sous, sous-titres incrustés, musique Bad Piggies, 48 plans) | 81 s | ✅ livré |
+| `snapchat/` | Pourquoi c'est horrible d'être accro à Snapchat ? (voix ElevenLabs, sous-titres + Bad Piggies, 48 plans) | 66,6 s | ✅ livré (lien GitHub) |
+| `indecis/` | Pourquoi c'est horrible d'être indécis ? (voix ElevenLabs, sous-titres + Bad Piggies, 47 plans) | 59,8 s | ✅ livré (lien GitHub) |
+| `embrouille/` | Pourquoi c'est horrible d'être toujours en embrouille avec ses parents ? (voix ElevenLabs, sous-titres + Bad Piggies, 47 plans) | 68,6 s | ✅ livré (lien GitHub) |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 
