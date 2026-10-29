@@ -5,16 +5,7 @@ Réponds à l'utilisateur en français, de façon directe et concise. Il a peu d
 
 ## ⚠️ NOUVELLES RÈGLES CLIENT (prioritaires, jusqu'à nouvel ordre — elles remplacent les anciennes là où elles divergent)
 Le style graphique ne change pas. Ce qui change :
-0. **INTRO = MACHINE À SOUS** (remplace l'intro motion du plan 1) : `engine/slot.js`, chargé par template/index.html après decor.js.
-   `casinoBg(t) + slotMachine(t, {l1, l2, key, t0, stops: [3 temps], win: [3 fonctions (x,y,s,t)=>svg]})` et `sfx: slotSfx(t0, stops)`.
-   Titre de l'épisode sur le fronton lumineux, levier tiré à t0, rouleaux qui s'arrêtent un par un sur le héros ou le sujet
-   (« c'est tombé sur toi au hasard »), puis JACKPOT et pièces. Modèle : le B(1) de template/scenes.js.
-   Ancien épisode : ajouter `<script src="../engine/slot.js"></script>` après decor.js dans son index.html.
-   **SUSPENSE (retour client : « je veux être impatient de voir de qui on parle »)** :
-   - PAS de silence avant la voix et PAS de zoom (retour client) : la révélation est simplement synchronisée sur le mot.
-   - Rouleaux 1 et 2 arrêtés vers 1,0 s et 1,45 s ; le 3e ralentit, presque arrêté sur un leurre « 7 », avance cran par cran (tic-tic + battements de cœur),
-     pénombre + projecteur, caméra fixe `slotCam(t, t0, stops)`, puis CLAC sur le héros au PREMIER mot du mot-clé : `stops[2] = at(1, 'premiermotcle')`.
-   - Le mot-clé du fronton reste caché (« ? ? ? ») jusqu'au jackpot ; `var CAP_START = stops[2];` masque les sous-titres jusque-là (pas de spoiler).
+0. **INTRO** : l'intro machine à sous a été ABANDONNÉE (le client n'aime pas). On garde l'ancienne intro motion (plan 1 : gridBg + titre 3 lignes + unlock en étoiles), voir template/scenes.js. engine/slot.js reste dispo mais n'est plus chargé.
 1. **Sous-titres INCRUSTÉS** (remplace « pas de sous-titres ») — déjà intégrés au moteur :
    - `engine/captions.js` (+ polices `engine/sourgummy_latin.woff2`, `sourgummy_ext.woff2`, déclarées dans `player.js`) : Sour Gummy 900,
      minuscules, blanc, contour noir 20 %, ombre feDropShadow dx 9 dy 5 σ 3,5 (opacité .95), 64 px, centre de ligne y = 1494, une ligne à la fois
