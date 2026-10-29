@@ -1,8 +1,9 @@
 // Lecteur commun : rend une frame au temps T (secondes) dans le <svg id="stage">
 (function () {
   const st = document.createElement('style');
-  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}@font-face{font-family:Anton;src:url(../engine/fonts/anton.woff2) format('woff2')}@font-face{font-family:Outfit;src:url(../engine/fonts/outfit200.woff2) format('woff2');font-weight:200}@font-face{font-family:Komika;src:url(../engine/fonts/komika.ttf) format('truetype')}@font-face{font-family:'Permanent Marker';src:url(../engine/fonts/marker.woff2) format('woff2')}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
+  st.textContent = "@font-face{font-family:Fredoka;src:url(../engine/fredoka.woff2) format('woff2');font-weight:700}@font-face{font-family:Anton;src:url(../engine/fonts/anton.woff2) format('woff2')}@font-face{font-family:Outfit;src:url(../engine/fonts/outfit200.woff2) format('woff2');font-weight:200}@font-face{font-family:Komika;src:url(../engine/fonts/komika.ttf) format('truetype')}@font-face{font-family:'Permanent Marker';src:url(../engine/fonts/marker.woff2) format('woff2')}@font-face{font-family:SourGummy;src:url(../engine/sourgummy_latin.woff2) format('woff2');font-weight:900}@font-face{font-family:SourGummy;src:url(../engine/sourgummy_ext.woff2) format('woff2');font-weight:900;unicode-range:U+0100-024F,U+1E00-1EFF}html,body{margin:0;background:#000;overflow:hidden}#stage{width:" + W + "px;height:" + H + "px;display:block}";
   document.head.appendChild(st);
+  if (document.fonts && document.fonts.load) document.fonts.load('900 64px SourGummy');
 })();
 const stage = document.getElementById('stage');
 window.fontsReady = Promise.all(['700 40px Fredoka', '40px Anton', '200 40px Outfit', "40px 'Permanent Marker'", '40px Komika'].map(f => document.fonts.load(f).catch(() => 0)));
@@ -55,6 +56,7 @@ function renderFrame(T) {
   if (T > TOTAL - .5) out += op(seg(T, TOTAL - .5, TOTAL), `<rect width="${W}" height="${H}" fill="#000"/>`);
   if (window.GUIDE && W > H) out += `<rect y="700" width="${W}" height="220" fill="rgba(255,0,0,.25)"/><rect y="920" width="${W}" height="160" fill="rgba(0,0,0,.3)"/>`;
   if (window.GUIDE && H > W) out += `<rect y="1250" width="1080" height="420" fill="rgba(255,0,0,.25)"/><rect y="1670" width="1080" height="250" fill="rgba(0,0,0,.35)"/>`;
+  if (typeof captionsAt === 'function') out += captionsAt(T);   // sous-titres incrustés (hors caméra)
   stage.innerHTML = out;
 }
 window.renderFrame = renderFrame;

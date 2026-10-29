@@ -3,6 +3,29 @@
 Ce document est pour toi, l'agent Claude qui reprend ce dépôt (eliasottari/ottaristation). Il contient toute la méthode, à appliquer à la lettre.
 Réponds à l'utilisateur en français, de façon directe et concise. Il a peu de crédits de session : avance, et ne lui pose pas d'autres questions que le QCM.
 
+## ⚠️ NOUVELLES RÈGLES CLIENT (prioritaires, jusqu'à nouvel ordre — elles remplacent les anciennes là où elles divergent)
+Le style graphique ne change pas. Ce qui change :
+1. **Sous-titres INCRUSTÉS** (remplace « pas de sous-titres ») — déjà intégrés au moteur :
+   - `engine/captions.js` (+ polices `engine/sourgummy_latin.woff2`, `sourgummy_ext.woff2`, déclarées dans `player.js`) : Sour Gummy 900,
+     minuscules, blanc, contour noir 20 %, ombre feDropShadow dx 9 dy 5 σ 3,5 (opacité .95), 64 px, centre de ligne y = 1494, une ligne à la fois
+     (coupe sur ponctuation ou pause > 0,32 s, jamais avant « -les »/« 'est », > 920 px → 2 morceaux équilibrés), apparition pop 0,55→1 en 0,16 s (eOutBack).
+   - Dessinés après la caméra (`captionsAt(T)` à la fin de `renderFrame`), générés depuis words.js (sans « »).
+   - `template/index.html` charge `captions.js` avant `player.js` ; pour un ANCIEN épisode, ajoute
+     `<script src="../engine/captions.js"></script>` juste avant `player.js` dans son index.html. Couper : `window.CAPTIONS = false;` dans scenes.js.
+   - Le cadrage reste : visages/textes entre y 380 et 1150 — la zone y ≈ 1440–1550 est occupée par les sous-titres.
+   - Whisper peut mal écrire un mot : corrige `assets/words.json` + `words.js` (le texte affiché vient de là), en gardant les temps.
+2. **Musique Bad Piggies** à −10 dB sous la voix, coupée à la fin avec fondu 0,25 s : le fichier du client va dans `engine/music_badpiggies.mp3`
+   (gitignore-le s'il est lourd ; demande-le s'il manque). `tools/finish.sh` appelle automatiquement `tools/add_music.sh` s'il existe.
+   **Aucune nappe d'ambiance synthétique** (le client entend un « souffle de vent ») : `const BEDS = [];`. On garde voix +10 dB + bruitages + musique.
+3. **Livrer UNE seule vidéo complète** (plus de parties à recoller) dans `Downloads/OTS CLAUDE/EXPORTS/<ep>/` sur son Mac :
+   - l'envoi (device_commit_files) refuse > 30 Mo → découpe SANS réencodage :
+     `ffmpeg -i out/<ep>_9x16.mp4 -c copy -map 0 -f segment -segment_time 33 -reset_timestamps 1 _p%d.mp4`, envoie les `_p*.mp4` ;
+   - recolle sur le Mac (device_bash, `/usr/bin/ffmpeg`) :
+     `printf "file '_p0.mp4'\nfile '_p1.mp4'\n" > _l.txt && /usr/bin/ffmpeg -f concat -safe 0 -i _l.txt -c copy -movflags +faststart <ep>_9x16.mp4`
+   - vérifie la durée (ffprobe), puis supprime `_p*.mp4` et `_l.txt` (si bloqué : demande la permission avec l'outil prévu).
+   - Résultat : vidéo finale non compressée, avec musique et sous-titres, prête à poster.
+   Le QCM du §0 garde ses 4 questions ; la question « format » vaut 9:16 avec sous-titres + musique par défaut.
+
 ## 0. AVANT TOUT : le QCM (outil AskUserQuestion, en un seul appel)
 À chaque nouvelle demande de vidéo, pose ces 4 questions, puis applique ses réponses :
 1. **Voix** : « Tu me fournis le fichier voix (mp3/wav) ? » → Oui, je l'envoie / Non, génère-la sur ElevenLabs depuis mon script (voix Tenko, modèle v4).
@@ -15,7 +38,7 @@ Les réponses recommandées sont celles qu'il valide depuis 30 épisodes. S'il e
 - Un dessin animé 2D cartoon généré par code (SVG → images → MP4), en 1080p, à 30 images/s.
 - Chaque gag et chaque bruitage tombe sur le mot prononcé.
 - Livraison découpée en `partie_1.mp4`, `partie_2.mp4`… de moins de 30 Mo chacune (limite d'envoi). L'utilisateur les recolle dans CapCut et veut la qualité maximale, pas de version compressée.
-- Pas de sous-titres incrustés : il ajoute les siens en bas de l'image.
+- Sous-titres INCRUSTÉS + musique Bad Piggies + UNE vidéo complète (voir « Nouvelles règles » en haut).
 
 ## 2. Lire d'abord
 - `CLAUDE.md` : règles client et tableau des épisodes faits.
