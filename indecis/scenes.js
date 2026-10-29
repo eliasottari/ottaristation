@@ -63,7 +63,7 @@ const idGlacier = (age, o, t) => adult(1, Object.assign({ hair: age >= 2 ? 'bald
 function idShop(t, o = {}) { const yb = 1250;
   let s = dWall('stripe', '#ffeaf2', '#ffdbe9', yb) + dBase(yb, '#ff8fb1');
   s += dNeon(540, 190, 'GLACES', '#ff5c8a', t, 72);
-  s += G(tr(190, 480, 1, -2), rect(-140, -170, 280, 340, '#8a5a3a', 18, 7) + rect(-122, -152, 244, 304, '#2f3a35', 10, 0) + ftext(0, -100, 'PARFUMS', { size: 34, fill: '#fff', stroke: 'none' }) +
+  if (!o.noMenu) s += G(tr(190, 480, 1, -2), rect(-140, -170, 280, 340, '#8a5a3a', 18, 7) + rect(-122, -152, 244, 304, '#2f3a35', 10, 0) + ftext(0, -100, 'PARFUMS', { size: 34, fill: '#fff', stroke: 'none' }) +
     ['VANILLE', 'CHOCOLAT', 'FRAISE', 'PISTACHE'].map((f, i) => circ(-92, -44 + i * 56, 12, [VAN, CHOC, '#ff8fb1', '#9be37b'][i], 3) + ftext(-68, -34 + i * 56, f, { size: 26, fill: 'rgba(255,255,255,.9)', stroke: 'none', anchor: 'start' })).join(''));
   s += dWindowView(720, 330, 290, 300, t) + rect(705, 312, 320, 30, '#ff5c8a', 6, 5) + [0, 1, 2, 3, 4].map(i => path(`M${705 + i * 64} 342L${769 + i * 64} 342L${769 + i * 64} 390Q${737 + i * 64} ${412 + wave(t, .6, 5, i)} ${705 + i * 64} 390Z`, i % 2 ? '#fff' : '#ff5c8a', 4)).join('');
   s += wallClock(470, 420, 56, t, o.clock || 1) + dShelf(370, 690, 280, dJar(400, 690, '#ff8fb1', .8) + dJar(465, 690, SX.acc2, .8) + dJar(530, 690, '#9be37b', .8) + dPot(605, 690, .45, t, 2, '#5ec4f0'));
@@ -157,7 +157,7 @@ function idChat(t, o = {}) { // contenu d'écran de téléphone (repère -66..66
   let s = rect(-66, -128, 132, 250, '#f4f6fb', 12, 0) + rect(-66, -128, 132, 36, SX.acc, 12, 0) + circ(-46, -110, 11, '#ff8fb1', 3) + ftext(-30, -104, 'Léa', { size: 15, fill: '#fff', stroke: 'none', anchor: 'start' });
   if (o.me) s += G(tr(26, -66, o.me), rect(-34, -14, 70, 28, '#7fd3a0', 10, 3) + ftext(1, 6, 'OUI !!', { size: 14, fill: OL, stroke: 'none' }));
   if (o.dots) s += G(tr(-36, -18), rect(-26, -12, 52, 24, '#fff', 10, 3) + [0, 1, 2].map(i => circ(-12 + i * 12, 0, 3.5 + Math.max(0, Math.sin(t * 10 - i)) * 1.5, '#9aa3ad', 0)).join(''));
-  if (o.her) s += G(tr(-8, 6, o.her), rect(-52, -44, 104, 82, '#fff', 10, 3) + ["Désolée, j'ai", 'cru que', "t'étais pas", 'intéressé.'].map((l, i) => ftext(-46, -24 + i * 18, l, { size: 12.5, fill: OL, stroke: 'none', anchor: 'start' })).join(''));
+  if (o.her) s += G(tr(-8, 6, o.her), rect(-58, -46, 116, 86, '#fff', 10, 3) + ["Désolée, j'ai", 'cru que', "t'étais pas", 'intéressé.'].map((l, i) => ftext(-52, -24 + i * 18, l, { size: 12, fill: OL, stroke: 'none', anchor: 'start' })).join(''));
   if (o.crack) s += path('M20 -40L4 -10L28 10L6 40L22 70M4 -10L-24 0M28 10L50 -4', 'none', 3, OL);
   return s; }
 
@@ -179,7 +179,7 @@ B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1, 1.06, t / d), hand: .3 }),
 // B001b — « Tu as huit ans. » : papier + gobo, héros cut-out, étiquette 8 ANS
 B(1, { enter: 'none', trans: 'wipe', transD: .18, cam: zin(1.02, 1.08, .2),
   draw: (t, d, T) => paper(SX.paper) + gobo(T, .12) + burst(CX, 1000, 280, t, 0, '#e6dcff', 16) +
-    cutout(heroP({ x: CX, y: 1460, s: 1.3, expr: 'happy', armR: [-40, -60] }, t), 12) +
+    cutout(heroP({ x: CX, y: 1400, s: 1.3, expr: 'happy', armR: [-40, -60] }, t), 12) +
     kthin('tu as', CX, 420, t, 0, { size: 60 }) + funTag(CX, 560, '8 ANS', t, .05, { size: 96, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 560, t, .1, 6, 200),
   sfx: [[0, 'whoosh', .4], [.05, 'pop', .7], [.15, 'sparkle', .4]] }, O1);
 
@@ -188,9 +188,9 @@ const idConeSign = (x, yb, t) => G(tr(x, yb), rect(-10, -560, 20, 560, '#3a4250'
 B(2, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.07, t / d), hand: .4 }),
   draw: (t, d, T) => { const Me = at(2, 'mere'), Gl = at(2, 'glace'), dx = t * 60;
     return depth({ zoom: 1, x: Math.sin(t) * 10 }, [{ z: 1.5, svg: streetT(t, 2), haze: .08 },
-      { z: 1, svg: idConeSign(860, 1300, t) + adult(3, { x: 520 + dx, y: 1480, s: 1.1, hair: 'long', expr: 'happy', walk: 1, armL: [150, 120] }, t) + heroP({ x: 270 + dx, y: 1490, s: 1.05, expr: t > Gl ? 'ecstatic' : 'happy', walk: 1, armR: [-10, 10] }, t) },
+      { z: 1, svg: idConeSign(860, 1300, t) + adult(3, { x: 520 + dx, y: 1410, s: 1.1, hair: 'long', expr: 'happy', walk: 1, armL: [150, 120] }, t) + heroP({ x: 270 + dx, y: 1420, s: 1.05, expr: t > Gl ? 'ecstatic' : 'happy', walk: 1, armR: [-10, 10] }, t) },
       { z: .6, svg: blur(10, dBush(60, 1900, 1.6)) }]) +
-      kthin("ta mère t'emmène", CX, 420, t, Me - .1, { size: 58 }) + kword('UNE GLACE', CX, 560, t, Gl - .05, { size: 110, fill: SX.acc2 }) + popStars(860, 660, t, Gl, 6, 160); },
+      kthin("ta mère t'emmène", CX, 420, t, Me - .1, { size: 58, fill: '#2b1f4a' }) + kword('UNE GLACE', CX, 560, t, Gl - .05, { size: 110, fill: SX.acc2 }) + popStars(860, 660, t, Gl, 6, 160); },
   sfx: [[0, 'whoosh', .4], [at(2, 'mere'), 'steps', .4], [at(2, 'acheter'), 'pop_hi', .4], [at(2, 'glace') - .05, 'boom', .4], [at(2, 'glace'), 'ding', .5]] });
 
 // B003 — « Vanille ou chocolat ? » : boutique, deux cornets qui se disputent l'écran, regard gauche-droite
@@ -198,17 +198,17 @@ B(3, { enter: 'none', trans: 'circle', transD: .22, cam: (t, d) => ({ z: lerp(1.
   draw: (t, d, T) => { const Va = at(3, 'vanille'), Ch = at(3, 'chocolat');
     return idShop(t) + idGlacier(0, { x: 800, y: 1330, s: 1.0, expr: 'happy', armL: [150, 110] }, t) + idCounter(t) +
       G(tr(260, 800, pop(t, Va - .05, .3), Math.sin(t * 5) * 6), idCone(0, 0, 1.3, VAN)) + G(tr(560, 800, pop(t, Ch - .05, .3), Math.sin(t * 5 + 2) * 6), idCone(0, 0, 1.3, CHOC)) +
-      heroP({ x: 330, y: 1490, s: 1.3, expr: 'confused', look: t > Ch ? idLook(t, 9) : [-1, -0.5] }, t) +
-      funTag(260, 590, 'VANILLE', t, Va - .05, { size: 46, bg: '#fff', fg: SX.ink, r: -6 }) + funTag(600, 590, 'CHOCOLAT', t, Ch - .05, { size: 46, bg: CHOC, r: 5 }) + kthin('ou', 430, 450, t, at(3, 'ou') - .05, { size: 64 }) + (t > Ch ? kword('?', 880, 560, t, Ch + .2, { size: 150, fill: SX.acc2 }) : ''); },
+      heroP({ x: 330, y: 1420, s: 1.3, expr: 'confused', look: t > Ch ? idLook(t, 9) : [-1, -0.5] }, t) +
+      funTag(260, 590, 'VANILLE', t, Va - .05, { size: 46, bg: '#fff', fg: SX.ink, r: -6 }) + funTag(600, 590, 'CHOCOLAT', t, Ch - .05, { size: 46, bg: CHOC, r: 5 }) + kthin('ou', 410, 760, t, at(3, 'ou') - .05, { size: 64, fill: '#2b1f4a' }) + (t > Ch ? kword('?', 880, 560, t, Ch + .2, { size: 150, fill: SX.acc2 }) : ''); },
   sfx: [[at(3, 'vanille') - .05, 'pop', .6], [at(3, 'ou'), 'pop_hi', .3], [at(3, 'chocolat') - .05, 'pop', .6], [at(3, 'chocolat') + .2, 'boing', .4]] });
 
 // B004 — « Tu réfléchis. » : gros plan, balance cornets qui oscille au-dessus, points d'interrogation en orbite
 B(4, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const Re = at(4, 'reflechis');
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: idShop(t), haze: .38 }]) + idScale(CX, 600, .62, t, idCone(0, -60, .55, VAN), idCone(0, -60, .55, CHOC), Math.sin(t * 6) * 18) +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: idShop(t), haze: .38 }]) + idScale(CX, 660, .62, t, idCone(0, -60, .55, VAN), idCone(0, -60, .55, CHOC), Math.sin(t * 6) * 18) +
       heroHead(CX, 990, 170, { expr: 'confused', look: idLook(t, 8), tilt: Math.sin(t * 4) * 6 }, t) +
       [0, 1, 2].map(i => { const a = t * 3 + i * 2.1; return qmark(CX + Math.cos(a) * 260, 960 + Math.sin(a) * 80, .5, [SX.acc2, '#fff', LIL][i]); }).join('') +
-      kword('TU RÉFLÉCHIS…', CX, 450, t, Re - .05, { size: 84, fill: '#fff' }); },
+      kword('TU RÉFLÉCHIS…', CX, 410, t, Re - .05, { size: 84, fill: '#fff' }); },
   sfx: [[0, 'whoosh', .4], [at(4, 'reflechis') - .05, 'hmm', .6], [at(4, 'reflechis') + .1, 'tick', .4], [at(4, 'reflechis') + .3, 'tick', .4]] });
 
 // B005–B007 — « Une minute. / Deux minutes. / Cinq minutes. » : le glacier vieillit, l'horloge s'emballe, le héros se fige
@@ -217,8 +217,8 @@ function idWait(n, age, label, word, expr, o = {}) {
     draw: (t, d, T) => { const Wd = at(n, word);
       return idShop(t, { clock: 6 + age * 14 }) + idGlacier(age, { x: 800, y: 1330, s: 1.0, expr, armL: age === 0 ? [150 + Math.sin(t * 20) * 10, 120] : [110, 100] }, t) + idCounter(t) +
         G(tr(260, 800, 1, Math.sin(t * 5) * 6), idCone(0, 0, 1.3, VAN, age * .3)) + G(tr(560, 800, 1, Math.sin(t * 5 + 2) * 6), idCone(0, 0, 1.3, CHOC, age * .3)) +
-        heroP({ x: 330, y: 1490, s: 1.3, expr: age >= 2 ? 'dizzy' : 'confused', look: idLook(t, 9) }, t) + (age >= 1 ? idWeb(150, 1010, .8 + age * .2, 20) : '') + (age >= 2 ? idWeb(520, 1180, .7, 200) : '') +
-        (age >= 1 ? sweat(420, 1000 + (t * 60) % 40, 1) : '') +
+        heroP({ x: 330, y: 1420, s: 1.3, expr: age >= 2 ? 'dizzy' : 'confused', look: idLook(t, 9) }, t) + (age >= 1 ? idWeb(150, 940, .8 + age * .2, 20) : '') + (age >= 2 ? idWeb(520, 1110, .7, 200) : '') +
+        (age >= 1 ? sweat(420, 930 + (t * 60) % 40, 1) : '') +
         kword(label, CX, 470, t, Wd - .05, { size: 120, fill: age >= 2 ? '#ff6b6b' : SX.acc2 }) + popStars(CX, 470, t, Wd, 6, 220); },
     sfx: [[0, o.trans ? 'whoosh' : 'pop_hi', .4], [at(n, word) - .05, 'boom', .4], [at(n, word), 'clock_fast', .4], [at(n, word) + .2, age >= 2 ? 'crickets' : 'tick', .4]] });
 }
@@ -229,13 +229,13 @@ idWait(7, 2, '5 MINUTES', 'cinq', 'sleep', { enter: 'crash' });
 // B008 — « LE GLACIER A EU LE TEMPS DE FONDER UNE FAMILLE. » : il est vieux, marié, enfants, photo de mariage — slam
 B(8, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(8, 'famille') && t < at(8, 'famille') + .5 ? 8 : 2 }),
   draw: (t, d, T) => { const Gl = at(8, 'glacier'), Fo = at(8, 'fonder'), Fa = at(8, 'famille');
-    return idShop(t, { clock: 30, photo: Fo }) + idGlacier(3, { x: 820, y: 1330, s: 1.0, expr: 'proud', armR: [-30, -60] }, t) +
+    return idShop(t, { clock: 30, photo: Fo, noMenu: 1 }) + dFrame(180, 520, 150, 120, 'mount', '#c38a52', -3) + idGlacier(3, { x: 820, y: 1330, s: 1.0, expr: 'proud', armR: [-30, -60] }, t) +
       (t > Fo ? adult(3, { x: 620, y: 1330, s: .95, hair: 'long', hairColor: '#d9d9de', wrinkles: true, shirt: '#fff', apron: '#ff8fb1', expr: 'happy', armL: [150, 120] }, t + 1) : '') +
       (t > Fa ? kid(1, { x: 470, y: 1200, s: .72, expr: 'joy', armL: [-150, -120] }, t) + kid(4, { x: 960, y: 1200, s: .65, expr: 'happy', armR: [-30, -60] }, t + 2) : '') + idCounter(t, 1) +
       G(tr(260, 860, 1, Math.sin(t * 5) * 6), idCone(0, 0, 1.2, VAN, 1)) +
-      heroP({ x: 300, y: 1490, s: 1.3, expr: t > Fa ? 'jawdrop' : 'dizzy', look: [1, -0.3] }, t) + idWeb(140, 1010, 1.2, 20) +
+      heroP({ x: 300, y: 1420, s: 1.3, expr: t > Fa ? 'jawdrop' : 'dizzy', look: [1, -0.3] }, t) + idWeb(140, 940, 1.2, 20) +
       (t > Fa ? heartsUp(t, 720, 900, 5) + confetti(t, Fa, 26) : '') +
-      kthin('le glacier a eu le temps', CX, 390, t, Gl - .1, { size: 54 }) + kthin('de fonder', CX, 460, t, Fo - .15, { size: 54 }) +
+      kthin('le glacier a eu le temps', CX, 390, t, Gl - .1, { size: 54, fill: '#2b1f4a' }) + kthin('de fonder', CX, 460, t, Fo - .15, { size: 54, fill: '#2b1f4a' }) +
       kword('UNE FAMILLE', CX, 580, t, Fa - .05, { size: 110, fill: SX.acc2 }) + idFlash(t, Fa, .6); },
   sfx: [[0, 'flash_hit', .5], [at(8, 'glacier'), 'pop_hi', .4], [at(8, 'fonder'), 'pop', .5], [at(8, 'famille') - .05, 'boom', .7], [at(8, 'famille'), 'baby_coo', .5], [at(8, 'famille') + .2, 'tada', .4]] });
 
@@ -246,39 +246,39 @@ B(9, { enter: 'none', trans: 'zoom', transD: .22, cam: (t, d) => ({ z: lerp(1.0,
     const arch = rect(118, 820, 44, 440, '#8a5a3a', 6, 6) + rect(918, 820, 44, 440, '#8a5a3a', 6, 6) + path('M140 820A400 190 0 0 1 940 820', 'none', 30, SX.acc) + path('M140 820A400 190 0 0 1 940 820', 'none', 6, SX.acc2) + bulbs;
     return depth({ zoom: 1, x: Math.sin(t) * 10 }, [{ z: 1.5, svg: streetT(t, 2), haze: .1 },
       { z: 1.2, svg: idSign(230, 1300, .7, t, 'ICI', 'LÀ', 5) + idSign(860, 1300, .7, t, 'OUI', 'NON', 6, 1) },
-      { z: 1, svg: arch + unlock(CX, 1000, t, In, { part: 'back', r: 460 }) + heroP({ x: CX, y: 1490, s: 1.3, expr: t > In ? 'dizzy' : 'happy', look: idLook(t, 5), armL: [-150, -120], armR: [-30, -60] }, t) + unlock(CX, 1000, t, In, { part: 'front', r: 460 }) },
+      { z: 1, svg: arch + unlock(CX, 1000, t, In, { part: 'back', r: 460 }) + heroP({ x: CX, y: 1420, s: 1.3, expr: t > In ? 'dizzy' : 'happy', look: idLook(t, 5), armL: [-150, -120], armR: [-30, -60] }, t) + unlock(CX, 1000, t, In, { part: 'front', r: 460 }) },
       { z: .6, svg: blur(10, dBush(1020, 1900, 1.6)) }]) +
-      kthin("bienvenue dans la vie d'un", CX, 420, t, Bv - .1, { size: 52 }) + kword('INDÉCIS', CX, 570, t, In - .05, { size: 130, fill: SX.acc2 }); },
+      kthin("bienvenue dans la vie d'un", CX, 420, t, Bv - .1, { size: 52, fill: '#2b1f4a' }) + kword('INDÉCIS', CX, 570, t, In - .05, { size: 130, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(9, 'bienvenue'), 'magic', .5], [at(9, 'vie'), 'pop_hi', .4], [at(9, 'indecis') - .05, 'boom', .5], [at(9, 'indecis'), 'sparkle', .5]] });
 
 // B010 — « À douze ans, Kevin te demande quel film regarder. » : devant le cinéma, Kevin pose LA question
 B(10, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const A12 = at(10, '12'), K = at(10, 'kevin'), Fi = at(10, 'film');
-    return idCinema(t) + kevin({ x: 790, y: 1490, s: 1.25, expr: 'happy', flip: 1, armL: [-150, -120] }, t) + heroP({ x: 300, y: 1490, s: 1.25, expr: t > Fi ? 'worried' : 'happy', look: t > Fi ? idLook(t, 6) : [1, 0] }, t) +
+    return idCinema(t) + kevin({ x: 790, y: 1420, s: 1.25, expr: 'happy', flip: 1, armL: [-150, -120] }, t) + heroP({ x: 300, y: 1420, s: 1.25, expr: t > Fi ? 'worried' : 'happy', look: t > Fi ? idLook(t, 6) : [1, 0] }, t) +
       funTag(CX, 470, '12 ANS', t, A12 - .1, { size: 80, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 470, t, A12, 6, 180) +
       chatBubble(760, 640, 380, 110, 'ON REGARDE QUOI ?', t, Fi - .1, false, 34); },
   sfx: [[0, 'whoosh', .4], [at(10, '12') - .1, 'pop', .7], [at(10, 'kevin'), 'pop_hi', .4], [at(10, 'film') - .1, 'pop', .5], [at(10, 'regarder'), 'hmm', .3]] });
 
 // B011 — « Tu choisis une comédie. » : l'affiche COMÉDIE s'illumine, le héros la pointe
-B(11, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .3, cx: 440 }),
+B(11, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .3 }),
   draw: (t, d, T) => { const Co = at(11, 'comedie');
-    return idCinema(t, { lit: [t > Co - .1 ? 1 : 0, 0] }) + kevin({ x: 790, y: 1490, s: 1.25, expr: 'happy', flip: 1 }, t) + heroP({ x: 300, y: 1490, s: 1.25, expr: 'laugh', look: [-.5, -1], armL: [-120, -140] }, t) +
+    return idCinema(t, { lit: [t > Co - .1 ? 1 : 0, 0] }) + kevin({ x: 790, y: 1420, s: 1.25, expr: 'happy', flip: 1 }, t) + heroP({ x: 300, y: 1420, s: 1.25, expr: 'laugh', look: [-.5, -1], armL: [-120, -140] }, t) +
       kword('COMÉDIE', 330, 470, t, Co - .05, { size: 96, fill: SX.acc2 }) + popStars(290, 720, t, Co, 6, 220); },
   sfx: [[at(11, 'choisis'), 'pop_hi', .4], [at(11, 'comedie') - .1, 'ding', .5], [at(11, 'comedie') - .05, 'boom', .4], [at(11, 'comedie') + .1, 'sparkle', .4]] });
 
 // B012 — « Puis tu changes pour un film d'horreur. » : whip vers l'affiche HORREUR, héros terrifié… mais il la choisit
-B(12, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .3, cx: 640 }),
+B(12, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .3 }),
   draw: (t, d, T) => { const Ch = at(12, 'changes'), Ho = at(12, 'horreur');
     return idCinema(t, { lit: [0, t > Ch ? 1 : 0] }) + (t > Ho && t < Ho + .2 ? op(.4, rect(-M, -M, W + 2 * M, H + 2 * M, '#2a2440', 0, 0)) : '') +
-      kevin({ x: 790, y: 1490, s: 1.25, expr: 'annoyed', flip: 1 }, t) + heroP({ x: 300, y: 1490, s: 1.25, expr: t > Ho ? 'scared' : 'confused', look: [1, -1], armR: [-60, -80], tremble: t > Ho ? 1 : 0 }, t) +
-      kthin('puis tu changes pour', CX, 420, t, Ch - .15, { size: 54 }) + kword("UN FILM D'HORREUR", CX, 560, t, Ho - .15, { size: 76, fill: '#ff6b6b' }); },
+      kevin({ x: 790, y: 1420, s: 1.25, expr: 'annoyed', flip: 1 }, t) + heroP({ x: 300, y: 1420, s: 1.25, expr: t > Ho ? 'scared' : 'confused', look: [1, -1], armR: [-60, -80], tremble: t > Ho ? 1 : 0 }, t) +
+      kthin('puis tu changes pour', CX, 420, t, Ch - .15, { size: 54 }) + kword("UN FILM D'HORREUR", CX, 560, t, at(12, 'film') - .1, { size: 76, fill: '#ff6b6b' }); },
   sfx: [[0, 'whoosh', .5], [at(12, 'changes'), 'rewind', .4], [at(12, 'horreur') - .15, 'boom', .4], [at(12, 'horreur'), 'ghost', .5], [at(12, 'horreur') + .1, 'thunder', .3]] });
 
 // B013 — « Puis tu reviens à la comédie. » : les affiches clignotent en alternance, Kevin a le tournis
 B(13, { enter: 'none', trans: 'glitch', transD: .2, cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .4, r: Math.sin(t * 6) * 3 }),
   draw: (t, d, T) => { const Rv = at(13, 'reviens'), Co = at(13, 'comedie'), alt = Math.sin(t * 16) > 0 && t < Co;
-    return idCinema(t, { lit: t > Co ? [1, 0] : alt ? [1, 0] : [0, 1] }) + kevin({ x: 790, y: 1490, s: 1.25, expr: 'dizzy', flip: 1 }, t) +
-      heroP({ x: 300, y: 1490, s: 1.25, expr: 'panic', look: idLook(t, 16), armL: t > Co ? [-120, -140] : [110, 100], armR: t > Co ? [70, 80] : [-60, -80] }, t) +
+    return idCinema(t, { lit: t > Co ? [1, 0] : alt ? [1, 0] : [0, 1] }) + kevin({ x: 790, y: 1420, s: 1.25, expr: 'dizzy', flip: 1 }, t) +
+      heroP({ x: 300, y: 1420, s: 1.25, expr: 'panic', look: idLook(t, 16), armL: t > Co ? [-120, -140] : [110, 100], armR: t > Co ? [70, 80] : [-60, -80] }, t) +
       idArrow(300, 880, Math.sin(t * 16) > 0 ? -1 : 1, '', SX.acc2, 0, .6) +
       kthin('puis tu reviens à la', CX, 420, t, Rv - .2, { size: 54 }) + kword('COMÉDIE', CX, 560, t, Co - .05, { size: 110, fill: SX.acc2 }); },
   sfx: [[0, 'whoosh', .4], [at(13, 'reviens'), 'rewind', .4], [at(13, 'reviens') + .2, 'tick', .3], [at(13, 'comedie') - .05, 'boom', .4], [at(13, 'comedie') + .1, 'boing', .4]] });
@@ -286,8 +286,8 @@ B(13, { enter: 'none', trans: 'glitch', transD: .2, cam: (t, d) => ({ z: lerp(1.
 // B014 — « QUAND TU TE DÉCIDES, LE CINÉMA EST FERMÉ. » : nuit, lune, Kevin endormi, le rideau de fer tombe — slam FERMÉ
 B(14, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t > at(14, 'ferme') && t < at(14, 'ferme') + .5 ? 9 : 2 }),
   draw: (t, d, T) => { const De = at(14, 'decides'), Ci = at(14, 'cinema'), Fe = at(14, 'ferme'), k = eOutCubic(seg(t, Ci, Fe));
-    return idCinema(t, { night: 1, shut: Math.max(.02, k) }) + kevin({ x: 800, y: 1490, s: 1.2, expr: 'sleep', flip: 1, rot: -8, beard: true, hairColor: '#c4521b' }, t) + ftext(880, 980 + Math.sin(t * 3) * 10, 'Zzz', { size: 54, fill: '#fff' }) +
-      heroP({ x: 300, y: 1490, s: 1.25, expr: t > Fe ? 'jawdrop' : 'ecstatic', look: [1, -1], armL: t > Fe ? [110, 100] : [-150, -120], armR: t > Fe ? [70, 80] : [-30, -60] }, t) +
+    return idCinema(t, { night: 1, shut: Math.max(.02, k) }) + kevin({ x: 800, y: 1420, s: 1.2, expr: 'sleep', flip: 1, rot: -8, beard: true, hairColor: '#c4521b' }, t) + ftext(880, 980 + Math.sin(t * 3) * 10, 'Zzz', { size: 54, fill: '#fff' }) +
+      heroP({ x: 300, y: 1420, s: 1.25, expr: t > Fe ? 'jawdrop' : 'ecstatic', look: [1, -1], armL: t > Fe ? [110, 100] : [-150, -120], armR: t > Fe ? [70, 80] : [-30, -60] }, t) +
       kthin('quand tu te décides,', CX, 420, t, De - .3, { size: 56, out: Fe - .1 }) + kword('FERMÉ', CX, 520, t, Fe - .05, { size: 170, fill: '#ff6b6b' }) + idFlash(t, Fe, .6); },
   sfx: [[0, 'flash_hit', .4], [at(14, 'decides'), 'ding', .4], [at(14, 'cinema'), 'whoosh_up', .3], [at(14, 'ferme') - .05, 'boom', .7], [at(14, 'ferme'), 'thud', .7], [at(14, 'ferme') + .3, 'crickets', .3]] });
 
@@ -295,14 +295,14 @@ B(14, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), s
 B(15, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
   draw: (t, d, T) => { const A16 = at(15, '16'), Re = at(15, 'restaurant');
     const menu = G(tr(0, -50, 1, -6), rect(-60, -80, 120, 160, '#2f3a35', 8, 5) + ftext(0, -36, 'MENU', { size: 22, fill: '#fff', stroke: 'none' }) + [0, 1, 2].map(i => line(-40, -6 + i * 26, 40, -6 + i * 26, 3, 'rgba(255,255,255,.6)')).join(''));
-    return restoT(t) + heroP({ x: 290, y: 1440, s: 1.2, expr: 'happy', armR: [-60, -60], holdR: menu }, t) + kevin({ x: 800, y: 1440, s: 1.2, expr: 'happy', flip: 1 }, t + 1) + idTable(1230) + dMug(820, 1186, .9, t, '#5ec4f0') +
+    return restoT(t) + heroP({ x: 290, y: 1350, s: 1.2, expr: 'happy', armR: [-60, -60], holdR: menu }, t) + kevin({ x: 800, y: 1350, s: 1.2, expr: 'happy', flip: 1 }, t + 1) + idTable(1150) + dMug(820, 1106, .9, t, '#5ec4f0') +
       funTag(CX, 450, '16 ANS', t, A16 - .1, { size: 80, bg: SX.acc2, fg: SX.ink }) + popStars(CX, 450, t, A16, 6, 180) + kthin('tu vas au restaurant', CX, 610, t, Re - .4, { size: 56 }); },
   sfx: [[0, 'whoosh', .4], [at(15, '16') - .1, 'pop', .7], [at(15, 'vas'), 'steps', .3], [at(15, 'restaurant'), 'ding', .4]] });
 
 // B016 — « Tu hésites entre un burger et une pizza. » : gros plan, balance burger/pizza au-dessus de la tête
 B(16, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .2 }),
   draw: (t, d, T) => { const He = at(16, 'hesites'), Bu = at(16, 'burger'), Pi = at(16, 'pizza');
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: restoT(t, { diners: false }), haze: .35 }]) + idScale(CX, 560, .95, t, t > Bu - .1 ? idBurger(0, -50, .7) : '', t > Pi - .1 ? idPizza(0, -20, .6) : '', Math.sin(t * 5) * 18) +
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: restoT(t, { diners: false }), haze: .35 }]) + idScale(CX, 620, .95, t, t > Bu - .1 ? idBurger(0, -50, .7) : '', t > Pi - .1 ? idPizza(0, -20, .6) : '', Math.sin(t * 5) * 18) +
       heroHead(CX, 1010, 150, { expr: 'confused', look: idLook(t, 7) }, t) +
       kthin('tu hésites entre', CX, 420, t, He - .1, { size: 56 }) + funTag(250, 880, 'BURGER', t, Bu - .05, { size: 40, bg: '#ff9a4d', r: -6 }) + funTag(830, 880, 'PIZZA', t, Pi - .05, { size: 40, bg: '#e2463a', r: 6 }); },
   sfx: [[0, 'whoosh', .4], [at(16, 'hesites'), 'hmm', .5], [at(16, 'burger') - .05, 'pop', .6], [at(16, 'pizza') - .05, 'pop', .6], [at(16, 'pizza') + .2, 'squeak', .4]] });
@@ -311,8 +311,8 @@ B(16, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .2 })
 B(17, { enter: 'none', trans: 'up', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
   draw: (t, d, T) => { const Rv = at(17, 'revient'), Tr = at(17, 'trois'), Fo = at(17, 'fois'), v = t > Fo ? 2 : t > Tr ? 1 : 0, sw = [Rv, Tr, Fo][v];
     const poof = t > sw && t < sw + .3 && v > 0 ? op(1 - seg(t, sw, sw + .3), G(tr(780, 950, 1 + seg(t, sw, sw + .3)), cloud(0, 0, 1.4, '#fff', 6))) : '';
-    return restoT(t) + idWaiter(v, { x: 780, y: 1480, s: 1.1, expr: v === 2 ? 'deadpan' : v === 1 ? 'annoyed' : 'happy', armL: [-80, -100], holdL: idPad, flip: 1 }, t) + poof +
-      heroP({ x: 290, y: 1440, s: 1.2, expr: 'confused', look: idLook(t, 6) }, t) + idTable(1230) +
+    return restoT(t) + idWaiter(v, { x: 780, y: 1410, s: 1.1, expr: v === 2 ? 'deadpan' : v === 1 ? 'annoyed' : 'happy', armL: [-80, -100], holdL: idPad, flip: 1 }, t) + poof +
+      heroP({ x: 290, y: 1350, s: 1.2, expr: 'confused', look: idLook(t, 6) }, t) + idTable(1150) +
       kthin('le serveur revient', CX, 420, t, at(17, 'serveur') - .1, { size: 56 }) + kword((v + 1) + ' FOIS', CX, 560, t, sw - .05, { size: 110, fill: v === 2 ? '#ff6b6b' : SX.acc2 }) +
       funTag(820, 720, '×' + (v + 1), t, sw, { size: 50, bg: '#fff', fg: SX.ink, r: 6 }); },
   sfx: [[at(17, 'serveur'), 'steps', .4], [at(17, 'revient') - .05, 'boom', .4], [at(17, 'trois') - .05, 'whoosh', .5], [at(17, 'trois'), 'pop', .5], [at(17, 'fois') - .05, 'whoosh', .5], [at(17, 'fois'), 'boing', .5]] });
@@ -320,18 +320,18 @@ B(17, { enter: 'none', trans: 'up', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1
 // B018 — « Finalement, tu prends le burger. Il arrive. » : il pointe le burger… qui tombe sur la table, fumant
 B(18, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3, shake: t > at(18, 'arrive') && t < at(18, 'arrive') + .25 ? 7 : 0 }),
   draw: (t, d, T) => { const Fi = at(18, 'finalement'), Bu = at(18, 'burger'), Ar = at(18, 'arrive'), dy = 700 * (1 - eOutBack(seg(t, Ar - .25, Ar + .1)));
-    return restoT(t) + heroP({ x: 290, y: 1440, s: 1.2, expr: t > Ar ? 'ecstatic' : 'happy', armR: t < Ar ? [-20, -10] : [-40, -60] }, t) + kevin({ x: 800, y: 1440, s: 1.2, expr: 'happy', flip: 1 }, t + 1) + idTable(1230) +
-      idPlate(480, 1192) + (t > Ar - .25 ? idBurger(480, 1130 - dy, 1) + (t > Ar ? steam(450, 1020, t, .8) + steam(520, 1010, t + .5, .8) : '') : '') +
+    return restoT(t) + heroP({ x: 290, y: 1350, s: 1.2, expr: t > Ar ? 'ecstatic' : 'happy', armR: t < Ar ? [-20, -10] : [-40, -60] }, t) + kevin({ x: 800, y: 1350, s: 1.2, expr: 'happy', flip: 1 }, t + 1) + idTable(1150) +
+      idPlate(480, 1112) + (t > Ar - .25 ? idBurger(480, 1050 - dy, 1) + (t > Ar ? steam(450, 940, t, .8) + steam(520, 930, t + .5, .8) : '') : '') +
       kthin('finalement,', CX, 420, t, Fi - .1, { size: 56 }) + funTag(CX, 560, 'LE BURGER', t, Bu - .1, { size: 64, bg: '#ff9a4d' }) + (t > Ar ? kword('IL ARRIVE !', CX, 700, t, Ar - .05, { size: 80, fill: SX.acc2 }) : ''); },
   sfx: [[at(18, 'finalement'), 'pop_hi', .4], [at(18, 'burger') - .1, 'pop', .6], [at(18, 'arrive') - .25, 'whoosh', .5], [at(18, 'arrive'), 'thud', .6], [at(18, 'arrive') + .1, 'sizzle', .4]] });
 
 // B019 — « Tu regardes la pizza de Kevin. » : la pizza de Kevin dans une lumière divine, le héros bave
-B(19, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.12, t / d), hand: .2, cx: 680 }),
+B(19, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.12, t / d), hand: .2 }),
   draw: (t, d, T) => { const Rg = at(19, 'regardes'), Pi = at(19, 'pizza'), K = at(19, 'kevin');
     return restoT(t) + (t > Pi ? op(.55, sunburst(700, 1150, 16, 'rgba(255,240,150,.9)', 'rgba(255,240,150,0)', t * 20)) : '') +
-      heroP({ x: 290, y: 1440, s: 1.2, expr: t > Pi ? 'starving' : 'happy', look: [1, .5] }, t) + (t > Pi ? path(`M330 ${1090}q-6 ${f1(30 + (t * 60) % 40)} 4 ${f1(50 + (t * 60) % 40)}`, 'none', 7, '#9fd8ff') : '') +
-      kevin({ x: 820, y: 1440, s: 1.2, expr: 'smugger', flip: 1, armL: [-80, -110], holdL: idSlice(seg(t, K - .2, d)) }, t + 1) + idTable(1230) +
-      idPlate(480, 1192) + idBurger(480, 1130, .9) + idPlate(700, 1192) + idPizza(700, 1170, .75) + (t > Pi ? sparkle(760, 1110, .8 + .2 * Math.sin(t * 14)) + sparkle(640, 1130, .6) : '') +
+      heroP({ x: 290, y: 1350, s: 1.2, expr: t > Pi ? 'starving' : 'happy', look: [1, .5] }, t) + (t > Pi ? path(`M330 ${1010}q-6 ${f1(30 + (t * 60) % 40)} 4 ${f1(50 + (t * 60) % 40)}`, 'none', 7, '#9fd8ff') : '') +
+      kevin({ x: 820, y: 1350, s: 1.2, expr: 'smugger', flip: 1, armL: [-80, -110], holdL: idSlice(seg(t, K - .2, d)) }, t + 1) + idTable(1150) +
+      idPlate(480, 1112) + idBurger(480, 1050, .9) + idPlate(700, 1112) + idPizza(700, 1090, .75) + (t > Pi ? sparkle(760, 1030, .8 + .2 * Math.sin(t * 14)) + sparkle(640, 1050, .6) : '') +
       kthin('tu regardes', CX, 420, t, Rg - .1, { size: 56 }) + kword('LA PIZZA DE KEVIN', CX, 560, t, Pi - .1, { size: 72, fill: SX.acc2 }); },
   sfx: [[at(19, 'regardes'), 'hmm', .4], [at(19, 'pizza') - .1, 'angel', .6], [at(19, 'pizza'), 'sparkle', .5], [at(19, 'kevin'), 'chomp', .5]] });
 
@@ -348,7 +348,7 @@ B(20, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), s
 B(21, { enter: 'none', trans: 'black', transD: .18, cam: () => ({ z: 1.04 }),
   draw: (t, d, T) => { const At = at(21, 'attends');
     const pause = G(tr(800, 760, pop(t, .02, .3)), circ(0, 0, 110, SX.acc, 7) + rect(-42, -50, 28, 100, '#fff', 6, 5) + rect(14, -50, 28, 100, '#fff', 6, 5));
-    return gridBg(SX.ink) + halftoneFade('#fff', .05, 1) + cutout(heroP({ x: 340, y: 1460, s: 1.3, expr: 'suspicious', armR: [-60, -95] }, t), 12) + pause +
+    return gridBg(SX.ink) + halftoneFade('#fff', .05, 1) + cutout(heroP({ x: 340, y: 1400, s: 1.3, expr: 'suspicious', armR: [-60, -95] }, t), 12) + pause +
       kword('MAIS ATTENDS.', CX, 470, t, At - .15, { size: 104, fill: '#fff' }); },
   sfx: [[0, 'scratch', .6], [.02, 'pop', .5], [at(21, 'attends') - .15, 'boom', .4], [at(21, 'attends') + .2, 'tick', .3]] });
 
@@ -359,25 +359,25 @@ const idDoor = (x, yb, lab, c, open = 0, inner = '') => G(tr(x, yb), rect(-130, 
 B(22, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
   draw: (t, d, T) => { const Pi = at(22, 'pire'), Ch = at(22, 'choisir');
     return hallway(t) + WASH() + idDoor(240, 1250, 'A', '#5b8fd8') + idDoor(840, 1250, 'B', '#e2463a') +
-      heroP({ x: CX, y: 1490, s: 1.25, expr: 'worried', look: idLook(t, 5) }, t) +
-      kthin('le pire,', CX, 400, t, Pi - .15, { size: 58 }) + kthin("ce n'est pas de", CX, 480, t, at(22, 'pas') - .3, { size: 54 }) + funTag(CX, 610, 'CHOISIR', t, Ch - .1, { size: 70, bg: SX.acc2, fg: SX.ink }) + cross(CX, 610, 1.1, t, Ch + .1); },
+      heroP({ x: CX, y: 1420, s: 1.25, expr: 'worried', look: idLook(t, 5) }, t) +
+      kword('LE PIRE,', CX, 420, t, Pi - .1, { size: 96, fill: '#fff' }) + kthin("ce n'est pas de", CX, 590, t, at(22, 'pas') - .3, { size: 54, fill: '#2b1f4a' }) + funTag(CX, 700, 'CHOISIR', t, Ch - .1, { size: 70, bg: SX.acc2, fg: SX.ink }) + cross(CX, 700, 1.1, t, Ch + .1); },
   sfx: [[0, 'whoosh', .4], [at(22, 'pire'), 'sting', .4], [at(22, 'choisir') - .1, 'pop', .6], [at(22, 'choisir') + .1, 'buzz', .4]] });
 
 // B023 — « C'est ce qui arrive APRÈS. » : la porte B s'ouvre sur l'orage — slam APRÈS
-B(23, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), shake: t > at(23, 'apres') ? 6 : 1, cx: 760 }),
+B(23, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.1, t / d), shake: t > at(23, 'apres') ? 6 : 1 }),
   draw: (t, d, T) => { const Ar = at(23, 'arrive'), Ap = at(23, 'apres'), fl = t > Ap && Math.sin(t * 30) > .2;
     const storm = (fl ? rect(-110, -540, 220, 540, '#5a4a90', 0, 0) + idBolt(0, -330, .9) : '') + cloud(0, -420, .7, '#3a3060', 0);
     return hallway(t) + WASH('rgba(40,30,80,.2)') + idDoor(240, 1250, 'A', '#5b8fd8') + idDoor(840, 1250, 'B', '#e2463a', eOutCubic(seg(t, Ar - .2, Ap)), storm) +
-      heroP({ x: 560, y: 1490, s: 1.25, expr: t > Ap ? 'terror' : 'scared', look: [1, -.5], tremble: t > Ap ? 1 : 0 }, t) +
-      kthin("c'est ce qui arrive", CX, 400, t, Ar - .4, { size: 56 }) + kword('APRÈS', CX, 540, t, Ap - .05, { size: 170, fill: '#ff6b6b' }) + idFlash(t, Ap, .5); },
+      heroP({ x: 560, y: 1420, s: 1.25, expr: t > Ap ? 'terror' : 'scared', look: [1, -.5], tremble: t > Ap ? 1 : 0 }, t) +
+      kthin("c'est ce qui arrive", CX, 640, t, Ar - .4, { size: 56, fill: '#2b1f4a' }) + kword('APRÈS', CX, 450, t, Ap - .05, { size: 170, fill: '#ff6b6b' }) + idFlash(t, Ap, .5); },
   sfx: [[0, 'flash_hit', .4], [at(23, 'arrive') - .2, 'squeak', .5], [at(23, 'apres') - .05, 'boom', .6], [at(23, 'apres'), 'thunder', .6]] });
 
 // B024a — « Ton cerveau imagine » : nuit, le cerveau sort de la tête comme un projecteur
 const O24 = at(24, 'toutes') - .1;
 B(24, { enter: 'none', trans: 'circle', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), hand: .2 }),
   draw: (t, d, T) => { const Ce = at(24, 'cerveau'), Im = at(24, 'imagine'), up = eOutBack(seg(t, Ce - .1, Ce + .3));
-    return bedroomN(t) + WASH('rgba(10,10,40,.25)') + heroP({ x: CX, y: 1490, s: 1.3, expr: 'worried', look: [0, -1] }, t) +
-      (up > 0 ? op(.35, path(`M${CX} ${1000}L${CX - 120} ${f1(1000 - 280 * up)}L${CX + 120} ${f1(1000 - 280 * up)}Z`, '#ffb3d6', 0)) + idBrain(CX, 1000 - 300 * up, .9 * up, t) : '') +
+    return bedroomN(t) + WASH('rgba(10,10,40,.25)') + heroP({ x: CX, y: 1420, s: 1.3, expr: 'worried', look: [0, -1] }, t) +
+      (up > 0 ? op(.35, path(`M${CX} ${930}L${CX - 120} ${f1(930 - 260 * up)}L${CX + 120} ${f1(930 - 260 * up)}Z`, '#ffb3d6', 0)) + idBrain(CX, 930 - 280 * up, .9 * up, t) : '') +
       (t > Im ? [0, 1, 2].map(i => sparkle(CX - 200 + i * 200, 640 + Math.sin(t * 5 + i) * 20, .6, [SX.acc2, '#fff', LIL][i])).join('') : '') +
       kthin('ton cerveau', CX, 400, t, Ce - .15, { size: 60 }) + kword('IMAGINE', CX, 520, t, Im - .05, { size: 110, fill: SX.acc2 }); },
   sfx: [[at(24, 'cerveau') - .1, 'boing', .5], [at(24, 'cerveau') + .1, 'pop', .4], [at(24, 'imagine') - .05, 'magic', .5], [at(24, 'imagine') + .1, 'sparkle', .4]] });
@@ -394,8 +394,8 @@ B(24, { enter: 'crash', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .2 })
 // B025 — « Tu achètes des baskets noires ? » : magasin de sneakers, il brandit les noires
 B(25, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3 }),
   draw: (t, d, T) => { const Ba = at(25, 'baskets'), No = at(25, 'noires');
-    return idShoeShop(t) + heroP({ x: 340, y: 1490, s: 1.3, expr: t > No ? 'proud' : 'happy', armR: [-40, -70], holdR: G(tr(0, -40), idSneak(0, 0, .8, '#2b2b33', -10)) }, t) +
-      adult(2, { x: 820, y: 1480, s: 1.1, hair: 'short', shirt: '#5ec4f0', expr: 'happy', flip: 1, armL: [-30, -40] }, t) +
+    return idShoeShop(t) + heroP({ x: 340, y: 1420, s: 1.3, expr: t > No ? 'proud' : 'happy', armR: [-40, -70], holdR: G(tr(0, -40), idSneak(0, 0, .8, '#2b2b33', -10)) }, t) +
+      adult(2, { x: 820, y: 1410, s: 1.1, hair: 'short', shirt: '#5ec4f0', expr: 'happy', flip: 1, armL: [110, 100] }, t) +
       kthin('tu achètes des baskets', CX, 420, t, Ba - .5, { size: 54 }) + funTag(CX, 560, 'NOIRES ?', t, No - .05, { size: 70, bg: '#2b2b33' }) + popStars(560, 900, t, No, 6, 140); },
   sfx: [[0, 'whoosh', .4], [at(25, 'achetes'), 'kaching', .4], [at(25, 'noires') - .05, 'pop', .6], [at(25, 'noires') + .1, 'squeak', .4]] });
 
@@ -403,7 +403,7 @@ B(25, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.02, 1.06, t / d), hand: .3 })
 B(26, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .2 }),
   draw: (t, d, T) => { const Rg = at(26, 'regrettes'), Bl = at(26, 'blanches');
     const ped = G(tr(780, 1250), rect(-130, -220, 260, 220, '#fff', 10, 7) + rect(-150, -240, 300, 30, '#e8eef2', 8, 6)) + (t > Bl - .1 ? op(.5, path('M780 -100L560 1030L1000 1030Z', '#fff6c8', 0)) : '') + G(tr(780, 970 + Math.sin(t * 3) * 10), idSneak(0, 0, 1.1, '#fbfbfb')) + (t > Bl ? sparkle(860, 930, .9 + .2 * Math.sin(t * 15), '#fff') : '');
-    return idShoeShop(t) + ped + heroP({ x: 330, y: 1490, s: 1.3, expr: t > Rg ? 'sob' : 'sad', look: [1, -.3], armR: [70, 80], holdR: idSneak(0, -10, .6, '#2b2b33', 20) }, t) +
+    return idShoeShop(t) + ped + heroP({ x: 330, y: 1420, s: 1.3, expr: t > Rg ? 'sob' : 'sad', look: [1, -.3], armR: [70, 80], holdR: idSneak(0, -10, .6, '#2b2b33', 20) }, t) +
       kthin('tu regrettes', CX, 420, t, Rg - .1, { size: 56 }) + kword('LES BLANCHES', CX, 560, t, Bl - .05, { size: 96, fill: '#fff' }); },
   sfx: [[at(26, 'regrettes'), 'sting', .4], [at(26, 'blanches') - .1, 'angel', .6], [at(26, 'blanches'), 'glint', .5], [at(26, 'blanches') + .2, 'gulp', .4]] });
 
@@ -429,16 +429,16 @@ B(28, { enter: 'none', cam: (t, d) => ({ z: lerp(1.05, 1.1, t / d), hand: .2 }),
 const O29 = at(29, 'regrettes') - .12;
 B(29, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.04, t / d), hand: .4 }),
   draw: (t, d, T) => { const So = at(29, 'sors');
-    return partyT(t) + kid(1, { x: 820, y: 1490 - Math.abs(Math.sin(t * 8)) * 20, s: 1.15, expr: 'ecstatic', flip: 1, armL: [-150, -120] }, t) + kid(4, { x: 160, y: 1490 - Math.abs(Math.sin(t * 8 + 1)) * 20, s: 1.1, expr: 'joy', armR: [-30, -60] }, t + 1) +
-      heroP({ x: CX, y: 1490 - Math.abs(Math.sin(t * 8)) * 10, s: 1.3, expr: 'happy', armL: [-150, -120], armR: [-30, -60] }, t) +
+    return partyT(t) + kid(1, { x: 820, y: 1420 - Math.abs(Math.sin(t * 8)) * 20, s: 1.15, expr: 'ecstatic', flip: 1, armL: [-150, -120] }, t) + kid(4, { x: 160, y: 1420 - Math.abs(Math.sin(t * 8 + 1)) * 20, s: 1.1, expr: 'joy', armR: [-30, -60] }, t + 1) +
+      heroP({ x: CX, y: 1420 - Math.abs(Math.sin(t * 8)) * 10, s: 1.3, expr: 'happy', armL: [-150, -120], armR: [-30, -60] }, t) +
       funTag(CX, 470, 'TU SORS ?', t, So - .15, { size: 80, bg: '#ff5c8a' }); },
   sfx: [[0, 'whoosh', .4], [at(29, 'sors') - .15, 'pop', .6], [at(29, 'sors'), 'drum', .5]] });
 // B029b — « Tu regrettes ton lit. » : il bâille, bulle de pensée avec son lit (et un cœur)
 B(29, { enter: 'none', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .3 }),
   draw: (t, d, T) => { const Rg = at(29, 'regrettes') - O29, Li = at(29, 'lit') - O29, k = pop(t, Rg - .05, .35);
     const bed = rect(-190, -110, 380, 200, '#1d2350', 0, 0) + rect(-150, 0, 300, 70, '#8a6ad8', 12, 5) + rect(-150, -40, 90, 50, '#fff', 14, 5) + path('M-60 -10Q60 -30 150 0L150 40L-60 40Z', '#ffd23f', 5) + heart(100, -70, .7) + ftext(-130, -60, 'z', { size: 30, fill: '#fff' });
-    return partyT(t) + kid(1, { x: 820, y: 1490 - Math.abs(Math.sin(t * 8)) * 20, s: 1.15, expr: 'ecstatic', flip: 1, armL: [-150, -120] }, t) +
-      heroP({ x: 420, y: 1490, s: 1.3, expr: t > Li ? 'sob' : 'sleep', face: t < Li ? { mouth: 'o' } : {} }, t) + (k > 0 ? bubble(680, 760, 440, 290, clipR(-190, -110, 380, 200, bed, 20), k) : '') +
+    return partyT(t) + kid(1, { x: 820, y: 1420 - Math.abs(Math.sin(t * 8)) * 20, s: 1.15, expr: 'ecstatic', flip: 1, armL: [-150, -120] }, t) +
+      heroP({ x: 420, y: 1420, s: 1.3, expr: t > Li ? 'sob' : 'sleep', face: t < Li ? { mouth: 'o' } : {} }, t) + (k > 0 ? bubble(680, 760, 440, 290, clipR(-190, -110, 380, 200, bed, 20), k) : '') +
       kthin('tu regrettes', CX, 400, t, Rg - .1, { size: 56 }) + kword('TON LIT', 640, 500, t, Li - .05, { size: 100, fill: SX.acc2 }); },
   sfx: [[at(29, 'regrettes') - O29 - .05, 'pop', .5], [at(29, 'regrettes') - O29 + .1, 'hmm', .4], [at(29, 'lit') - O29 - .05, 'boom', .4], [at(29, 'lit') - O29 + .1, 'sparkle', .3]] }, O29);
 
@@ -454,17 +454,17 @@ B(30, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), s
 // B031 — « Puis un jour, quelqu'un te plaît. » : cour, elle passe, cœurs, le héros fond
 B(31, { enter: 'none', trans: 'wipe', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
   draw: (t, d, T) => { const Jo = at(31, 'jour'), Qu = at(31, 'quelqu'), Pl = at(31, 'plait');
-    return schoolyard(t) + WASH() + idGirl({ x: 800, y: 1490, s: 1.3, expr: 'happy', flip: 1, armL: [200, 160 + Math.sin(t * 8) * 15] }, t) +
-      heroP({ x: 300, y: 1490, s: 1.3, expr: t > Pl ? 'love' : 'happy', look: [1, 0] }, t) + (t > Pl ? heartsUp(t, 330, 950, 6) : '') +
-      kthin('puis un jour,', CX, 400, t, Jo - .2, { size: 58 }) + funTag(CX, 520, "QUELQU'UN", t, Qu - .05, { size: 64, bg: '#ff8fb1' }) + kword('TE PLAÎT', CX, 660, t, Pl - .05, { size: 96, fill: '#ffb3c8' }); },
+    return schoolyard(t) + WASH() + idGirl({ x: 800, y: 1420, s: 1.3, expr: 'happy', flip: 1, armL: [200, 160 + Math.sin(t * 8) * 15] }, t) +
+      heroP({ x: 300, y: 1420, s: 1.3, expr: t > Pl ? 'love' : 'happy', look: [1, 0] }, t) + (t > Pl ? heartsUp(t, 330, 880, 6) : '') +
+      kthin('puis un jour,', CX, 400, t, Jo - .2, { size: 58, fill: '#2b1f4a' }) + funTag(CX, 520, "QUELQU'UN", t, Qu - .05, { size: 64, bg: '#ff8fb1' }) + kword('TE PLAÎT', CX, 660, t, Pl - .05, { size: 96, fill: '#ffb3c8' }); },
   sfx: [[0, 'whoosh', .4], [at(31, 'jour'), 'pop_hi', .4], [at(31, 'quelqu') - .05, 'pop', .5], [at(31, 'plait') - .05, 'kiss', .5], [at(31, 'plait') + .1, 'sparkle', .4]] });
 
 // B032 — « Elle te propose un rendez-vous. » : bulle « ON SE VOIT SAMEDI ? », étiquette RENDEZ-VOUS
 B(32, { enter: 'punch', cam: (t, d) => ({ z: lerp(1.04, 1.08, t / d), hand: .3 }),
   draw: (t, d, T) => { const Pr = at(32, 'propose'), Rv = at(32, 'rendez');
-    return schoolyard(t) + WASH() + idGirl({ x: 800, y: 1490, s: 1.3, expr: 'happy', flip: 1, face: { mouth: 'talk' } }, t) +
-      heroP({ x: 300, y: 1490, s: 1.3, expr: 'love', look: [1, 0] }, t) + chatBubble(720, 720, 400, 140, 'ON SE VOIT\nSAMEDI ?', t, Pr - .1, false, 40) +
-      kthin('elle te propose', CX, 400, t, 0, { size: 56 }) + funTag(CX, 510, 'UN RENDEZ-VOUS', t, Rv - .05, { size: 56, bg: '#ff8fb1' }) + heartsUp(t, 720, 900, 3); },
+    return schoolyard(t) + WASH() + idGirl({ x: 800, y: 1420, s: 1.3, expr: 'happy', flip: 1, face: { mouth: 'talk' } }, t) +
+      heroP({ x: 300, y: 1420, s: 1.3, expr: 'love', look: [1, 0] }, t) + chatBubble(720, 720, 400, 140, 'ON SE VOIT\nSAMEDI ?', t, Pr - .1, false, 40) +
+      kthin('elle te propose', CX, 400, t, 0, { size: 56, fill: '#2b1f4a' }) + funTag(CX, 510, 'UN RENDEZ-VOUS', t, Rv - .05, { size: 56, bg: '#ff8fb1' }) + heartsUp(t, 720, 900, 3); },
   sfx: [[at(32, 'propose') - .1, 'pop', .5], [at(32, 'rendez') - .05, 'ding', .5], [at(32, 'rendez') + .1, 'kiss', .4]] });
 
 // B033 — « Tu veux répondre oui. » : un énorme « OUI ! » commence à sortir de sa bouche
@@ -472,7 +472,7 @@ B(33, { enter: 'none', trans: 'zoom', transD: .2, cam: (t, d) => ({ z: lerp(1.0,
   draw: (t, d, T) => { const Ve = at(33, 'veux'), Ou = at(33, 'oui'), k = pop(t, Ou - .1, .35);
     return depth({ zoom: 1 }, [{ z: 1.4, svg: schoolyard(t), haze: .3 }]) + heroHead(380, 990, 160, { expr: t > Ou ? 'ecstatic' : 'happy', look: [1, 0], face: t > Ve ? { mouth: 'o' } : {} }, t) +
       (k > 0 ? G(tr(760, 860, k), rect(-200, -110, 400, 220, '#7fd3a0', 40, 7) + path('M-170 60L-240 130L-110 90Z', '#7fd3a0', 6) + rect(-176, 50, 90, 50, '#7fd3a0', 0, 0) + ftext(0, 50, 'OUI !', { size: 130, fill: '#fff' })) : '') +
-      kthin('tu veux répondre', CX, 430, t, Ve - .1, { size: 60 }) + popStars(760, 860, t, Ou, 7, 260); },
+      kthin('tu veux répondre', CX, 430, t, Ve - .1, { size: 60, fill: '#2b1f4a' }) + popStars(760, 860, t, Ou, 7, 260); },
   sfx: [[at(33, 'veux'), 'pop_hi', .4], [at(33, 'repondre'), 'whoosh_up', .4], [at(33, 'oui') - .1, 'boom', .5], [at(33, 'oui'), 'tada', .4]] });
 
 // B034 — « Mais tu réfléchis. » : le « OUI » se dégonfle, balance, points d'interrogation
@@ -481,11 +481,11 @@ B(34, { enter: 'none', cam: (t, d) => ({ z: lerp(1.06, 1.1, t / d), hand: .2 }),
     return depth({ zoom: 1 }, [{ z: 1.4, svg: schoolyard(t), haze: .4 }]) + heroHead(380, 990, 160, { expr: 'worried', look: idLook(t, 8) }, t) +
       G(tr(760, 860, k, Math.sin(t * 9) * 6 * (1 - k)), rect(-200, -110, 400, 220, '#b9c4cc', 40, 7) + ftext(0, 50, 'OUI ?', { size: 130, fill: '#fff' })) +
       [0, 1, 2].map(i => qmark(220 + i * 300, 720 + Math.sin(t * 6 + i) * 20, .5, [SX.acc2, '#fff', LIL][i], -10 + i * 10)).join('') +
-      kthin('mais…', CX, 400, t, Ma - .05, { size: 60 }) + kword('TU RÉFLÉCHIS', CX, 520, t, Re - .05, { size: 90, fill: SX.acc2 }); },
+      kthin('mais…', CX, 400, t, Ma - .05, { size: 60, fill: '#2b1f4a' }) + kword('TU RÉFLÉCHIS', CX, 520, t, Re - .05, { size: 90, fill: SX.acc2 }); },
   sfx: [[at(34, 'mais') - .05, 'scratch', .5], [at(34, 'reflechis') - .05, 'hmm', .5], [at(34, 'reflechis') + .1, 'whoosh', .3], [at(34, 'reflechis') + .3, 'tick', .3]] });
 
 // B035–B037 — « Et si… » : l'arbre des « et si » pousse sur sa tête, une bulle par question
-const ETSI = [[230, 760, 'ÇA SE PASSE MAL ?'], [850, 760, "TU T'ATTACHES ?"], [540, 560, "QUELQU'UN D'AUTRE ?"]];
+const ETSI = [[270, 760, 'ÇA SE PASSE MAL ?'], [810, 760, "TU T'ATTACHES ?"], [540, 560, "QUELQU'UN D'AUTRE ?"]];
 function idEtSiInner(i, t) {
   if (i === 0) return cloud(0, -30, .8, '#4a4a6a', 6) + idBolt(10, 50, .45) + [0, 1, 2, 3].map(k => line(-60 + k * 40, 20 + ((t * 200 + k * 30) % 60), -70 + k * 40, 40 + ((t * 200 + k * 30) % 60), 4, '#5ec4f0')).join('');
   if (i === 1) return heart(0, 0, 1.6) + rect(-30, 10, 60, 50, '#ffd23f', 8, 5) + path('M-18 10L-18 -6Q-18 -26 0 -26Q18 -26 18 -6L18 10', 'none', 6) + path('M-110 -60Q-60 -30 -40 0M110 -60Q60 -30 40 0', 'none', 8, '#9aa3ad');
@@ -506,14 +506,14 @@ function idWhatIf(n, word, o = {}) {
 }
 idWhatIf(35, 'mal', { trans: 'black' });
 idWhatIf(36, 'attaches', { enter: 'punch' });
-idWhatIf(37, 'autre', { enter: 'crash' });
+idWhatIf(37, 'rencontres', { enter: 'crash' });
 
 // B038 — « Trois jours plus tard, tu écris enfin. » : calendrier qui défile JOUR 1-2-3, toiles d'araignée, il écrit enfin
 B(38, { enter: 'none', trans: 'push', transD: .2, cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .2 }),
   draw: (t, d, T) => { const Tr = at(38, 'trois'), Jo = at(38, 'jours'), Pl = at(38, 'plus'), Ec = at(38, 'ecris'), En = at(38, 'enfin'), day = t > Pl ? '3' : t > Jo ? '2' : '1';
     const ph = phone(0, -30, .45, 0, idChat(t, { me: t > Ec ? 1 : 0 }));
     return bedroomN(t, 1) + WASH() + G(tr(800, 760, 1, 4), idCal(0, 0, 1.05, day)) + (t > Jo && t < Pl + .3 ? op(.6, G(tr(800, 760 - seg(t, Jo, Jo + .3) * 200, 1, 30), rect(-110, -130, 220, 260, '#fff', 14, 6))) : '') +
-      heroP({ x: 330, y: 1490, s: 1.3, expr: t > En ? 'ecstatic' : 'dizzy', armR: [-50, -70], holdR: ph }, t) + idWeb(170, 1000, 1.1, 30) + (t > Pl ? idWeb(450, 1170, .8, 200) : '') +
+      heroP({ x: 330, y: 1420, s: 1.3, expr: t > En ? 'ecstatic' : 'dizzy', armR: [-50, -70], holdR: ph }, t) + idWeb(170, 930, 1.1, 30) + (t > Pl ? idWeb(450, 1100, .8, 200) : '') +
       kthin('trois jours plus tard,', CX, 400, t, Tr - .1, { size: 56 }) + (t > Ec ? kword('TU ÉCRIS ENFIN', CX, 540, t, Ec - .05, { size: 82, fill: SX.acc2 }) : ''); },
   sfx: [[at(38, 'trois'), 'tick', .4], [at(38, 'jours'), 'whoosh', .4], [at(38, 'plus'), 'whoosh', .4], [at(38, 'ecris'), 'typing', .5], [at(38, 'enfin') - .05, 'boom', .4]] });
 
@@ -536,7 +536,7 @@ B(40, { enter: 'none', cam: (t, d) => ({ z: lerp(1.04, 1.1, t / d), hand: .2, sh
 // B041 — « Et là, tu comprends. » : l'ampoule s'allume, débloqué (3/3)
 B(41, { enter: 'none', trans: 'circle', transD: .22, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), hand: .2 }),
   draw: (t, d, T) => { const La = at(41, 'la'), Co = at(41, 'comprends');
-    return bedroomN(t, 1) + WASH() + unlock(CX, 900, t, Co, { part: 'back', r: 460 }) + heroP({ x: CX, y: 1490, s: 1.3, expr: t > Co ? 'shock' : 'deadpan', look: [0, -1] }, t) +
+    return bedroomN(t, 1) + WASH() + unlock(CX, 900, t, Co, { part: 'back', r: 460 }) + heroP({ x: CX, y: 1420, s: 1.3, expr: t > Co ? 'shock' : 'deadpan', look: [0, -1] }, t) +
       idBulb(CX, 660, 1, t > Co, t) + unlock(CX, 900, t, Co, { part: 'front', r: 460 }) +
       kthin('et là,', CX, 400, t, La - .2, { size: 60 }) + kword('TU COMPRENDS', CX, 520, t, Co - .05, { size: 92, fill: SX.acc2 }); },
   sfx: [[at(41, 'la'), 'hmm', .4], [at(41, 'comprends') - .05, 'ding', .6], [at(41, 'comprends'), 'sparkle', .5], [at(41, 'comprends') + .1, 'magic', .4]] });
@@ -546,8 +546,8 @@ B(42, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.08, t / d), r
   draw: (t, d, T) => { const Fo = at(42, 'force'), Ch = at(42, 'chercher'), Me = at(42, 'meilleure');
     const bg = SKY(t, '#c9b3ff', '#fff0e0') + dBirds(t, 3, 300, 4) + path('M-200 1100Q300 980 700 1060Q1000 1120 1300 1040L1300 1920L-200 1920Z', '#8fd18a', 7) + rect(-M, 1250, W + 2 * M, 800, '#7cc278', 0, 0) +
       [[120, 1140, .5, 0], [340, 1110, .45, 1], [760, 1120, .5, 2], [980, 1150, .55, 3]].map(([x, y, s, i]) => idSign(x, y, s, t, ['ICI', 'NON', 'OUI', 'PAR LÀ'][i], ['LÀ', 'PEUT-ÊTRE', 'NON', 'ICI'][i], 4 + i, i)).join('') + tree(1000, 1000, .7, t) + dFlowers(200, 1260, 6, 2, t);
-    return depth({ zoom: 1 }, [{ z: 1.4, svg: bg, haze: .05 }, { z: 1, svg: heroP({ x: CX, y: 1490, s: 1.3, expr: 'dizzy', look: idLook(t, 4), armR: [-40, -70], holdR: magnifier(0, -30, .6, -20) }, t) + idSign(820, 1500, .9, t, 'MIEUX', 'PIRE', 7) }, { z: .6, svg: blur(10, dBush(60, 1900, 1.6)) }]) +
-      kthin('à force de chercher', CX, 400, t, Fo - .1, { size: 58 }) + kword('LA MEILLEURE DÉCISION…', CX, 530, t, Me - .2, { size: 64, fill: SX.acc2 }); },
+    return depth({ zoom: 1 }, [{ z: 1.4, svg: bg, haze: .05 }, { z: 1, svg: heroP({ x: CX, y: 1420, s: 1.3, expr: 'dizzy', look: idLook(t, 4), armR: [-40, -70], holdR: magnifier(0, -30, .6, -20) }, t) + idSign(820, 1500, .9, t, 'MIEUX', 'PIRE', 7) }, { z: .6, svg: blur(10, dBush(60, 1900, 1.6)) }]) +
+      kthin('à force de chercher', CX, 400, t, Fo - .1, { size: 58, fill: '#2b1f4a' }) + kword('LA MEILLEURE DÉCISION…', CX, 530, t, Me - .2, { size: 64, fill: SX.acc2 }); },
   sfx: [[0, 'flash_hit', .4], [at(42, 'force'), 'wind', .3], [at(42, 'chercher'), 'hmm', .4], [at(42, 'meilleure') - .2, 'boom', .5], [at(42, 'decision'), 'error_beep', .3]] });
 
 // B043a — « TU LAISSES PARFOIS LES AUTRES » : Kevin part main dans la main avec elle, le héros figé au panneau
@@ -555,17 +555,17 @@ const O43 = at(43, 'decider') - .15;
 B(43, { enter: 'whip', cam: (t, d) => ({ z: lerp(1.0, 1.05, t / d), hand: .3 }),
   draw: (t, d, T) => { const La = at(43, 'laisses'), Au = at(43, 'autres'), dx = t * 70;
     return depth({ zoom: 1, x: Math.sin(t) * 8 }, [{ z: 1.5, svg: streetT(t, 2), haze: .1 },
-      { z: 1, svg: kevin({ x: 700 + dx, y: 1480, s: 1.15, expr: 'smugger', walk: 1, armL: [150, 110] }, t) + idGirl({ x: 900 + dx, y: 1480, s: 1.15, expr: 'love', walk: 1, armR: [30, 60] }, t + 1) + heartsUp(t, 800 + dx, 1000, 4) +
-        heroP({ x: 270, y: 1490, s: 1.25, expr: 'jawdrop', look: [1, 0] }, t) + idWeb(120, 1020, 1.1, 20) + idSign(450, 1500, .7, t, 'ELLE', '???', 8) },
+      { z: 1, svg: kevin({ x: 700 + dx, y: 1410, s: 1.15, expr: 'smugger', walk: 1, armL: [150, 110] }, t) + idGirl({ x: 900 + dx, y: 1410, s: 1.15, expr: 'love', walk: 1, armR: [30, 60] }, t + 1) + heartsUp(t, 800 + dx, 1000, 4) +
+        heroP({ x: 270, y: 1420, s: 1.25, expr: 'jawdrop', look: [1, 0] }, t) + idWeb(120, 950, 1.1, 20) + idSign(450, 1500, .7, t, 'ELLE', '???', 8) },
       { z: .6, svg: blur(10, dBush(1020, 1900, 1.6)) }]) +
-      kthin('tu laisses parfois', CX, 400, t, La - .2, { size: 58 }) + kword('LES AUTRES', CX, 530, t, Au - .1, { size: 110, fill: '#fff' }); },
+      kthin('tu laisses parfois', CX, 400, t, La - .2, { size: 58, fill: '#2b1f4a' }) + kword('LES AUTRES', CX, 530, t, Au - .1, { size: 110, fill: '#fff' }); },
   sfx: [[0, 'whoosh', .4], [at(43, 'laisses'), 'steps', .4], [at(43, 'parfois'), 'kiss', .4], [at(43, 'autres') - .1, 'boom', .5]] });
 // B043b — FIN : « …DÉCIDER À TA PLACE. » : gros texte final, le héros cut-out tient encore son panneau qui tourne
 B(43, { enter: 'crash', flash: 1, cam: (t, d) => ({ z: lerp(1.0, 1.06, t / d), shake: t < .3 ? 6 : t > at(43, 'place') - O43 && t < at(43, 'place') - O43 + .4 ? 6 : 0 }),
   draw: (t, d, T) => { const De = at(43, 'decider') - O43, Pl = at(43, 'place') - O43;
     return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + burst(CX, 1020, 300, t, .1, SX.acc, 18) +
       G(tr(840, 900, .8), kevinHead(0, 0, 100, { expr: 'smugger' }, t) + idGirlHead(170, 10, 95, { expr: 'love' }, t) + heart(85, -130, .8)) +
-      cutout(heroP({ x: 340, y: 1460, s: 1.3, expr: t > Pl ? 'sob' : 'shock', look: idLook(t, 9), armR: [-60, -95], holdR: G(tr(0, -30, 1, t * 400), idArrow(0, 0, 1, '', SX.acc2, 0, .5)) }, t), 12) +
+      cutout(heroP({ x: 340, y: 1400, s: 1.3, expr: t > Pl ? 'sob' : 'shock', look: idLook(t, 9), armR: [-10, 10], holdR: G(tr(0, -30, 1, t * 400), idArrow(0, 0, 1, '', SX.acc2, 0, .5)) }, t), 12) +
       kword('DÉCIDER', CX, 430, t, De - .05, { size: 140, fill: '#fff' }) + kword('À TA PLACE.', CX, 600, t, Pl - .1, { size: 110, fill: SX.acc2 }) + (t > Pl ? popStars(CX, 600, t, Pl, 8, 380) : '') + idFlash(t, Pl, .5); },
   sfx: [[0, 'flash_hit', .5], [at(43, 'decider') - O43 - .05, 'boom', .7], [at(43, 'place') - O43 - .1, 'boom', .6], [at(43, 'place') - O43 + .1, 'rimshot', .6], [at(43, 'place') - O43 + .5, 'crickets', .3]] }, O43);
 
