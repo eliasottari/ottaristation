@@ -5,6 +5,11 @@ Réponds à l'utilisateur en français, de façon directe et concise. Il a peu d
 
 ## ⚠️ NOUVELLES RÈGLES CLIENT (prioritaires, jusqu'à nouvel ordre — elles remplacent les anciennes là où elles divergent)
 Le style graphique ne change pas. Ce qui change :
+0. **INTRO = MACHINE À SOUS** (remplace l'intro motion du plan 1) : `engine/slot.js`, chargé par template/index.html après decor.js.
+   `casinoBg(t) + slotMachine(t, {l1, l2, key, t0, stops: [3 temps], win: [3 fonctions (x,y,s,t)=>svg]})` et `sfx: slotSfx(t0, stops)`.
+   Titre de l'épisode sur le fronton lumineux, levier tiré à t0, rouleaux qui s'arrêtent un par un sur le héros ou le sujet
+   (« c'est tombé sur toi au hasard »), puis JACKPOT et pièces. Modèle : le B(1) de template/scenes.js.
+   Ancien épisode : ajouter `<script src="../engine/slot.js"></script>` après decor.js dans son index.html.
 1. **Sous-titres INCRUSTÉS** (remplace « pas de sous-titres ») — déjà intégrés au moteur :
    - `engine/captions.js` (+ polices `engine/sourgummy_latin.woff2`, `sourgummy_ext.woff2`, déclarées dans `player.js`) : Sour Gummy 900,
      minuscules, blanc, contour noir 20 %, ombre feDropShadow dx 9 dy 5 σ 3,5 (opacité .95), 64 px, centre de ligne y = 1494, une ligne à la fois

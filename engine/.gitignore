@@ -2,4 +2,3 @@ node_modules/
 __pycache__/
 sfx_preview/
 .env
-engine/music_badpiggies.mp3

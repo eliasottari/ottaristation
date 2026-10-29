@@ -31,15 +31,13 @@ const heroHead = (x, y, r, o, t) => G(tr(x, y, 1, o.tilt || 0), head(Object.assi
 //  PLANS — un B(n, {...}) par bloc (sous-plans : B(n, {...}, at(n, 'mot') - .15)). Vise 32–40 plans pour ~60 s.
 //  Cadrage 9:16 : visages/textes entre y 380 et 1150 ; sous 1250 = décor seulement (sous-titres du client).
 // ============================================================
-// B001 — SIGNATURE : fond graphique, héros en cut-out, titre 3 lignes, « débloqué » en étoiles sur le mot-clé
-B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1, 1.06, t / d), hand: .3 }),
-  draw: (t, d, T) => { const K = at(1, 'pourquoi') + .9; // ← remplace par at(1, 'motcle')
-    return gridBg(SX.ink) + halftoneFade('#fff', .06, 1) + burst(CX, 1050, 300, t, .4, SX.acc, 16) + unlock(CX, 1000, t, K, { part: 'back', r: 480 }) +
-      G(tr(CX, 1440, 1 + .03 * Math.sin(t * 6)), cutout(heroP({ x: 0, y: 0, s: 1.25, expr: t > K ? 'jawdrop' : 'happy' }, t), 12)) +
-      unlock(CX, 1000, t, K, { part: 'front', r: 480 }) + funBox(CX, 1030, 330, 330, t, K + .2, { label: 'heros.png' }) +
-      kthin("POURQUOI C'EST", CX, 330, t, .05, { size: 62 }) + kthin('HORRIBLE DE', CX, 415, t, .3, { size: 58 }) +
-      kword('MOT-CLÉ ?', CX, 540, t, K - .05, { size: 80, fill: SX.acc2 }); },
-  sfx: [[0, 'whoosh', .6], [.05, 'pop_hi', .4], [.3, 'pop_hi', .4], [at(1, 'pourquoi') + .85, 'boom', .6], [at(1, 'pourquoi') + .9, 'sparkle', .5]] });
+// B001 — INTRO MACHINE À SOUS (règle client) : titre sur le fronton, levier, 3 rouleaux qui s'arrêtent sur le héros = « c'est tombé sur toi »
+//  Cale t0 (levier) au début de la voix et le dernier arrêt sur le mot-clé du titre : stops = [.., .., at(1,'motcle')].
+const SL0 = .35, SLS = [1.0, 1.35, 1.75];
+B(1, { enter: 'none', cam: (t, d) => ({ z: lerp(1, 1.05, t / d), hand: .25, shake: t > SLS[2] && t < SLS[2] + .3 ? 6 : 0 }),
+  draw: (t, d, T) => casinoBg(t) + slotMachine(t, { l1: "POURQUOI C'EST", l2: 'HORRIBLE DE', key: 'MOT-CLÉ ?', t0: SL0, stops: SLS,
+      win: [0, 1, 2].map(() => (x, y, s, t) => heroHead(x, y, 64 * s, { expr: 'jawdrop' }, t)) }),
+  sfx: slotSfx(SL0, SLS) });
 
 // B002 — intro motion (papier + ombre de feuillage), personnages en cut-out, étiquettes molles
 B(2, { enter: 'none', trans: 'wipe', cam: zin(1.02, 1.08, .3),

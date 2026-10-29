@@ -86,6 +86,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 - **CADRAGE 9:16 (retour utilisateur)** : il ajoute ses propres sous-titres TikTok vers 65–75 % de la hauteur.
   → Visages et infos clés entre **y≈380 et y≈1150** (sur 1920). **Sous y≈1250 : décor seulement**
   (sol, herbe, branche, table…). Vérifier avec `GUIDE=1` (bande rouge = zone sous-titres).
+- **Intro = machine à sous** (engine/slot.js, voir PASSATION.md).
 - **Sous-titres INCRUSTÉS (nouvelle règle)** : engine/captions.js (Sour Gummy, y 1494) + musique Bad Piggies −10 dB + UNE vidéo complète livrée — voir PASSATION.md.
 - **TITRE 9:16** : plus petit et loin des bords (YouTube Shorts zoome/recadre) → 3 lignes ~74/74/84 px, largeur ≤ ~760 px
   (x 160→920), vers y 300–560 (voir `title()` dans calvitie/scenes.js).
