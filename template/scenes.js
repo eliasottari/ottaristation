@@ -32,9 +32,9 @@ const heroHead = (x, y, r, o, t) => G(tr(x, y, 1, o.tilt || 0), head(Object.assi
 //  Cadrage 9:16 : visages/textes entre y 380 et 1150 ; sous 1250 = décor seulement (sous-titres du client).
 // ============================================================
 // B001 — INTRO MACHINE À SOUS (règle client) : titre sur le fronton, levier, 3 rouleaux qui s'arrêtent sur le héros = « c'est tombé sur toi »
-//  La voix démarre après 1,2 s de silence (INTRO_PAD) : les 2 premiers rouleaux s'arrêtent pendant ce temps, le 3e fait durer le suspense
-//  (zoom, pénombre, leurre « 7 », cran par cran) et tombe sur le PREMIER mot du mot-clé : SLS[2] = at(1, 'premiermotcle').
-const SL0 = .25, SLS = [1.0, 1.45, 2.7];
+//  La voix démarre tout de suite. Le 3e rouleau fait durer le suspense (pénombre, leurre « 7 », cran par cran) et tombe PILE sur le
+//  premier mot du mot-clé : SLS[2] = at(1, 'premiermotcle'). Les 2 premiers s'arrêtent avant (ex. SLS[2] - 1.1 et SLS[2] - .75).
+const SL0 = .15, SLS = [.6, .95, 1.6];
 var CAP_START = SLS[2];   // sous-titres masqués jusqu'au jackpot (pas de spoiler)
 B(1, { enter: 'none', cam: (t, d) => slotCam(t, SL0, SLS),
   draw: (t, d, T) => casinoBg(t) + slotMachine(t, { l1: "POURQUOI C'EST", l2: 'HORRIBLE DE', key: 'MOT-CLÉ ?', t0: SL0, stops: SLS,

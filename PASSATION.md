@@ -11,9 +11,9 @@ Le style graphique ne change pas. Ce qui change :
    (« c'est tombé sur toi au hasard »), puis JACKPOT et pièces. Modèle : le B(1) de template/scenes.js.
    Ancien épisode : ajouter `<script src="../engine/slot.js"></script>` après decor.js dans son index.html.
    **SUSPENSE (retour client : « je veux être impatient de voir de qui on parle »)** :
-   - `tools/new_episode.sh` ajoute 1,2 s de silence AVANT la voix (`INTRO_PAD`, 0 = désactivé) : la machine tourne seule pendant ce temps.
+   - PAS de silence avant la voix et PAS de zoom (retour client) : la révélation est simplement synchronisée sur le mot.
    - Rouleaux 1 et 2 arrêtés vers 1,0 s et 1,45 s ; le 3e ralentit, presque arrêté sur un leurre « 7 », avance cran par cran (tic-tic + battements de cœur),
-     pénombre + projecteur, zoom caméra `slotCam(t, t0, stops)`, puis CLAC sur le héros au PREMIER mot du mot-clé : `stops[2] = at(1, 'premiermotcle')`.
+     pénombre + projecteur, caméra fixe `slotCam(t, t0, stops)`, puis CLAC sur le héros au PREMIER mot du mot-clé : `stops[2] = at(1, 'premiermotcle')`.
    - Le mot-clé du fronton reste caché (« ? ? ? ») jusqu'au jackpot ; `var CAP_START = stops[2];` masque les sous-titres jusque-là (pas de spoiler).
 1. **Sous-titres INCRUSTÉS** (remplace « pas de sous-titres ») — déjà intégrés au moteur :
    - `engine/captions.js` (+ polices `engine/sourgummy_latin.woff2`, `sourgummy_ext.woff2`, déclarées dans `player.js`) : Sour Gummy 900,

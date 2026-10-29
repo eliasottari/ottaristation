@@ -133,7 +133,7 @@ function slotSfx(t0, stops) {
     [stops[2], 'boom', .6], [stops[2] + .02, 'jackpot', .7], [stops[2] + .15, 'coins', .6]];
 }
 // caméra du plan 1 : pousse lentement vers le 3e rouleau pendant le suspense, recule d'un coup au jackpot
-function slotCam(t, t0, stops) {
-  const k = eInOut(seg(t, stops[1] - .1, stops[2] - .1)) * (1 - eOutCubic(seg(t, stops[2] + .02, stops[2] + .35)));
-  return { z: 1 + .5 * k, cx: 772, cy: 770, x: (540 - 772) * .9 * k, hand: .15 + .2 * k, shake: t > stops[2] && t < stops[2] + .35 ? 9 : 0 };
+function slotCam(t, t0, stops) {   // caméra fixe (retour client : pas de zoom), petit tremblement au jackpot
+  return { z: 1, hand: .15, shake: t > stops[2] && t < stops[2] + .3 ? 8 : 0 };
+};
 }

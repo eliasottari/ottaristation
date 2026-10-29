@@ -15,7 +15,7 @@ printf 'out/tmp/\nout/partie_*.mp4\nout/planche_finale.png\nout/check.txt\n' > "
 cd "$EP"
 ffmpeg -v error -y -i "$VOICE" -c:a libmp3lame -q:a 2 assets/brut.mp3
 python3 "$ROOT/tools/tighten.py" assets/brut.mp3 assets/src.mp3 --keep .06 --min .12     # phrases bord à bord (TikTok)
-PAD="${INTRO_PAD:-1.2}"   # silence ajouté AVANT la voix : la machine à sous tourne seule (suspense) — INTRO_PAD=0 pour l'ancien rythme
+PAD="${INTRO_PAD:-0}"   # silence avant la voix (désactivé : retour client, la révélation se cale sur le mot)
 if [ "$PAD" != "0" ]; then ffmpeg -v error -y -i assets/src.mp3 -af "adelay=$(python3 -c "print(int($PAD*1000))"):all=1" assets/_pad.mp3 && mv assets/_pad.mp3 assets/src.mp3; fi
 python3 "$ROOT/tools/prep.py" assets/src.mp3                                            # words.js, blocks.txt, timing.js
 ffmpeg -v error -y -i assets/src.mp3 -af "volume=10dB,alimiter=limit=0.89:level=false" assets/voix.mp3   # voix +10 dB
