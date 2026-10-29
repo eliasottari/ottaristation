@@ -29,6 +29,7 @@ function buildCaps() {
 let _CAPS = null;
 function captionsAt(T) {
   if (window.CAPTIONS === false) return '';
+  if (typeof CAP_START === 'number' && T < CAP_START) return '';   // intro machine à sous : pas de spoiler avant le jackpot
   if (!_CAPS) _CAPS = buildCaps();
   const c = _CAPS.find(c => T >= c.t0 && T < c.t1); if (!c) return '';
   const k = seg(T, c.t0, c.t0 + .16), s = .55 + .45 * eOutBack(k, 2.2);

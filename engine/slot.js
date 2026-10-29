@@ -39,6 +39,15 @@ function _slotPos(t, t0, t1, P) {
   const a = t - t1; return P + Math.sin(a * 26) * 18 * Math.exp(-a * 9);
 }
 function _slotVel(t, t0, t1, P) { if (t <= t0 || t >= t1) return 0; const k = (t - t0) / (t1 - t0); return 3 * P * Math.pow(1 - k, 2) / (t1 - t0); }
+// 3e rouleau « suspense » : ralentit, s'arrête presque sur un LEURRE, avance cran par cran… puis CLAC sur le gagnant
+function _slotTease(t, t0, t1, P, cell) {
+  const A = t1 - .62, B = t1 - .14;
+  if (t <= t0) return 0;
+  if (t < A) { const k = (t - t0) / (A - t0); return (P - .8 * cell) * (1 - Math.pow(1 - k, 3)); }
+  if (t < B) { const k = (t - A) / (B - A), steps = Math.floor(k * 3) / 3, kk = steps + Math.pow((k * 3) % 1, 4) / 3; return P - .8 * cell + .55 * cell * kk; }
+  if (t < t1) { const k = (t - B) / (t1 - B); return P - .25 * cell + .25 * cell * k * k; }
+  const a = t - t1; return P + Math.sin(a * 30) * 22 * Math.exp(-a * 8);
+}
 
 function slotMachine(t, o = {}) {
   const { x, y, w, h, cell } = SLOT, cx = x + w / 2, acc = o.acc || SX.acc, t0 = o.t0 ?? .35, stops = o.stops || [t0 + .65, t0 + 1, t0 + 1.4];
@@ -68,17 +77,19 @@ function slotMachine(t, o = {}) {
   // titre (3 lignes, dernier mot en couleur) — reste dans le fronton (≤ 700 px)
   const ks = Math.min(84, 700 / (.62 * Math.max(6, (o.key || '').length)));
   s += kthin(o.l1 || "POURQUOI C'EST", cx, 300, t, .05, { size: 50 }) + kthin(o.l2 || 'HORRIBLE DE', cx, 370, t, .2, { size: 48 });
-  s += kword(o.key || 'MOT-CLÉ ?', cx, 470, t, o.tk ?? .4, { size: ks, fill: SX.acc2 });
+  const tk = o.tk ?? stops[2];
+  if (t < tk) { const q = '?'.repeat(Math.max(3, Math.min(9, (o.key || '???').length - 2))); s += op(.55 + .45 * Math.abs(Math.sin(t * 7)), ftext(cx, 470 + ks * .36, q.split('').join(' '), { size: ks * .9, fill: '#fff', font: 'Fredoka, sans-serif' })); }
+  s += kword(o.key || 'MOT-CLÉ ?', cx, 470, t, tk, { size: ks, fill: SX.acc2 });
   // --- fenêtre des rouleaux ---
   const wy = y + 30, wh = 300, rw = 210, gap = 22, rx0 = cx - (rw * 3 + gap * 2) / 2;
   s += rect(rx0 - 26, wy - 26, rw * 3 + gap * 2 + 52, wh + 52, '#2b2420', 30, 7) + rect(rx0 - 14, wy - 14, rw * 3 + gap * 2 + 28, wh + 28, '#ffd23f', 22, 5);
   for (let r = 0; r < 3; r++) {
-    const X = rx0 + r * (rw + gap), N = 9 + r * 3, P = N * cell, p = _slotPos(t, t0 + r * .06, stops[r], P), v = _slotVel(t, t0 + r * .06, stops[r], P);
+    const X = rx0 + r * (rw + gap), N = 9 + r * 3, P = N * cell, tease = r === 2 && o.tease !== false, pf = u => tease ? _slotTease(u, t0 + r * .06, stops[r], P, cell) : _slotPos(u, t0 + r * .06, stops[r], P), p = pf(t), v = Math.abs(pf(t + .01) - p) / .01;
     const blur = Math.min(1, v / 3500), cyR = wy + wh / 2;
     let inner = rect(X, wy, rw, wh, '#fffaf0', 0, 0);
     for (let i = 0; i <= N; i++) {
       const sy = cyR - i * cell + p; if (sy < wy - cell || sy > wy + wh + cell) continue;
-      const isWin = i === N, sym = isWin && win[r] ? win[r] : SLOT_SYMS[SLOT_ORDER[(i * 3 + r * 2) % SLOT_ORDER.length]];
+      const isWin = i === N, sym = isWin && win[r] ? win[r] : (i === N - 1 && r === 2 ? (o.decoy || SLOT_SYMS.seven) : SLOT_SYMS[SLOT_ORDER[(i * 3 + r * 2) % SLOT_ORDER.length]]);
       const pulse = isWin && done ? 1 + .08 * Math.sin((t - stops[2]) * 14) : 1;
       const g = sym(0, 0, .95 * pulse, t);
       inner += G(`translate(${f1(X + rw / 2)} ${f1(sy)}) scale(1 ${f1(1 + blur * .6)})`, blur > .15 ? op(1 - blur * .5, g) + op(blur * .35, G(`translate(0 ${f1(-40 * blur)})`, g)) : g);
@@ -97,7 +108,7 @@ function slotMachine(t, o = {}) {
   s += path(`M${rx0 - 40} ${ply - 22}L${rx0 - 12} ${ply}L${rx0 - 40} ${ply + 22}Z`, '#ffd23f', 5) + path(`M${rx0 + rw * 3 + gap * 2 + 40} ${ply - 22}L${rx0 + rw * 3 + gap * 2 + 12} ${ply}L${rx0 + rw * 3 + gap * 2 + 40} ${ply + 22}Z`, '#ffd23f', 5);
   // --- panneau : écran crédits + boutons ---
   const py = wy + wh + 60;
-  s += rect(x + 60, py, 300, 80, '#1a0a14', 14, 6) + ftext(x + 210, py + 54, done ? 'JACKPOT' : 'CRÉDITS 001', { size: 36, fill: done && Math.sin(t * 16) > 0 ? '#ff5c8a' : '#ffd23f', stroke: 'none', font: 'Fredoka, sans-serif' });
+  s += rect(x + 60, py, 300, 80, '#1a0a14', 14, 6) + ftext(x + 210, py + 54, done ? 'JACKPOT' : t > t0 ? (Math.sin(t * 9) > 0 ? 'QUI ?' : '') : 'CRÉDITS 001', { size: 36, fill: done && Math.sin(t * 16) > 0 ? '#ff5c8a' : '#ffd23f', stroke: 'none', font: 'Fredoka, sans-serif' });
   [['#5ec4f0', 0], ['#7be07b', 1], ['#ffd23f', 2]].forEach(([c, i]) => { const press = i === 2 && t > t0 - .2 && t < t0 + .1 ? 6 : 0; s += ell(x + 430 + i * 105, py + 52, 40, 16, shade(c, -.35), 5) + ell(x + 430 + i * 105, py + 40 + press, 40, 16, c, 5); });
   // --- bac à pièces + pièces qui jaillissent au jackpot ---
   const ty = y + h - 110;
@@ -107,11 +118,22 @@ function slotMachine(t, o = {}) {
   const lk = t < t0 - .35 ? 0 : t < t0 ? eOutCubic(seg(t, t0 - .35, t0)) : 1 - eOutBack(seg(t, t0, t0 + .5)) * 1, ang = lerp(-8, 62, clamp(lk));
   s += rect(x + w + 30, y + 180, 50, 120, '#9aa3ad', 14, 6);
   s += G(`translate(${x + w + 55} ${y + 240}) rotate(${f1(ang)})`, rect(-9, -300, 18, 300, '#c9ced6', 9, 5) + circ(0, -310, 44, '#e2463a', 6) + ell(-14, -324, 12, 9, 'rgba(255,255,255,.7)', 0));
+  // suspense : tout s'assombrit sauf le 3e rouleau (projecteur), puis lumière au jackpot
+  const dk = o.tease === false ? 0 : seg(t, stops[1], stops[1] + .3) * (1 - seg(t, stops[2], stops[2] + .1));
+  if (dk > 0) { const X3 = rx0 + 2 * (rw + gap); s += op(.62 * dk, `<path fill-rule="evenodd" fill="#05010a" d="M${-M} ${-M}H${W + M}V${H + M}H${-M}Z M${X3 - 8} ${wy - 8}h${rw + 16}v${wh + 16}h${-rw - 16}Z"/>`) + op(dk * (.5 + .2 * Math.sin(t * 20)), glow(X3 + rw / 2, wy + wh / 2, 260, '#fff6b0', .35)); }
   // éclat final
   if (done) s += op(1 - wk * .7, glow(cx, ply, 520, '#fff6b0', .35)) + sparkle(rx0 - 50, wy - 30, .9 * pop(t, stops[2]), '#fff6b0') + sparkle(rx0 + rw * 3 + gap * 2 + 50, wy - 20, 1.1 * pop(t, stops[2] + .1), '#fff6b0');
   return s;
 }
 // bruitages calés : levier, rouleaux (tic-tic), arrêt de chaque rouleau, jackpot + pièces
 function slotSfx(t0, stops) {
-  return [[t0 - .3, 'squeak', .5], [t0, 'slot', .7], [t0 + .15, 'clock_fast', .3], [stops[0], 'thud', .5], [stops[1], 'thud', .5], [stops[2], 'thud', .6], [stops[2] + .05, 'jackpot', .7], [stops[2] + .15, 'coins', .6]];
+  const A = stops[2] - .62, B = stops[2] - .14;
+  return [[Math.max(0, t0 - .3), 'squeak', .5], [t0, 'slot', .7], [t0 + .15, 'clock_fast', .3], [stops[0], 'thud', .5], [stops[1], 'thud', .5],
+    [stops[1] + .05, 'heartbeat', .6], [A, 'tick', .6], [A + (B - A) / 3, 'tick', .6], [A + 2 * (B - A) / 3, 'tick', .65],
+    [stops[2], 'boom', .6], [stops[2] + .02, 'jackpot', .7], [stops[2] + .15, 'coins', .6]];
+}
+// caméra du plan 1 : pousse lentement vers le 3e rouleau pendant le suspense, recule d'un coup au jackpot
+function slotCam(t, t0, stops) {
+  const k = eInOut(seg(t, stops[1] - .1, stops[2] - .1)) * (1 - eOutCubic(seg(t, stops[2] + .02, stops[2] + .35)));
+  return { z: 1 + .5 * k, cx: 772, cy: 770, x: (540 - 772) * .9 * k, hand: .15 + .2 * k, shake: t > stops[2] && t < stops[2] + .35 ? 9 : 0 };
 }
