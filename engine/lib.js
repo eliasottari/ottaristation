@@ -397,6 +397,7 @@ function person(o, t = 0) {
   if (o.necklace) for (let i = -3; i <= 3; i++) s += circ(i * 12, topY + 20 + Math.cos(i / 3) * -6 + 6, 6, '#fff', 3);
   if (o.stetho) s += path(`M${-bt * .5} ${topY + 6}Q${-bt * .6} ${topY + 90} ${-10} ${topY + 100}Q${bt * .5} ${topY + 90} ${bt * .4} ${topY + 6}`, 'none', 6, '#555') + circ(-10, topY + 106, 12, '#bbb', 4);
   if (o.heartShirt) s += heart(0, topY + A.bodyH * .45, .9, '#e2463a');
+  if (o.chest) s += o.chest(topY, hipY, bt, bb);   // motif de maillot (numéro, bande…) dessiné sous les bras
   // bras
   const aL = o.armL || [110, 100], aR = o.armR || [70, 80];
   const sleeve = o.sleeve || shirt;

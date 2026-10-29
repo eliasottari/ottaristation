@@ -48,6 +48,7 @@ L'utilisateur parle français : répondre en français, ton direct et concis.
 | `compare/` | Pourquoi c'est horrible d'être toujours comparé à son frère ou sa sœur ? (voix ElevenLabs, 44 plans) | 63,5 s | ✅ livré (3 parties) |
 | `nouveau/` | Pourquoi c'est horrible d'être le nouveau de la classe ? (voix ElevenLabs, 48 plans) | 62,7 s | ✅ livré (3 parties) |
 | `loin/` | Pourquoi c'est horrible d'habiter loin de tous ses potes ? (voix ElevenLabs, 44 plans) | 64,7 s | ✅ livré (3 parties) |
+| `mbappe/` | Pourquoi c'est horrible d'être Kylian Mbappé ? (intro machine à sous, sous-titres incrustés, musique Bad Piggies, 48 plans) | 81 s | ✅ livré |
 | `dents_sizex/` | Démo du style **SIZEX** (cartoon + motion design) sur les 10 premiers blocs de « dents » | 11,6 s | 🧪 démo |
 | `tortue/` | Pourquoi c'est horrible de naître tortue ? (182 blocs → 260 plans, **16:9 YouTube**, V2 ciné, ElevenLabs) | 7 min 02 | ✅ V2 livrée (en 9 parties) |
 

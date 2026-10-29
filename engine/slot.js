@@ -135,5 +135,4 @@ function slotSfx(t0, stops) {
 // caméra du plan 1 : pousse lentement vers le 3e rouleau pendant le suspense, recule d'un coup au jackpot
 function slotCam(t, t0, stops) {   // caméra fixe (retour client : pas de zoom), petit tremblement au jackpot
   return { z: 1, hand: .15, shake: t > stops[2] && t < stops[2] + .3 ? 8 : 0 };
-};
 }
